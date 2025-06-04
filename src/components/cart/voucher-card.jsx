@@ -78,3 +78,18 @@ export const VoucherCard = ({ voucher, isSelected, onSelect, cartTotal }) => {
         </Card>
     );
 };
+
+import PropTypes from "prop-types";
+
+VoucherCard.propTypes = {
+    voucher: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        code: PropTypes.string.isRequired,
+        minOrderValue: PropTypes.number.isRequired,
+        discountTypeDisplay: PropTypes.string.isRequired,
+        discountValue: PropTypes.number.isRequired,
+    }).isRequired,
+    isSelected: PropTypes.bool.isRequired,
+    onSelect: PropTypes.func.isRequired,
+    cartTotal: PropTypes.number.isRequired,
+};
