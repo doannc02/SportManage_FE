@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Lato-Light", Helvetica, Arial, sans-serif;
+}
+
+.cart-animation {
+  position: absolute;
+  z-index: 999;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #ff6600; /* Màu sắc của thẻ */
+  animation: moveToCart 1s forwards ease-in-out;
+}
+
+@keyframes moveToCart {
+  0% {
+    transform: scale(1) translateX(0) translateY(0);
+  }
+  100% {
+    transform: scale(0) translateX(200px) translateY(-200px); /* Di chuyển đến vị trí giỏ hàng */
+  }
+}
+
+/* styles/global.css hoặc trong file styles.css dùng trong dự án */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  scrollbar-width: none;
+}
