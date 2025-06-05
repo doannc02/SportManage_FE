@@ -32,7 +32,7 @@ function Search() {
         onKeyPress={handleKeyPress}
         value={searchInput}
         h="100%"
-        placeholder="Search for product or brand..."
+        placeholder="Tìm kiếm sản phẩm hoặc thương hiệu..."
       />
       <InputRightAddon
         h="100%"

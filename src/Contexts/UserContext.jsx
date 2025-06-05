@@ -18,7 +18,7 @@ export function UserProvider({ children }) {
             }
     })
 
-    const [search, setSearch] = useState("all")
+    const [search, setSearch] = useState("")
 
     useEffect(() => {
         localStorage.setItem("user", JSON.stringify(user))

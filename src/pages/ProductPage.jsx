@@ -24,41 +24,61 @@ import axios from "axios";
 import { UserContext } from "../Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { getAppToken } from "../configs/token";
+import { useQueryProductsList } from "../services/customers/products";
+import { set } from "lodash";
+import { BASE_URL } from "../configs/auth";
+import { BsEmojiSmile } from "react-icons/bs";
+import { Empty } from "antd";
 // import { SearchContext } from "../Utilis/Context/SearchContext";
 // "https://makeup-api.herokuapp.com/api/v1/products.json"
 //https://skin-care-hub.onrender.com/product?l=all&q=
 const ProductPage = () => {
   const { user, setUser, search, setSearch } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
-  const [noofElements, setnoofElements] = useState(10);
-  const [sortBy, setsortBy] = useState(null);
-  const [load, setLoad] = useState(false);
+  const [noofElements, setNoofElements] = useState(10);
+  const [sortBy, setSortBy] = useState(null);
   const navigate = useNavigate();
-  const tokenApp = getAppToken()
+  const tokenApp = getAppToken();
+
+  const { data, isLoading, isError } = useQueryProductsList({
+    pageNumber: 0,
+    pageSize: 20,
+    keyword: search,
+  });
+
   useEffect(() => {
-    const fetchPosts = async () => {
-      //setLoad(true);
-
-      const res = await axios.get(
-        `https://BadmintonStore.onrender.com/product/search/${search}/${sortBy}`,
-        { withCredentials: true }
-      );
-      // console.log(res.data.data);
-      setPosts(res.data.data);
-      setnoofElements(10);
-
-
-      setLoad(false);
+    const fetchProducts = async () => {
+      setPosts(data?.items || []);
+      setNoofElements(10);
+      console.log("data in useEffect", data);
     };
-    fetchPosts();
-  }, [sortBy, search]);
+    fetchProducts();
+  }, [data, isLoading]);
+
+  //setLoad(true);
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     //setLoad(true);
+
+  //     const res = await axios.get(
+  //       `https://BadmintonStore.onrender.com/product/search/${search}/${sortBy}`,
+  //       { withCredentials: true }
+  //     );
+  //     console.log(res.data.data);
+  //     setPosts(res.data.data);
+  //     setNoofElements(10);
+
+  //     setLoad(false);
+  //   };
+  //   fetchPosts();
+  // }, [sortBy, search]);
 
   function handleQuickBuy(id) {
     if (!tokenApp) {
-      return navigate("/login")
+      return navigate("/login");
     }
     // navigate(`/CartPage/${id}`);
-    console.log(id)
+    console.log(id);
     id.user_id = user.id;
     axios
       .post(`https://BadmintonStore.onrender.com/product/cart`, id, {
@@ -76,9 +96,9 @@ const ProductPage = () => {
 
   const slice = posts.slice(0, noofElements);
   const loadMore = () => {
-    setnoofElements(noofElements + noofElements);
+    setNoofElements(noofElements + noofElements);
   };
-  if (load) {
+  if (isLoading) {
     return (
       <Image
         m="auto"
@@ -89,18 +109,6 @@ const ProductPage = () => {
   }
   return (
     <>
-      <Box w="95%" m={5} justifyContent="space-evenly">
-        <Box>
-          <Heading>The Holiday Countdown is On!</Heading>
-          <Text margin="auto" textAlign="left" fontWeight="100">
-            The Countdown is on! Save up to 30% off your purchase when you use
-            code COUNTDOWN. But be quick! Discount drops 1% every 3 hours. Offer
-            started at 9AM EST. *Exclusions apply. All products below included
-            in the offer.
-          </Text>
-        </Box>
-      </Box>
-
       <SimpleGrid gap={10} gridTemplateColumns={"1fr 1fr"} p={2}>
         <HStack display="grid" gridTemplateColumns={"0.5fr 1.5fr"} p={2}>
           <Heading fontWeight="200">Category</Heading>
@@ -125,10 +133,14 @@ const ProductPage = () => {
             </Stack>
           </RadioGroup> */}
         <HStack>
-          <RadioGroup onChange={setsortBy} value={sortBy}>
+          <RadioGroup onChange={setSortBy} value={sortBy}>
             <Stack direction="row">
-              <Radio value="asc" onClick={(e) => setsortBy("asc")}  >Price Low To High</Radio>
-              <Radio value="desc" onClick={(e) => setsortBy("desc")}>Price High To Low</Radio>
+              <Radio value="asc" onClick={(e) => setSortBy("asc")}>
+                Price Low To High
+              </Radio>
+              <Radio value="desc" onClick={(e) => setSortBy("desc")}>
+                Price High To Low
+              </Radio>
             </Stack>
           </RadioGroup>
         </HStack>
@@ -150,32 +162,42 @@ const ProductPage = () => {
       {slice.length !== 0 ? (
         <Box
           w="95%"
-          margin="auto"
+          mx="auto"
           display="grid"
-          gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr 1fr 1fr "]}
-          p={2}
-          gap={5}
+          gridTemplateColumns={["1fr", "1fr 1fr", "repeat(4, 1fr)"]}
+          p={4}
+          gap={6}
         >
           {slice &&
             slice.map((el, index) => (
-              <Center py={6} key={index}>
-                <Box key={el.id} rounded="lg" shadow="md" position="relative">
-                  {el.quantity < 1 ? (
-                    <Alert status="error">
+              <Center key={index} py={4}>
+                <Box
+                  w="100%"
+                  bg="white"
+                  rounded="xl"
+                  shadow="md"
+                  overflow="hidden"
+                  transition="all 0.3s ease"
+                  _hover={{ shadow: "xl", transform: "translateY(-4px)" }}
+                  position="relative"
+                >
+                  {el.quantity < 1 && (
+                    <Alert status="error" roundedTop="xl">
                       <AlertIcon />
                       <AlertTitle>Out Of Stock!</AlertTitle>
                     </Alert>
-                  ) : (
-                    ""
                   )}
-                  <Box cursor={"pointer"} onClick={() => navigate(`/product/${el._id}`)} >
-                    {" "}
+
+                  <Box cursor="pointer">
                     <Image
-                      boxSize="270"
-                      src={el.image_link}
+                      boxSize="270px"
+                      mx="auto"
+                      src={
+                        `${BASE_URL}${el?.images?.[0]}` || "/placeholder.png"
+                      }
                       alt={el.name}
-                      roundedTop="lg"
-                      objectFit={"contain"}
+                      objectFit="contain"
+                      p={3}
                       onError={(e) => {
                         e.target.src =
                           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsNGGjrfSqqv8UjL18xS4YypbK-q7po_8oVQ&usqp=CAU";
@@ -183,75 +205,68 @@ const ProductPage = () => {
                       }}
                     />
                   </Box>
-                  <Heading
-                    as="h3"
-                    fontSize="sm"
-                    fontWeight="semibold"
-                    lineHeight="tight"
-                    maxH="md"
-                    // border="2px solid red"
-                    // height="40"
-                    p={2}
-                  >
-                    {el.name}
-                  </Heading>
-                  <Text fontSize="lg" fontWeight="600" textAlign="center" p={1}>
-                    $ {el.price}
-                  </Text>{" "}
-                  <HStack
-                    p={1}
-                    margin="auto"
-                    justifyContent="space-evenly"
-                    bg="gray.700"
-                    fontWeight="600"
-                    bgColor="black"
-                    color="white"
-                    borderRadius="0"
-                    _hover={{
-                      bg: "cyan.500",
-                    }}
-                  >
-                    <Tooltip
-                      label="Add to cart"
-                      bg="white"
-                      placement={"top"}
-                      color={"gray.800"}
-                      fontSize={"1.2em"}
+
+                  <Box p={4}>
+                    <Heading
+                      as="h3"
+                      fontSize="md"
+                      fontWeight="semibold"
+                      noOfLines={2}
+                      mb={1}
                     >
-                      <chakra.a
-                        onClick={(e) => {
-                          handleQuickBuy(el)
-                        }}
-                        display={"flex"}
-                        margin="auto"
+                      {el.name}
+                    </Heading>
+
+                    <Text fontSize="sm" color="gray.600" mb={2}>
+                      Thương hiệu: {el?.brand?.name || "New Brand"}
+                    </Text>
+
+                    <Text
+                      fontSize="xl"
+                      fontWeight="bold"
+                      color="cyan.600"
+                      textAlign="center"
+                      mb={3}
+                    >
+                      {el?.variants[0]?.price?.toLocaleString() ?? "0"} ₫
+                    </Text>
+
+                    <HStack
+                      p={2}
+                      justify="center"
+                      bg="black"
+                      color="white"
+                      borderRadius="md"
+                      _hover={{ bg: "cyan.500" }}
+                      cursor="pointer"
+                    >
+                      <Tooltip
+                        label="Add to cart"
+                        bg="white"
+                        placement="top"
+                        color="black"
+                        fontSize="md"
                       >
-                        <HStack>
-                          {" "}
-                          <Icon
-                            as={FiShoppingCart}
-                            h={7}
-                            w={7}
-                            alignSelf={"center"}
-                          />
-                          <Text fontSize="md" fontWeight="600">
-                            QUICKBUY
-                          </Text>
-                        </HStack>
-                      </chakra.a>
-                    </Tooltip>
-                  </HStack>
+                        <chakra.a onClick={() => handleQuickBuy(el)}>
+                          <HStack spacing={2}>
+                            <Icon as={FiShoppingCart} h={6} w={6} />
+                            <Text fontSize="md" fontWeight="bold">
+                              QUICKBUY
+                            </Text>
+                          </HStack>
+                        </chakra.a>
+                      </Tooltip>
+                    </HStack>
+                  </Box>
                 </Box>
               </Center>
             ))}
         </Box>
       ) : (
-        <Image
-          m="auto"
-          src="https://ih1.redbubble.net/image.1304795334.8057/pp,840x830-pad,1000x1000,f8f8f8.jpg"
-        />
+        <Empty description={<span>Không có sản phẩm nào</span>} />
       )}
 
-      <Button
+      {/* <Button
         fontWeight="600"
         bgColor="black"
         color="white"
@@ -264,7 +279,7 @@ const ProductPage = () => {
         p={4}
       >
         Load More
-      </Button>
+      </Button> */}
     </>
   );
 };
