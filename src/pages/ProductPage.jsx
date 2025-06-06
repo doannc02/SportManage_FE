@@ -25,15 +25,13 @@ import { UserContext } from "../Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { getAppToken } from "../configs/token";
 import { useQueryProductsList } from "../services/customers/products";
-import { set } from "lodash";
 import { BASE_URL } from "../configs/auth";
-import { BsEmojiSmile } from "react-icons/bs";
 import { Empty } from "antd";
 // import { SearchContext } from "../Utilis/Context/SearchContext";
 // "https://makeup-api.herokuapp.com/api/v1/products.json"
 //https://skin-care-hub.onrender.com/product?l=all&q=
 const ProductPage = () => {
-  const { user, setUser, search, setSearch } = useContext(UserContext);
+  const { user, search, setSearch } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
   const [noofElements, setNoofElements] = useState(10);
   const [sortBy, setSortBy] = useState(null);

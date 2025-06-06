@@ -32,7 +32,7 @@ const ProductCard = ({ product }) => {
                     {product.name}
                 </Heading>
                 <Text fontSize="sm" color="gray.500" noOfLines={2} mb={2}>
-                    {product.description || ''}
+                    {product.description || <span className="text-gray-400 text-[11px] italic">{`Chưa có mô tả nào`}</span>}
                 </Text>
                 {product.variants?.[0] && (
                     <Text fontSize="lg" fontWeight="bold" color="blue.600">
