@@ -10,7 +10,7 @@ import "swiper/css/pagination";
 // import "./styles.css";
 
 // import required modules
-import { Pagination, Autoplay, Navigation } from "swiper/modules";
+import { Pagination, Autoplay, Navigation, Scrollbar } from "swiper/modules";
 import { Box } from "@chakra-ui/react";
 
 export default function App() {
@@ -171,74 +171,124 @@ export default function App() {
   ];
 
   return (
-    <Box h="50vh" w="80%">
+    <Box
+      maxW="1200px"
+      mx="auto"
+      py={10}
+      px={{ base: 2, md: 6 }}
+      bg="white"
+      borderRadius="lg"
+      boxShadow="lg"
+      mt={10}
+    >
       <Text
-        fontWeight={500}
-        w={"100%"}
-        textAlign={"center"}
-        m={5}
-        mt={10}
-        fontSize={"40px"}
+        fontWeight={700}
+        w="100%"
+        textAlign="center"
+        mb={8}
+        fontSize={{ base: "2xl", md: "3xl" }}
+        letterSpacing="wide"
+        color="gray.800"
       >
-        Recommended for you
+        Gợi ý cho bạn
       </Text>
       <Swiper
-        slidesPerView={1}
-        spaceBetween={10}
-        pagination={{
-          clickable: true,
+        slidesPerView={3}
+        spaceBetween={30}
+        scrollbar={{
+          hide: true,
         }}
-        breakpoints={{
-          640: {
-            slidesPerView: 2,
-            spaceBetween: 20,
-          },
-          768: {
-            slidesPerView: 4,
-            spaceBetween: 40,
-          },
-          1024: {
-            slidesPerView: 5,
-            spaceBetween: 50,
-          },
-        }}
+        modules={[Scrollbar, Autoplay]}
         autoplay={{
           delay: 2500,
           disableOnInteraction: false,
         }}
-        navigation={true}
-        modules={[Autoplay, Navigation]}
+        breakpoints={{
+          320: { slidesPerView: 1 },
+          600: { slidesPerView: 2 },
+          900: { slidesPerView: 3 },
+        }}
         className="mySwiper"
+        style={{ paddingBottom: "32px" }}
       >
-        {data.map((el) => {
-          return (
-            <SwiperSlide key={el.id} >
-              {/* <Link> */}
-              <Box p={10}>
-                <Image mb={10} src={el.image_link} />
-                <Box>
-                  <Text>{el.name}</Text>
-                  <Text fontWeight={500} mt={5}>
-                    Price : ${el.price}
-                  </Text>
-                </Box>
-                <Button
-                  w="100%"
-                  fontWeight="600"
-                  bgColor="black"
-                  color="white"
-                  borderRadius="0"
-                  _hover={{
-                    bg: "cyan.500",
-                  }}
+        {data.map((el) => (
+          <SwiperSlide key={el.id}>
+            <Box
+              bg="gray.50"
+              borderRadius="xl"
+              boxShadow="md"
+              p={5}
+              h="100%"
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              transition="all 0.2s"
+              _hover={{ boxShadow: "xl", transform: "translateY(-4px)" }}
+            >
+              <Image
+                mb={5}
+                src={el.image_link}
+                alt={el.name}
+                borderRadius="md"
+                boxSize="220px"
+                objectFit="cover"
+                bg="white"
+                boxShadow="sm"
+              />
+              <Box flex="1" w="100%">
+                <Text
+                  className="truncate"
+                  fontWeight={600}
+                  fontSize="lg"
+                  mb={2}
+                  color="gray.700"
+                  noOfLines={2}
+                  textAlign="center"
                 >
-                  QUICK BUY
-                </Button>
+                  {el.name}
+                </Text>
+                <Text
+                  fontWeight={500}
+                  color="cyan.600"
+                  fontSize="xl"
+                  mb={2}
+                  textAlign="center"
+                >
+                  {el.price_sign}
+                  {el.price}
+                  <Text as="span" fontSize="sm" color="gray.500" ml={1}>
+                    {el.currency}
+                  </Text>
+                </Text>
+                <Text
+                  fontSize="sm"
+                  color="gray.500"
+                  noOfLines={2}
+                  mb={4}
+                  textAlign="center"
+                >
+                  {el.description.replace(/<[^>]+>/g, "")}
+                </Text>
               </Box>
-              {/* </Link> */}
-            </SwiperSlide>
-          );
-        })}
+              <Button
+                w="100%"
+                fontWeight="700"
+                bgGradient="linear(to-r, cyan.500, blue.500)"
+                color="white"
+                borderRadius="md"
+                size="lg"
+                mt="auto"
+                _hover={{
+                  bgGradient: "linear(to-r, blue.600, cyan.600)",
+                  boxShadow: "md",
+                }}
+                transition="all 0.2s"
+              >
+                Mua ngay
+              </Button>
+            </Box>
+          </SwiperSlide>
+        ))}
       </Swiper>
     </Box>
   );

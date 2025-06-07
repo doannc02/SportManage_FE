@@ -79,27 +79,50 @@ const ProductList = () => {
     });
 
     return (
-        <Box className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <Heading as="h1" size="xl" mb={6} textAlign="center">
-                🛍️ Danh sách sản phẩm
+        <Box
+            py={8}
+            mt={6}
+        >
+            <Heading
+                as="h1"
+                size="lg"
+                mb={8}
+                textAlign="center"
+                letterSpacing="wide"
+                color="blue.700"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                gap={2}
+            >
+                <span role="img" aria-label="shop">🛒</span>
+                Danh sách sản phẩm
             </Heading>
 
             {isError && (
-                <Text textAlign="center" color="red.500" mb={4}>
-                    Đã xảy ra lỗi khi tải sản phẩm. Vui lòng thử lại sau.
-                </Text>
+                <Box textAlign="center" mb={4}>
+                    <Text color="red.500" fontWeight="semibold">
+                        <span role="img" aria-label="error">❌</span> Đã xảy ra lỗi khi tải sản phẩm. Vui lòng thử lại sau.
+                    </Text>
+                </Box>
             )}
 
-            <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing={5}>
+            <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing={7} mb={6}>
                 {isLoading
                     ? Array.from({ length: 10 }).map((_, i) => (
-                        <ChakraSkeleton key={i} height="60" borderRadius="md" />
+                        <ChakraSkeleton key={i} height="260px" borderRadius="lg" />
                     ))
                     : data?.items?.length
                         ? data.items.map((product) => (
                             <ProductCard key={product.id} product={product} />
                         ))
-                        : <Text textAlign="center" color="gray.500" colSpan={5}>Không có sản phẩm nào.</Text>
+                        : (
+                            <Box gridColumn="1/-1" textAlign="center" py={10}>
+                                <Text color="gray.400" fontSize="lg">
+                                    <span role="img" aria-label="empty">🛒</span> Không có sản phẩm nào.
+                                </Text>
+                            </Box>
+                        )
                 }
             </SimpleGrid>
 
