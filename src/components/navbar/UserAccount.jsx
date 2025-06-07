@@ -30,54 +30,81 @@ function UserAccount() {
 
   const navigate = useNavigate();
   const tokenApp = getAppToken()
+  console.log(tokenApp);
+  
   const { user, setUser } = useContext(UserContext);
   //   const { logout } = useAuth();
 
 
   return (
-    <Popover trigger="hover">
+    <Popover trigger="hover" placement="bottom-end">
       <PopoverTrigger>
-        <Flex alignItems="center" gap="10px">
-          <RxPerson size="20px" ml="" />{" "}
+        <Flex
+          alignItems="center"
+          gap="8px"
+          cursor="pointer"
+          px={3}
+          py={2}
+          borderRadius="md"
+          _hover={{ bg: "teal.50", boxShadow: "md" }}
+          className={NavStyle.userAccountTrigger}
+        >
+          <Box
+            bg="teal.500"
+            color="white"
+            borderRadius="full"
+            p={1.5}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <RxPerson size="22px" />
+          </Box>
           <Text
-            display={{ lg: "initial", md: "none", sm: "none", base: "none" }}
+            fontWeight="medium"
+            fontSize="md"
+            display={{ lg: "block", md: "none", sm: "none", base: "none" }}
           >
             {tokenApp.username}
-            {/* {user} */}
           </Text>
         </Flex>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent
+        w="250px"
+        borderRadius="lg"
+        boxShadow="lg"
+        p={0}
+        bg="white"
+      >
         <PopoverArrow />
         <PopoverCloseButton />
-        <PopoverHeader pt="40px" bg="#f9f9f9">
-          {/* {role === "Admin" ? (
-            <Button
-              w="100%"
-              onClick={() => {
-                navigate("/admin");
-              }}
-            >
-              Admin
-            </Button>
-          ) : (
-            `Logged in As ${role}`
-          )} */}
+        <PopoverHeader
+          pt="36px"
+          pb="2"
+          bg="teal.50"
+          borderTopRadius="lg"
+          fontWeight="bold"
+          fontSize="lg"
+          color="teal.700"
+        >
+          Tài khoản
         </PopoverHeader>
-        <PopoverBody p="20px">
-          <Flex flexDir="column">
-            <Text fontWeight="semibold">Name: {user.username}</Text>
+        <PopoverBody p={5}>
+          <Flex flexDir="column" gap={3}>
+            <Text fontWeight="semibold" color="gray.700">
+              Tên: <Box as="span" color="teal.600">{tokenApp.username}</Box>
+            </Text>
             <Button
               colorScheme="teal"
-              mt="20px"
-              //onClick={logout}
-              variant="outline"
+              variant="solid"
+              mt={2}
+              borderRadius="md"
               onClick={() => {
-                logoutAccount()
-                // location.reload();
+                logoutAccount();
               }}
+              _hover={{ bg: "teal.600" }}
             >
-              Log Out
+              Đăng xuất
             </Button>
           </Flex>
         </PopoverBody>

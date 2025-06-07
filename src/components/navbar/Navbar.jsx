@@ -28,123 +28,97 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const cartRef = useRef();
-  const { user, setUser } = useContext(UserContext);
-  const [isLogin, setIsLogin] = useState(false);
-  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
   const [num, setNum] = useState(0);
-
-
+  const navigate = useNavigate();
 
   function handleClickLogo() {
     navigate("/");
-    // console.log("clicked")
   }
 
   function handleCartClick(e) {
-    e.preventDefault()
+    e.preventDefault();
     navigate("/CartPage");
-    // console.log("clickedd here")
   }
 
   useEffect(() => {
-    setNum(user.totalCartItems)
-    // console.log("navbar", user, num)
-  })
-
+    setNum(user.totalCartItems);
+  }, [user.totalCartItems]);
 
   return (
     <Flex
-      zIndex={"999"}
-      w={"100%"}
-      bg={"white"}
-      flexDir={"column"}
-      alignItems={"space-between"}
+      zIndex="999"
+      w="100%"
+      bg="white"
+      flexDir="column"
+      boxShadow="0 2px 8px rgba(0,0,0,0.07)"
+      position="sticky"
+      top="0"
     >
-      <TopNav />
+      {/* <TopNav /> */}
+      {/* Mobile Navbar */}
       <Flex
-        display={{ lg: "none", md: "flex", sm: "flex", base: "flex" }}
-        gap="15px"
+        display={{ base: "flex", md: "flex", lg: "none" }}
+        px={4}
+        py={2}
         alignItems="center"
-        w={"80%"}
+        justifyContent="space-between"
+        borderBottom="1px solid #eee"
+        bg="white"
       >
-        <Flex w={"80%"} gap={"15px"} alignItems={"center"} m={3}>
+        <Flex alignItems="center" gap={2}>
           <Navmenu />
           <Popsearch />
         </Flex>
-        <Flex w={"80%"} justifyContent={"space-evenly"}>
+        <Flex alignItems="center" gap={4}>
           <Acount />
-          <Cart ref={cartRef} />
+          <Box as="span" onClick={handleCartClick} cursor="pointer">
+            <Cart ref={cartRef} num={num} />
+          </Box>
         </Flex>
       </Flex>
 
+      {/* Desktop Navbar */}
       <Box
-        display={"flex"}
-        justifyContent={"space-evenly"}
-        alignItems={"center"}
-        borderBottom={"2px solid black"}
-        pb={"20px"}
+        display={{ base: "none", lg: "flex" }}
+        justifyContent="space-between"
+        alignItems="center"
+        px={10}
+        py={4}
+        borderBottom="1.5px solid #f0f0f0"
+        bg="white"
       >
         <Flex
-          cursor={"pointer"}
+          alignItems="center"
+          flexDirection={"column"}
+          cursor="pointer"
           onClick={handleClickLogo}
-          display={{ lg: "flex", md: "none", sm: "none", base: "none" }}
-          justifyContent={"center"}
-          flexDir={"column"}
+          gap={2}
         >
           <Text
-            fontWeight={"530"}
-            fontSize={"50px"}
-            color={"#2e3337"}
-            mb={0}
-            h={"55px"}
+            fontWeight="bold"
+            fontSize="2.5rem"
+            color="#2e3337"
+            letterSpacing="1px"
+            lineHeight="1"
+            fontFamily="Montserrat, sans-serif"
           >
             BadmintonStore
           </Text>
-          <Text fontSize={"13px"} color={"#2e3337"} mb={0}>
+          <Text fontSize="sm" color="#888" ml={2}>
             part of the LOOKFANTASTIC group
           </Text>
         </Flex>
-        <Box
-          w={"40%"}
-          display={{ lg: "flex", md: "none", sm: "none", base: "none" }}
-        >
+        <Box w="40%">
           <Search />
         </Box>
-        <Flex
-          w={"20%"}
-          justifyContent={"space-evenly"}
-          display={{ lg: "flex", md: "none", sm: "none", base: "none" }}
-        >
+        <Flex alignItems="center" gap={6}>
           <Acount />
-
-          <Link onClick={handleCartClick} >
+          <Box as="span" onClick={handleCartClick} cursor="pointer">
             <Cart ref={cartRef} num={num} />
-          </Link>
+          </Box>
         </Flex>
       </Box>
-      <Flex
-        display={{ lg: "flex", md: "none", sm: "none", base: "none" }}
-        gap="10px"
-        bg="white"
-        boxShadow={` rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;`}
-        justifyContent="center"
-        color={"#333"}
-        fontSize={"15px"}
-      >
-        <Holiday />
-        <Sale />
-        <Skin />
-        <Hair />
-        <Makeup />
-        <Brands />
-        <Bath />
-        <Fragrance />
-        <Blog />
-        <SelfCare />
-        <Tools />
-        <Trending />
-        <Build />
-      </Flex>
     </Flex>
   );
 }
