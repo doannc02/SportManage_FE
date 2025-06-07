@@ -32,7 +32,6 @@ function UserAccount() {
   const tokenApp = getAppToken()
   const { user, setUser } = useContext(UserContext);
   //   const { logout } = useAuth();
-  console.log(user)
 
 
   return (

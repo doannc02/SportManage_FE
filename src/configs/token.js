@@ -3,7 +3,6 @@ import cookie from 'js-cookie'
 export const getAppToken = () => {
     try {
         const val = cookie.get('ACCESS_TOKEN')
-        console.log(JSON.parse(val), 'vl')
         if (val) return JSON.parse(val)
         return null
     } catch (e) {

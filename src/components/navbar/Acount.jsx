@@ -22,8 +22,7 @@ function Acount() {
   const navigate = useNavigate();
 
   const { user } = useContext(UserContext);
-  console.log(user, "acount")
-  const tokenApp = getAppToken()
+  const tokenApp = getAppToken();
 
   if (tokenApp) {
     return (<UserAccount />)

@@ -6,7 +6,8 @@ export const getProductList = async (
     {
         pageSize,
         pageNumber,
-        keyword
+        keyword,
+        categories
     }
 ) => {
     const { data } = await authApi({
@@ -15,19 +16,20 @@ export const getProductList = async (
         params: {
             pageSize,
             pageNumber,
-            keyword
+            keyword,
+            categories
         }
     })
     return data
 }
 
 export const useQueryProductsList = (
-    { pageSize, pageNumber, keyword },
+    { pageSize, pageNumber, keyword, categories },
     options
 ) => {
     return useQuery(
-        ['/api/products/paging', pageSize, pageNumber, keyword],
-        () => getProductList({ pageSize, pageNumber, keyword }),
+        ['/api/products/paging', pageSize, pageNumber, keyword, categories],
+        () => getProductList({ pageSize, pageNumber, keyword, categories }),
         {
             ...defaultOption,
             ...options,
