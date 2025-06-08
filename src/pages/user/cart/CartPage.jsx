@@ -4,7 +4,7 @@ import {
   Flex,
   Text,
 } from "@chakra-ui/react";
-import CartTable from "../components/cart/CartTable";
+import CartTable from "../../../components/cart/CartTable";
 import { Link } from "react-router-dom";
 
 

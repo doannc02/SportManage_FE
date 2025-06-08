@@ -34,16 +34,16 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { StarIcon, ChevronLeftIcon, ChevronRightIcon, CloseIcon, ChatIcon, ArrowBackIcon } from "@chakra-ui/icons";
-import { useQueryGetProductReview, useQueryProductsDetail } from "../services/customers/products";
-import { addToCartItem } from "../services/customers/carts";
-import { submitReview, submitReviewComment } from "../services/customers/reviews";
+import { useQueryGetProductReview, useQueryProductsDetail } from "../../../services/customers/products";
+import { addToCartItem } from "../../../services/customers/carts";
+import { submitReview, submitReviewComment } from "../../../services/customers/reviews";
 import { useMutation } from "react-query";
-import { UserContext } from "../Contexts/UserContext";
-import { getAppToken } from "../configs/token";
-import { BASE_URL } from "../configs/auth";
-import { ProductOffers } from "../components/customer/product-detail/product-offers";
-import { GroupedAttributeDisplay } from "../components/customer/product-detail/product-group-attribute";
-import { ReviewComment } from "../components/products/review-comment";
+import { UserContext } from "../../../Contexts/UserContext";
+import { getAppToken } from "../../../configs/token";
+import { BASE_URL } from "../../../configs/auth";
+import { ProductOffers } from "../../../components/customer/product-detail/product-offers";
+import { GroupedAttributeDisplay } from "../../../components/customer/product-detail/product-group-attribute";
+import { ReviewComment } from "../../../components/products/review-comment";
 
 function buildCommentTree(comments) {
   // Nếu comments đã có cấu trúc cây (có thuộc tính replies), 
