@@ -46,6 +46,8 @@ import {
     XCircle,
     Circle
 } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { useQueryOrderDetail } from '../../../services/customers/orders';
 
 // Mock order data
 const mockOrderData = {
@@ -59,7 +61,7 @@ const mockOrderData = {
     shippingFee: 0,
     finalAmount: 52182000,
     paymentMethod: "COD",
-    paymentStatus: "pending",
+    paymentStatus: "shipping",
     voucher: {
         code: "FIRST10",
         name: "Giảm giá 10% cho đơn hàng đầu tiên",
@@ -243,14 +245,14 @@ const OrderTimeline = ({ timeline }) => {
 
 // Product item component
 const OrderItem = ({ item }) => {
-    const { productVariant, quantity, unitPrice, totalPrice } = item;
+    const {productId, productName, quantity, unitPrice, totalPrice } = item;
 
     return (
         <Box p={4} borderBottom="1px" borderColor="gray.100" _last={{ borderBottom: 'none' }}>
             <HStack align="flex-start" spacing={4}>
                 <Image
-                    src={productVariant.image}
-                    alt={productVariant.name}
+                    src={'https://png.pngtree.com/png-clipart/20191120/original/pngtree-package-glyph-icon-vector-png-image_5058430.jpg'}
+                    alt={productName}
                     boxSize="64px"
                     objectFit="cover"
                     borderRadius="lg"
@@ -258,10 +260,10 @@ const OrderItem = ({ item }) => {
                 />
                 <Box flex={1} minW={0}>
                     <Text fontWeight="medium" color="gray.900" noOfLines={2}>
-                        {productVariant.name}
+                        {productName}
                     </Text>
                     <Text fontSize="sm" color="gray.500" mt={1}>
-                        SKU: {productVariant.sku}
+                        ID: {productId}
                     </Text>
                     <Flex justify="space-between" align="center" mt={2}>
                         <Text fontSize="sm" color="gray.600">
@@ -283,18 +285,24 @@ const OrderItem = ({ item }) => {
 };
 
 const OrderDetailPage = () => {
+    
     const [orderData, setOrderData] = useState(mockOrderData);
+    const {id} = useParams()
     const [isRefreshing, setIsRefreshing] = useState(false);
     const toast = useToast();
 
     const bgColor = useColorModeValue('gray.50', 'gray.900');
     const cardBg = useColorModeValue('white', 'gray.800');
 
-    const currentStatus = statusConfig[orderData.status];
-
+    const currentStatus = statusConfig[mockOrderData?.status];
+      const { data} = useQueryOrderDetail(
+        { id: id },
+      );
+      console.log('order detail', data);
+    const finalAmount = data?.subTotal - (data?.discountAmount ? data?.discountAmount : 0)
     const handleCopyOrderId = async () => {
         try {
-            await navigator.clipboard.writeText(orderData.id);
+            await navigator.clipboard.writeText(orderData?.id);
             toast({
                 title: "Đã sao chép mã đơn hàng",
                 status: "success",
@@ -323,6 +331,13 @@ const OrderDetailPage = () => {
         });
     };
 
+    // Helper to add days to a date
+    const addDays = (dateString, days) => {
+        const date = new Date(dateString);
+        date.setDate(date.getDate() + days);
+        return date;
+    };
+
     return (
         <Box minH="100vh" bg={bgColor}>
             {/* Header */}
@@ -339,7 +354,7 @@ const OrderDetailPage = () => {
                                 <Heading size="lg" color="gray.900">Chi tiết đơn hàng</Heading>
                                 <HStack spacing={2} mt={1}>
                                     <Text color="gray.600">Mã đơn hàng:</Text>
-                                    <Text fontFamily="mono" fontWeight="medium">{orderData.id}</Text>
+                                    <Text fontFamily="mono" fontWeight="medium">{data?.id}</Text>
                                     <IconButton
                                         size="sm"
                                         icon={<Copy size={16} />}
@@ -396,7 +411,7 @@ const OrderDetailPage = () => {
                                     </Flex>
                                 </CardHeader>
                                 <CardBody>
-                                    <OrderTimeline timeline={orderData.timeline} />
+                                    <OrderTimeline timeline={orderData?.timeline} />
 
                                     <Alert status="info" mt={6} borderRadius="lg">
                                         <AlertIcon as={AlertCircle} />
@@ -405,11 +420,11 @@ const OrderDetailPage = () => {
                                             <AlertDescription>
                                                 <Text>
                                                     Dự kiến giao hàng: <Text as="span" fontWeight="bold">
-                                                        {formatDate(orderData.estimatedDelivery)}
+                                                        {formatDate(addDays(data?.orderDate, 7))}
                                                     </Text>
                                                 </Text>
                                                 <Text mt={1}>
-                                                    Đơn hàng sẽ được giao trong vòng 3-5 ngày làm việc.
+                                                    Đơn hàng sẽ được giao sau 7 ngày kể từ ngày đặt hàng.
                                                 </Text>
                                             </AlertDescription>
                                         </Box>
@@ -423,7 +438,7 @@ const OrderDetailPage = () => {
                                     <Heading size="md">Sản phẩm đã đặt</Heading>
                                 </CardHeader>
                                 <CardBody p={0}>
-                                    {orderData.items.map((item) => (
+                                    {data?.orderItems?.map((item) => (
                                         <OrderItem key={item.id} item={item} />
                                     ))}
                                 </CardBody>
@@ -466,24 +481,24 @@ const OrderDetailPage = () => {
                                     <VStack spacing={3} align="stretch" fontSize="sm">
                                         <Flex justify="space-between">
                                             <Text color="gray.600">Tạm tính:</Text>
-                                            <Text>{orderData.totalAmount.toLocaleString()} VND</Text>
+                                            <Text>{data?.subTotal.toLocaleString()} VND</Text>
                                         </Flex>
 
-                                        {orderData.voucher && (
+                                        {data?.voucherCode && (
                                             <Flex justify="space-between" color="green.600">
                                                 <HStack>
                                                     <Tag size={16} />
-                                                    <Text>Giảm giá ({orderData.voucher.code}):</Text>
+                                                    <Text>Mã giảm giá ({data?.voucherCode}):</Text>
                                                 </HStack>
-                                                <Text>-{orderData.discountAmount.toLocaleString()} VND</Text>
+                                                <Text>-{data?.discountAmount.toLocaleString()} VND</Text>
                                             </Flex>
                                         )}
 
                                         <Flex justify="space-between">
                                             <Text color="gray.600">Phí vận chuyển:</Text>
                                             <Text>
-                                                {orderData.shippingFee === 0 ? 'Miễn phí' :
-                                                    orderData.shippingFee.toLocaleString() + ' VND'}
+                                                {orderData?.shippingFee === 0 ? 'Miễn phí' :
+                                                    orderData?.shippingFee.toLocaleString() + ' VND'}
                                             </Text>
                                         </Flex>
 
@@ -492,7 +507,7 @@ const OrderDetailPage = () => {
                                         <Flex justify="space-between" fontWeight="semibold" fontSize="lg">
                                             <Text>Tổng cộng:</Text>
                                             <Text color="teal.600">
-                                                {orderData.finalAmount.toLocaleString()} VND
+                                                {finalAmount.toLocaleString()} VND
                                             </Text>
                                         </Flex>
                                     </VStack>
@@ -509,18 +524,18 @@ const OrderDetailPage = () => {
                                         <CreditCard size={20} color="gray" />
                                         <Box>
                                             <Text fontWeight="medium">
-                                                {orderData.paymentMethod === 'COD' ?
+                                                {orderData?.paymentMethod === 'COD' ?
                                                     'Thanh toán khi nhận hàng' : 'Thẻ tín dụng'}
                                             </Text>
                                             <Text
                                                 fontSize="sm"
                                                 color={
-                                                    orderData.paymentStatus === 'paid' ? 'green.600' :
-                                                        orderData.paymentStatus === 'failed' ? 'red.600' : 'yellow.600'
+                                                    orderData?.paymentStatus === 'paid' ? 'green.600' :
+                                                        orderData?.paymentStatus === 'failed' ? 'red.600' : 'yellow.600'
                                                 }
                                             >
-                                                {orderData.paymentStatus === 'paid' ? 'Đã thanh toán' :
-                                                    orderData.paymentStatus === 'failed' ? 'Thanh toán thất bại' : 'Chưa thanh toán'}
+                                                {orderData?.paymentStatus === 'paid' ? 'Đã thanh toán' :
+                                                    orderData?.paymentStatus === 'failed' ? 'Thanh toán thất bại' : 'Chưa thanh toán'}
                                             </Text>
                                         </Box>
                                     </HStack>
@@ -538,10 +553,10 @@ const OrderDetailPage = () => {
                                             <User size={20} color="gray" />
                                             <Box>
                                                 <Text fontWeight="medium">
-                                                    {orderData.shippingAddress.recipientName}
+                                                    {data?.shippingAddress?.receiveName}
                                                 </Text>
                                                 <Text fontSize="sm" color="gray.600">
-                                                    {orderData.customer.email}
+                                                    {orderData?.customer.email}
                                                 </Text>
                                             </Box>
                                         </HStack>
@@ -549,14 +564,14 @@ const OrderDetailPage = () => {
                                         <HStack align="flex-start" spacing={3}>
                                             <Phone size={20} color="gray" />
                                             <Text fontWeight="medium">
-                                                {orderData.shippingAddress.phone}
+                                                {data?.shippingAddress?.phone}
                                             </Text>
                                         </HStack>
 
                                         <HStack align="flex-start" spacing={3}>
                                             <MapPin size={20} color="gray" />
                                             <Text fontSize="sm" color="gray.600" lineHeight="relaxed">
-                                                {orderData.shippingAddress.fullAddress}
+                                                {data?.shippingAddress?.addressDetail}
                                             </Text>
                                         </HStack>
                                     </VStack>
@@ -575,7 +590,7 @@ const OrderDetailPage = () => {
                                             <Box>
                                                 <Text color="gray.600">Ngày đặt hàng:</Text>
                                                 <Text fontWeight="medium">
-                                                    {formatDate(orderData.createdAt)}
+                                                    {formatDate(data?.orderDate)}
                                                 </Text>
                                             </Box>
                                         </HStack>
@@ -585,7 +600,7 @@ const OrderDetailPage = () => {
                                             <Box>
                                                 <Text color="gray.600">Dự kiến giao hàng:</Text>
                                                 <Text fontWeight="medium">
-                                                    {formatDate(orderData.estimatedDelivery)}
+                                                     {formatDate(addDays(data?.orderDate, 7))}
                                                 </Text>
                                             </Box>
                                         </HStack>

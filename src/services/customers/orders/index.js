@@ -1,3 +1,4 @@
+import { useQuery } from "react-query"
 import { authApi } from "../../../configs/auth"
 
 export const createOrderUser = async (
@@ -21,4 +22,54 @@ export const createOrderUser = async (
         }
     })
     return data
+}
+
+
+
+export const getOrderList = async (
+
+) => {
+    const { data } = await authApi({
+        method: 'get',
+        url: '/api/order',
+    })
+    return data
+}
+
+export const useQueryOrderList = (
+    options
+) => {
+    return useQuery(['/api/order'], () => getOrderList(), {
+        ...options,
+    })
+}
+
+
+export const getOrderDetail = async (
+    {
+        id
+    }
+) => {
+    const { data } = await authApi({
+        method: 'get',
+        url: `/api/orders/${id}`,
+        params: {
+            id: id
+        }
+    })
+    return data
+}
+
+export const useQueryOrderDetail = (
+    {
+        id
+    },
+    options
+) => {
+    return useQuery(['/api/orders/detail', id], () => getOrderDetail({
+        id
+    }), {
+        // ...defaultOption,
+        ...options,
+    })
 }

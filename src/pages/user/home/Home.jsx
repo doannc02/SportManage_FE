@@ -1,10 +1,10 @@
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
-import Crousel from "../components/Home/Crousel";
-import Trending from "../components/Home/Trending";
-import CardSlide from "../components/Home/CardSlide";
-import Middle from "../components/Home/Middle";
-import { ProductSlider } from "../components/Home/MainProductSlide";
-import ProductList from "../components/Home/ProductList";
+import Crousel from "../../../components/Home/Crousel";
+import Trending from "../../../components/Home/Trending";
+import CardSlide from "../../../components/Home/CardSlide";
+import Middle from "../../../components/Home/Middle";
+import { ProductSlider } from "../../../components/Home/MainProductSlide";
+import ProductList from "../../../components/Home/ProductList";
 const mockProducts = [
   {
     Id: "1",

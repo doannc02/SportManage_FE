@@ -19,14 +19,16 @@ import {
   AlertTitle,
 } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
-import { UserContext } from "../Contexts/UserContext";
-import { useQueryProductsList } from "../services/customers/products";
-import { BASE_URL } from "../configs/auth";
+import { UserContext } from "../../../Contexts/UserContext";
+import { useQueryProductsList } from "../../../services/customers/products";
+import { BASE_URL } from "../../../configs/auth";
 import { Checkbox, Empty } from "antd";
-import useDetailProduct from "./admin/products/detail/useDetail";
+import useDetailProduct from "../../admin/products/detail/useDetail";
 import { set } from "lodash";
+import { useNavigate } from "react-router-dom";
 
 const ProductPage = () => {
+  const navigate = useNavigate()
   const { search, setSearch } = useContext(UserContext);
   const [noofElements, setNoofElements] = useState(10);
   const [selectCategory, setSelectCategory] = useState([]);
@@ -99,6 +101,7 @@ const ProductPage = () => {
                   transition="all 0.3s ease"
                   _hover={{ shadow: "xl", transform: "translateY(-4px)" }}
                   position="relative"
+                   onClick={() => navigate(`/product/${el.id}`)}
                 >
                   {el.quantity < 1 && (
                     <Alert status="error" roundedTop="xl">
