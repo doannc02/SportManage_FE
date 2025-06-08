@@ -251,7 +251,7 @@ const CartTable = () => {
         }
       }),
       shippingAddressId: shippingAddressId,
-      voucherCode: selectedVoucher.code,
+      voucherCode: selectedVoucher?.code ?? null,
       paymentMethod: paymentMethod,
       notes: ""
     }
