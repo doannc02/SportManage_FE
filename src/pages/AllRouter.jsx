@@ -27,6 +27,8 @@ import CategoryListAdmin from './admin/categories/list'
 import SupplierListAdmin from './admin/suppliers/list'
 import OrderDetailPage from './OrderDetail'
 import OrderManagement from './shipper/order-deliverys/list'
+import CategoryAdmin from './admin/categories/detail'
+import AddMultipleCategories from './admin/categories/add-multiple'
 
 export default function AllRouter() {
 
@@ -76,8 +78,8 @@ export default function AllRouter() {
 
           <Route path="/categories" element={<DashboardLayout title='Category Manager' />}>
             <Route path="list" element={<CategoryListAdmin />} />
-            <Route path='add' element={<VoucherDetailAdmin />} />
-            <Route path='detail/:id' element={<VoucherDetailAdmin title='Voucher detail' />} />
+            <Route path='add' element={<AddMultipleCategories />} />
+            <Route path='detail/:id' element={<CategoryAdmin title='Category detail' />} />
           </Route>
 
           <Route path="/order-admin" element={<DashboardLayout title='Order Manager' />}>

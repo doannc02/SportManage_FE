@@ -37,7 +37,7 @@ export const ProductSlider = ({ products }) => {
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={2}
-        // slidesPerView={4}
+        slidesPerView={4}
         navigation
         // pagination={{ clickable: true }}
         autoplay={{ delay: 2500 }}
