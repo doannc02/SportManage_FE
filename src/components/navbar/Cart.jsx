@@ -5,29 +5,51 @@ import { BsMinecartLoaded } from "react-icons/bs";
 
 const Cart = forwardRef(({ num }, ref) => {
   return (
-    <Flex alignItems="center" ref={ref}>
-      <Box display="flex" alignItems="center" h="30px" position="relative">
-        <BsMinecartLoaded size="20px" />
+    <Flex
+      alignItems="center"
+      ref={ref}
+      cursor="pointer"
+      _hover={{ bg: "gray.50", borderRadius: "md", boxShadow: "sm" }}
+      px={4}
+      py={2}
+      transition="all 0.2s"
+      position="relative"
+      minW="48px"
+    >
+      <Box position="relative" display="flex" alignItems="center" h="32px">
+        <BsMinecartLoaded size="26px" color="#1A202C" />
         {num > 0 && (
           <Text
             position="absolute"
-            top="-5px"
-            right="-10px"
-            px="4px"
-            h="16px"
-            minW="16px"
-            fontSize="10px"
-            lineHeight="16px"
+            top="-8px"
+            right="-12px"
+            px="7px"
+            h="20px"
+            minW="20px"
+            fontSize="12px"
+            fontWeight="bold"
+            lineHeight="20px"
             textAlign="center"
             color="white"
-            bg="red.500"
+            bgGradient="linear(to-tr, red.500, orange.400)"
+            boxShadow="0 2px 6px rgba(0,0,0,0.18)"
             borderRadius="full"
+            border="2px solid white"
+            zIndex={1}
           >
             {num}
           </Text>
         )}
       </Box>
-      <Text marginLeft={4} display={{ lg: "initial", md: "none", sm: "none", base: "none" }}>
+      <Text
+        ml={3}
+        fontWeight="bold"
+        color="gray.800"
+        fontSize="md"
+        display={{ base: "none", md: "block" }}
+        letterSpacing="wide"
+        userSelect="none"
+      >
         Cart
       </Text>
     </Flex>
