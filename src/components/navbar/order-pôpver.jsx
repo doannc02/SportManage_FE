@@ -1,8 +1,5 @@
-import { forwardRef } from "react";
-import PropTypes from "prop-types";
-import { Box, Flex, Text } from "@chakra-ui/react";
-import { BsMinecartLoaded } from "react-icons/bs";
-import { BaggageClaim, PackageCheck } from "lucide-react";
+import { Box, Flex } from "@chakra-ui/react";
+import { PackageCheck } from "lucide-react";
 import { Popover } from "antd";
 
 const Order = () => {

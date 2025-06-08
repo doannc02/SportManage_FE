@@ -24,7 +24,7 @@ import { UserContext } from "../../Contexts/UserContext";
 import { useContext, useEffect, useRef, useState } from "react";
 import UserAccount from "./UserAccount";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import Order from "./Order";
+import Order from "./order-pôpver";
 
 function Navbar() {
   const cartRef = useRef();
@@ -118,7 +118,7 @@ function Navbar() {
             <Cart ref={cartRef} num={num} />
           </Box>
           <Box as="span" onClick={() => navigate('/CartPage')} cursor="pointer">
-            <Order/>
+            <Order />
           </Box>{" "}
         </Flex>
       </Box>
