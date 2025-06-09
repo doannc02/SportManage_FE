@@ -1,11 +1,10 @@
-import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Image, Box } from "@chakra-ui/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "./style.css";
-import { Autoplay, Navigation, Scrollbar } from "swiper/modules";
+import {  Scrollbar } from "swiper/modules";
 
 const images = [
   "https://yumo.ca/cdn/shop/files/25.01.23-2.png?v=1737677229",

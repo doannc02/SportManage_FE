@@ -1,5 +1,4 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-
 import TopNav from "./TopNav";
 import Search from "./Search";
 import Acount from "./Acount";
@@ -10,7 +9,6 @@ import Popsearch from "./Popsearch";
 import { UserContext } from "../../Contexts/UserContext";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Order from "./order-popover";
 import OrderPopover from "./order-popover";
 
 function Navbar() {

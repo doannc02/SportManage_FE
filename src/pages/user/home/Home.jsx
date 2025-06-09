@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Image } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import Crousel from "../../../components/Home/Crousel";
 import Trending from "../../../components/Home/Trending";
 import CardSlide from "../../../components/Home/CardSlide";
@@ -6,7 +6,6 @@ import Middle from "../../../components/Home/Middle";
 import { ProductSlider } from "../../../components/Home/MainProductSlide";
 import ProductList from "../../../components/Home/ProductList";
 import Categories from "../../../components/Home/categories-main-dashboard";
-import { useQueryCategoryList } from "../../../services/admins/categories";
 const mockProducts = [
   {
     Id: "1",
