@@ -122,7 +122,7 @@ export const OrderCard = ({ order, userRole, onViewDetails, onUpdateState }) => 
                                                 <MenuItem
                                                     key={state}
                                                     onClick={() => {
-                                                        if (['shipped', 'delivered', 'cancelled'].includes(state)) {
+                                                        if (['Pending', 'Delivered', 'Cancelled'].includes(state)) {
                                                             handleUpdateWithPhoto(order.id, state);
                                                         } else {
                                                             onUpdateState(order.id, state);

@@ -1,107 +1,116 @@
-import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import './DashboardLayout.css'
-import SidebarMenu from './SlidebarMenu'
-import { getAppToken } from '../../configs/token'
-import { Outlet } from 'react-router-dom'
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import "./DashboardLayout.css";
+import SidebarMenu from "./SlidebarMenu";
+import { getAppToken } from "../../configs/token";
+import { Outlet } from "react-router-dom";
 
 function DashboardLayout({ children, title }) {
-    const [collapsed, setCollapsed] = useState(false)
-    const [isMobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const [isMobile, setIsMobile] = useState(false)
-    const tokenApp = getAppToken()
+    const [collapsed, setCollapsed] = useState(false);
+    const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const tokenApp = getAppToken();
 
     // Check if device is mobile
     useEffect(() => {
         const checkMobile = () => {
-            setIsMobile(window.innerWidth <= 768)
-        }
+            setIsMobile(window.innerWidth <= 768);
+        };
 
-        checkMobile()
-        window.addEventListener('resize', checkMobile)
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
 
-        return () => window.removeEventListener('resize', checkMobile)
-    }, [])
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
 
     // Close mobile menu when screen becomes desktop size
     useEffect(() => {
         if (!isMobile && isMobileMenuOpen) {
-            setMobileMenuOpen(false)
+            setMobileMenuOpen(false);
         }
-    }, [isMobile, isMobileMenuOpen])
+    }, [isMobile, isMobileMenuOpen]);
 
     // Prevent body scroll when mobile menu is open
     useEffect(() => {
         if (isMobileMenuOpen) {
-            document.body.style.overflow = 'hidden'
+            document.body.style.overflow = "hidden";
         } else {
-            document.body.style.overflow = 'unset'
+            document.body.style.overflow = "unset";
         }
 
         // Cleanup on unmount
         return () => {
-            document.body.style.overflow = 'unset'
-        }
-    }, [isMobileMenuOpen])
+            document.body.style.overflow = "unset";
+        };
+    }, [isMobileMenuOpen]);
 
     const toggleCollapsed = () => {
         if (!isMobile) {
-            setCollapsed(!collapsed)
+            setCollapsed(!collapsed);
         }
-    }
+    };
 
     const toggleMobileMenu = () => {
-        setMobileMenuOpen(!isMobileMenuOpen)
-    }
+        setMobileMenuOpen(!isMobileMenuOpen);
+    };
 
     const closeMobileMenu = () => {
-        setMobileMenuOpen(false)
-    }
+        setMobileMenuOpen(false);
+    };
 
     // Handle overlay click to close mobile menu
     const handleOverlayClick = (e) => {
         if (e.target === e.currentTarget) {
-            closeMobileMenu()
+            closeMobileMenu();
         }
-    }
+    };
 
     // Handle escape key to close mobile menu
     useEffect(() => {
         const handleEscapeKey = (e) => {
-            if (e.key === 'Escape' && isMobileMenuOpen) {
-                closeMobileMenu()
+            if (e.key === "Escape" && isMobileMenuOpen) {
+                closeMobileMenu();
             }
-        }
+        };
 
-        document.addEventListener('keydown', handleEscapeKey)
-        return () => document.removeEventListener('keydown', handleEscapeKey)
-    }, [isMobileMenuOpen])
+        document.addEventListener("keydown", handleEscapeKey);
+        return () => document.removeEventListener("keydown", handleEscapeKey);
+    }, [isMobileMenuOpen]);
+
+    const roleName = tokenApp?.roles?.includes("Admin")
+        ? "ADMIN"
+        : tokenApp?.roles?.includes("Shipper")
+            ? "SHIPPER"
+            : tokenApp?.role?.includes("USER")
+                ? "USER"
+                : "GUEST";
 
     return (
         <div className="admin-layout">
             {/* Mobile Overlay */}
             <div
-                className={`mobile-overlay ${isMobileMenuOpen ? 'active' : ''}`}
+                className={`mobile-overlay ${isMobileMenuOpen ? "active" : ""}`}
                 onClick={handleOverlayClick}
                 aria-hidden="true"
             />
 
             {/* Sidebar */}
             <div
-                className={`sidebar ${collapsed && !isMobile ? 'collapsed' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''}`}
+                className={`sidebar ${collapsed && !isMobile ? "collapsed" : ""} ${isMobileMenuOpen ? "mobile-open" : ""
+                    }`}
                 role="navigation"
                 aria-label="Main navigation"
             >
                 <div className="sidebar-header">
-                    <h2>{collapsed && !isMobile ? "M" : 'Manager Admin'}</h2>
+                    <h2>{collapsed && !isMobile ? "M" : "Manager Admin"}</h2>
 
                     {/* Desktop toggle button */}
                     {!isMobile && (
                         <button
                             onClick={toggleCollapsed}
-                            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
                         >
-                            {collapsed ? '→' : '←'}
+                            {collapsed ? "→" : "←"}
                         </button>
                     )}
 
@@ -116,6 +125,7 @@ function DashboardLayout({ children, title }) {
                 </div>
 
                 <SidebarMenu
+                    roleName={roleName}
                     collapsed={collapsed && !isMobile}
                     onMenuClick={isMobile ? closeMobileMenu : undefined}
                 />
@@ -124,7 +134,7 @@ function DashboardLayout({ children, title }) {
             {/* Content Area */}
             <div className="content-area">
                 <div className="content-header">
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{ display: "flex", alignItems: "center" }}>
                         {/* Mobile menu button */}
                         <button
                             className="mobile-menu-btn"
@@ -147,12 +157,12 @@ function DashboardLayout({ children, title }) {
                 </main>
             </div>
         </div>
-    )
+    );
 }
 
 DashboardLayout.propTypes = {
     children: PropTypes.node,
     title: PropTypes.string.isRequired,
-}
+};
 
-export default DashboardLayout
+export default DashboardLayout;

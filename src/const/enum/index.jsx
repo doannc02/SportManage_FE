@@ -1,5 +1,16 @@
 import { CheckCircle, Clock, Package, Truck, XCircle } from "lucide-react";
-import { FaCreditCard, FaMoneyBillWave, FaWallet } from "react-icons/fa";
+import { FaCreditCard, FaMoneyBillWave, FaUserShield, FaWallet } from "react-icons/fa";
+import {
+    FiHome,
+    FiUsers,
+    FiBox,
+    FiSettings,
+    FiBarChart2,
+    FiList,
+    FiGift,
+    FiLogOut,
+} from "react-icons/fi";
+import { MdOutlineCategory } from "react-icons/md";
 
 export const optionSizeByUnit = {
     "1": [ // Box - Hộp 📦
@@ -123,3 +134,110 @@ export const ORDER_STATES = {
     Sendered: { label: 'Đã giao', color: 'green', icon: CheckCircle },
     Cancelled: { label: 'Đã hủy', color: 'red', icon: XCircle }
 };
+
+export const TYPE_ORDER_STATE = "Pending" | "Receivered" | "Shipped" | "Sendered" | "Cancelled";
+
+export const LIST_ROLES = ["ADMIN", "SHIPPER", "CUSTOMER", "GUEST"];
+
+
+export const menuAdminItems = [
+    {
+        title: "Dashboard",
+        icon: <></>,
+        path: "/admin",
+    },
+    {
+        title: "Quản lý chung",
+        icon: <FiList />,
+        path: "/generals",
+        submenu: [
+            {
+                title: "Danh mục sản phẩm",
+                path: "/generals/categoryProduct",
+                icon: <MdOutlineCategory />,
+            },
+            { title: "Nhà cung cấp", path: "/generals/supplier" },
+            { title: "Thương hiệu", path: "/generals/brand" },
+        ],
+    },
+    {
+        title: "Quản lý người dùng",
+        icon: <FiUsers />,
+        path: "/users",
+        submenu: [
+            { title: "Danh sách người dùng", path: "/users/list" },
+            { title: "Thêm người dùng mới", path: "/users/new" },
+            {
+                title: "Phân quyền",
+                path: "/users/permissions",
+                icon: <FaUserShield />,
+            },
+        ],
+    },
+    {
+        title: "Brands",
+        icon: <FiBox />,
+        path: "/brands/list",
+    },
+    {
+        title: "Suppliers",
+        icon: <FiBox />,
+        path: "/suppliers/list",
+    },
+    {
+        title: "Categories",
+        icon: <FiBox />,
+        path: "/categories/list",
+    },
+    {
+        title: "Voucher",
+        icon: <FiGift />,
+        path: "/vouchers/list",
+    },
+    {
+        title: "Order Management",
+        icon: <FiList />,
+        path: "/order-admin/list",
+    },
+    {
+        title: "Sản phẩm",
+        icon: <FiBox />,
+        path: "/products/list",
+    },
+    {
+        title: "Báo cáo",
+        icon: <FiBarChart2 />,
+        path: "/reports",
+        submenu: [
+            { title: "Doanh thu", path: "/reports/revenue" },
+            { title: "Khách hàng", path: "/reports/customers" },
+        ],
+    },
+    {
+        title: "Cài đặt",
+        icon: <FiSettings />,
+        path: "/settings",
+    },
+    {
+        title: "Đăng xuất",
+        icon: <FiLogOut />,
+    },
+];
+
+export const menuShipperItems = [
+    { title: "Dashboard", icon: <FiHome />, path: "/shipper" },
+    {
+        title: "Quản lý đơn hàng",
+        icon: <FiList />,
+        path: "/order-delivery/list"
+    },
+    {
+        title: "Đăng xuất",
+        icon: <FiLogOut />,
+    },]
+
+
+export const MENU_ENUMS = [
+    { value: menuAdminItems, role: "ADMIN" },
+    { value: menuShipperItems, role: "SHIPPER" }
+]

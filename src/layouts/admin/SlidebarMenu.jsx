@@ -14,97 +14,19 @@ import {
 } from "react-icons/fi";
 import { MdCategory } from "react-icons/md";
 import { FaUserShield } from "react-icons/fa";
-import { removeAppToken } from "../../configs/token";
+import { getAppToken, removeAppToken } from "../../configs/token";
+import PropTypes from "prop-types";
+import { MENU_ENUMS } from "../../const/enum";
 
-const menuItems = [
-  {
-    title: "Dashboard",
-    icon: <FiHome />,
-    path: "/admin",
-  },
-  {
-    title: "Quản lý chung",
-    icon: <FiList />,
-    path: "/generals",
-    submenu: [
-      {
-        title: "Danh mục sản phẩm",
-        path: "/generals/categoryProduct",
-        icon: <MdCategory />,
-      },
-      { title: "Nhà cung cấp", path: "/generals/supplier" },
-      { title: "Thương hiệu", path: "/generals/brand" },
-    ],
-  },
-  {
-    title: "Quản lý người dùng",
-    icon: <FiUsers />,
-    path: "/users",
-    submenu: [
-      { title: "Danh sách người dùng", path: "/users/list" },
-      { title: "Thêm người dùng mới", path: "/users/new" },
-      {
-        title: "Phân quyền",
-        path: "/users/permissions",
-        icon: <FaUserShield />,
-      },
-    ],
-  },
-  {
-    title: "Brands",
-    icon: <FiBox />,
-    path: "/brands/list",
-  },
-  {
-    title: "Suppliers",
-    icon: <FiBox />,
-    path: "/suppliers/list",
-  },
-  {
-    title: "Categories",
-    icon: <FiBox />,
-    path: "/categories/list",
-  },
-  {
-    title: "Voucher",
-    icon: <FiGift />,
-    path: "/vouchers/list",
-  },
-  {
-    title: "Order Management",
-    icon: <FiList />,
-    path: "/order-admin/list",
-  },
-  {
-    title: "Sản phẩm",
-    icon: <FiBox />,
-    path: "/products/list",
-  },
-  {
-    title: "Báo cáo",
-    icon: <FiBarChart2 />,
-    path: "/reports",
-    submenu: [
-      { title: "Doanh thu", path: "/reports/revenue" },
-      { title: "Khách hàng", path: "/reports/customers" },
-    ],
-  },
-  {
-    title: "Cài đặt",
-    icon: <FiSettings />,
-    path: "/settings",
-  },
-  {
-    title: "Đăng xuất",
-    icon: <FiLogOut />,
-  },
-];
-
-function SidebarMenu({ collapsed, onMenuClick }) {
+function SidebarMenu({ roleName, collapsed, onMenuClick }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [openSubMenus, setOpenSubMenus] = useState({});
-  console.log(menuItems);
+
+  const token = getAppToken();
+  if (!token) {
+    navigate("/login");
+  }
 
   const toggleSubMenu = (title, e) => {
     e.preventDefault();
@@ -148,7 +70,7 @@ function SidebarMenu({ collapsed, onMenuClick }) {
   return (
     <nav className="sidebar-menu" role="navigation">
       <ul role="menubar">
-        {menuItems.map((item) => (
+        {MENU_ENUMS.find(i => i.role === roleName).value.map((item) => (
           <li
             key={item.title}
             className={isActive(item.path) ? "active" : ""}
@@ -224,5 +146,10 @@ function SidebarMenu({ collapsed, onMenuClick }) {
     </nav>
   );
 }
+SidebarMenu.propTypes = {
+  collapsed: PropTypes.bool,
+  onMenuClick: PropTypes.func,
+  roleName: PropTypes.string.isRequired,
+};
 
 export default SidebarMenu;
