@@ -1,9 +1,8 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import {  Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
 import {
   Typography,
   Button,
@@ -30,17 +29,21 @@ const getFallbackImage = () => {
 
 export const ProductSlider = ({ products }) => {
   return (
-    <div className="flex flex-col gap-5">
-      <div className="text-3xl text-center">
+    <div className="flex flex-col gap-6">
+      <div className="text-2xl md:text-3xl font-bold text-center mb-2 text-[#222] tracking-tight">
         Top những sản phẩm bán chạy nhất
       </div>
       <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
-        spaceBetween={2}
-        slidesPerView={4}
-        navigation
-        // pagination={{ clickable: true }}
-        autoplay={{ delay: 2500 }}
+        slidesPerView={5}
+        pagination={{
+          dynamicBullets: true,
+        }}
+        modules={[Pagination]}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
+        style={{ padding: "8px 0" }}
       >
         {(products ?? []).map((product, index) => {
           let imageSrc = "";
@@ -60,26 +63,33 @@ export const ProductSlider = ({ products }) => {
             <SwiperSlide key={product.Id ?? index}>
               <Card
                 sx={{
-                  maxWidth: 300,
-                  minHeight: 370,
-                  borderRadius: 3,
-                  border: "1px solid #e0e0e0",
-                  boxShadow: "0 2px 12px 0 rgba(0,0,0.07,0.1)",
+                  maxWidth: 180,
+                  minHeight: 260,
+                  borderRadius: 2.5,
+                  border: "1px solid #f0f0f0",
+                  boxShadow: "0 2px 8px 0 rgba(0,0,0,0.06)",
                   display: "flex",
                   flexDirection: "column",
                   background: "#fff",
+                  transition: "box-shadow 0.2s, transform 0.2s",
+                  "&:hover": {
+                    boxShadow: "0 8px 24px 0 rgba(25, 118, 210, 0.10)",
+                    transform: "translateY(-4px) scale(1.03)",
+                  },
+                  cursor: "pointer",
                 }}
               >
                 <CardMedia
                   component="img"
-                  height="100"
+                  height="120"
                   image={imageSrc}
                   alt={product.Name || "Product image"}
                   sx={{
                     objectFit: "cover",
-                    borderTopLeftRadius: 12,
-                    borderTopRightRadius: 12,
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
                     background: "#f5f5f5",
+                    width: "100%",
                   }}
                 />
                 <CardContent
@@ -87,19 +97,21 @@ export const ProductSlider = ({ products }) => {
                     flexGrow: 1,
                     display: "flex",
                     flexDirection: "column",
-                    gap: 1.5,
-                    p: 2,
+                    gap: 1,
+                    p: 1.5,
                   }}
                 >
                   <Typography
-                    variant="subtitle1"
-                    fontWeight={600}
+                    variant="subtitle2"
+                    fontWeight={700}
                     sx={{
                       overflow: "hidden",
                       display: "-webkit-box",
                       WebkitLineClamp: 1,
                       WebkitBoxOrient: "vertical",
                       color: "#222",
+                      fontSize: 15,
+                      mb: 0.5,
                     }}
                   >
                     {product.Name}
@@ -113,7 +125,8 @@ export const ProductSlider = ({ products }) => {
                       display: "-webkit-box",
                       WebkitLineClamp: 2,
                       WebkitBoxOrient: "vertical",
-                      fontSize: 14,
+                      fontSize: 12.5,
+                      mb: 0.5,
                     }}
                   >
                     {product.Description}
@@ -122,27 +135,31 @@ export const ProductSlider = ({ products }) => {
                   {product?.Variants?.[0] && (
                     <Typography
                       sx={{
-                        mt: 1,
+                        mt: 0.5,
                         fontWeight: 700,
-                        color: "#1976d2",
-                        fontSize: 18,
+                        color: "#e53935",
+                        fontSize: 16,
+                        letterSpacing: 0.2,
                       }}
                     >
-                      {product.Variants[0].Price.toLocaleString()} VND
+                      {product.Variants[0].Price.toLocaleString()}{" "}
+                      <span style={{ fontSize: 12 }}>VND</span>
                     </Typography>
                   )}
 
                   <Button
                     variant="contained"
-                    size="medium"
+                    size="small"
                     sx={{
                       mt: "auto",
                       borderRadius: 2,
                       fontWeight: 600,
                       textTransform: "none",
+                      fontSize: 13,
                       background:
                         "linear-gradient(90deg, #1976d2 0%, #42a5f5 100%)",
                       boxShadow: "none",
+                      py: 0.7,
                       "&:hover": {
                         background:
                           "linear-gradient(90deg, #1565c0 0%, #1976d2 100%)",

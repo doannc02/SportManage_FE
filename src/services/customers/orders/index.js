@@ -31,15 +31,15 @@ export const getOrderList = async (
 ) => {
     const { data } = await authApi({
         method: 'get',
-        url: '/api/order',
+        url: '/api/orders/user-paging',
     })
     return data
 }
 
-export const useQueryOrderList = (
+export const useUserOrderList = (
     options
 ) => {
-    return useQuery(['/api/order'], () => getOrderList(), {
+    return useQuery(['/orders/user-paging'], () => getOrderList(), {
         ...options,
     })
 }
