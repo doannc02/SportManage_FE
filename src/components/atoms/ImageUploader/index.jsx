@@ -91,7 +91,7 @@ export const MultiImageUploader = ({
                 onChange={handleFileChange}
             />
             <Flex gap={3} wrap="nowrap" overflowX="auto">
-                {previews.map((src, index) => (
+                {(previews ?? []).map((src, index) => (
                     <Box
                         key={index}
                         position="relative"

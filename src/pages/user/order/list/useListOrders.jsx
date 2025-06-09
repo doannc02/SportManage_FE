@@ -2,20 +2,15 @@ import { useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import { deleteProduct } from "../../../../services/customers/products";
 import _ from "lodash";
-import { Button, Tooltip } from "@mui/material";
-import { BASE_URL } from "../../../../configs/auth";
-import { Box } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useQueryVouchers } from "../../../../services/admins/vouchers";
-import { discountTypeEnums } from "../../../../const/enum";
+import { useUserOrderList } from "../../../../services/customers/orders";
+import { Button } from "antd";
 
 const defaultValues = {
     pageNumber: 0,
     pageSize: 20,
     keyWord: "",
-    startDate: "",
-    endDate: ""
 };
 
 const useListOrders = () => {
@@ -24,8 +19,8 @@ const useListOrders = () => {
 
     const [queryPage, setQueryPage] = useState(_.omitBy(defaultValues, _.isNil));
     const [openDialog, setOpenDialog] = useState(false);
-    const [selectedProductName, setSelectedProductName] = useState(null);
-    const [selectedProductId, setSelectedProductId] = useState(null);
+    const [selectedOrderName, setSelectedOrderName] = useState(null);
+    const [selectedProductId, setSelectedOrderId] = useState(null);
 
     const navigate = useNavigate()
 
@@ -65,70 +60,62 @@ const useListOrders = () => {
         setQueryPage(_.omitBy(defaultValues, _.isNil));
     };
 
-    const handleOpenDialog = (productId, name) => {
-        setSelectedProductName(name);
-        setSelectedProductId(productId)
+    const handleOpenDialog = (productId) => {
+        setSelectedOrderId(productId)
         setOpenDialog(true);
     };
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
-        setSelectedProductName(null);
+        setSelectedOrderName(null);
     };
 
     const handleConfirmDelete = async () => {
         try {
             await deleteProduct({ id: selectedProductId });
-            toast.success(`Xóa sản phẩm "${selectedProductName}" thành công!`);
+            toast.success(`Xóa đơn hàng thành công!`);
             handleCloseDialog();
             refetch();
         } catch (err) {
             const errorMessage =
                 err?.response?.data?.message ||
                 err?.message ||
-                "Xảy ra lỗi không xác định khi xóa sản phẩm.";
-            toast.error(`Không thể xoá sản phẩm: ${errorMessage}`);
-            console.error("Xoá sản phẩm thất bại:", err);
+                "Xảy ra lỗi không xác định khi xóa đơn hàng.";
+            toast.error(`Không thể xoá đơn hàng: ${errorMessage}`);
+            console.error("Xoá đơn hàng thất bại:", err);
         }
     };
     const columns = useMemo(() => [
-        { header: "Mã voucher", fieldName: "code" },
-        { header: "Tên chương trình", fieldName: "name" },
-        { header: "Loại giảm giá", fieldName: "discountType" },
-        { header: "Giá trị giảm", fieldName: "discountValue" },
-        { header: "Giá trị đơn tối thiểu", fieldName: "minOrderValue" },
-        { header: "Ngày bắt đầu", fieldName: "startDate" },
-        { header: "Ngày kết thúc", fieldName: "endDate" },
-        { header: "Trạng thái", fieldName: "isActive" },
-        { header: "Số lần còn lại", fieldName: "remainingUsage" },
-        { header: "Số lần còn lại / người", fieldName: "remainingUserUsage" },
-        { header: "Ngày tạo", fieldName: "createdAt" },
-        { header: "Hành động", fieldName: "action" },
+        { header: "Mã đơn hàng", fieldName: "id" },
+        { header: "Tên khách hàng", fieldName: "customerName" },
+        { header: "Giảm giá", fieldName: "discountAmount" },
+        { header: "Ngày đặt hàng", fieldName: "orderDate" },
+
+        { header: "Tên người nhận", fieldName: "receiveName" },
+        { header: "Số lượng mặt hàng", fieldName: "countItems" },
+        { header: "Trạng thái đơn hàng", fieldName: "state" },
     ], []);
 
 
-
-    const { data, isLoading, refetch } = useQueryVouchers({
-        ...queryPage,
-    }, {
-        enabled: !!queryPage,
-    });
-
+    const {data, isLoading, refetch} = useUserOrderList({...queryPage,})
+    console.log(data);
+    
+    // const { data, isLoading, refetch } = useQueryVouchers({
+    //     ...queryPage,
+    // }, {
+    //     enabled: !!queryPage,
+    // });
+    
     const dataTable = (data?.items ?? []).map((item) => ({
         id: item.id,
-        code: item.code || "",
-        name: item.name || "",
-        description: item.description || "- không có mô tả -",
-        discountType: discountTypeEnums.find(i => i.value === item.discountTypeDisplay)?.label || item.discountTypeDisplay,
-        discountValue: item.discountValue ?? "-",
-        minOrderValue: item.minOrderValue ?? "-",
-        startDate: item.startDate ? new Date(item.startDate).toLocaleString() : "-",
-        endDate: item.endDate ? new Date(item.endDate).toLocaleString() : "-",
-        isActive: item.isActive ? "Đang hoạt động" : "Không hoạt động",
-        remainingUsage: item.remainingUsage ?? "-",
-        remainingUserUsage: item.remainingUserUsage ?? "-",
-        createdAt: item.createdAt ? new Date(item.createdAt).toLocaleString() : "-",
-        action: (
+        customerName: item.customerName || "",
+        description: item.notes || "- không có ghi chú -",
+        discountAmount: item.discountAmount ?? "-",
+        orderDate: item.orderDate ? new Date(item.orderDate).toLocaleString() : "-",
+        receiveName: item?.shippingAddress?.receiveName ?? "-",
+        countItems: "0",
+        state: item.state ?? "-",
+                action: (
             <Button
                 variant="outlined"
                 color="error"
@@ -144,8 +131,7 @@ const useListOrders = () => {
         methodForm,
         columns,
         isLoading,
-        openDialog,
-        selectedProductName,
+        selectedOrderName,
         dataTable,
         totalPages: data?.totalPages || 0,
         pageNumber: queryPage.pageNumber || 0,
