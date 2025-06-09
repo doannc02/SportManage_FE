@@ -75,7 +75,7 @@ const ProductList = () => {
 
     const { data, isLoading, isError } = useQueryProductsList({
         pageNumber: page,
-        pageSize: 20
+        pageSize: 5
     });
 
     return (

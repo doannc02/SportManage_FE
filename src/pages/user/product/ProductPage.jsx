@@ -9,11 +9,7 @@ import {
   HStack,
   Icon,
   Tooltip,
-  SimpleGrid,
-  Select,
   Stack,
-  Radio,
-  RadioGroup,
   Alert,
   AlertIcon,
   AlertTitle,
@@ -24,7 +20,6 @@ import { useQueryProductsList } from "../../../services/customers/products";
 import { BASE_URL } from "../../../configs/auth";
 import { Checkbox, Empty } from "antd";
 import useDetailProduct from "../../admin/products/detail/useDetail";
-import { set } from "lodash";
 import { useNavigate } from "react-router-dom";
 
 const ProductPage = () => {

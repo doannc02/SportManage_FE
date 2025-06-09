@@ -2,7 +2,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import { PackageCheck } from "lucide-react";
 import { Popover } from "antd";
 
-const Order = () => {
+const OrderPopover = () => {
   return (
     <>
       <Popover content={"Đơn hàng"}>
@@ -25,4 +25,4 @@ const Order = () => {
   );
 };
 
-export default Order;
+export default OrderPopover;

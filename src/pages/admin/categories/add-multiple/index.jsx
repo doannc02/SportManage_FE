@@ -88,7 +88,7 @@ const AddMultipleCategories = () => {
                 required
                 rules={{ required: "Trường này là bắt buộc" }}
                 height={"45px"}
-                defaultValue={getValues(`categories.${index}.logo`)}
+              //  defaultValue={getValues(`categories.${index}.logo`)}
                 onChange={(urls) => setValue(`categories.${index}.logo`, urls[0])}
                 maxFiles={1}
             />
@@ -139,7 +139,7 @@ const AddMultipleCategories = () => {
                                 append({
                                     name: "",
                                     description: "",
-                                    logo: "",
+                                    logo: ""
                                 });
                             }}
                         >

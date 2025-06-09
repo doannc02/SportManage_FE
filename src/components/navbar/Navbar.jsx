@@ -4,27 +4,14 @@ import TopNav from "./TopNav";
 import Search from "./Search";
 import Acount from "./Acount";
 import Cart from "./Cart";
-import Brands from "./contain/Brands";
-import Holiday from "./contain/Holiday";
-import Sale from "./contain/Sale";
-import Skin from "./contain/Skin";
-import Hair from "./contain/Hair";
-import Makeup from "./contain/Makeup";
-import Bath from "./contain/Bath";
-import Fragrance from "./contain/Fragrance";
-import SelfCare from "./contain/SelfCare";
-import Tools from "./contain/Tools";
-import Trending from "./contain/Trending";
-import Build from "./contain/Build";
-import Blog from "./contain/Blog";
 import Navmenu from "./Navmenu";
 import Popsearch from "./Popsearch";
 // import { Link } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
 import { useContext, useEffect, useRef, useState } from "react";
-import UserAccount from "./UserAccount";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import Order from "./order-pôpver";
+import { useNavigate } from "react-router-dom";
+import Order from "./order-popover";
+import OrderPopover from "./order-popover";
 
 function Navbar() {
   const cartRef = useRef();
@@ -38,7 +25,7 @@ function Navbar() {
 
   function handleCartClick(e) {
     e.preventDefault();
-    navigate("/CartPage");
+    navigate("/cartpage");
   }
 
   useEffect(() => {
@@ -55,7 +42,7 @@ function Navbar() {
       position="sticky"
       top="0"
     >
-      {/* <TopNav /> */}
+      <TopNav />
       {/* Mobile Navbar */}
       <Flex
         display={{ base: "flex", md: "flex", lg: "none" }}
@@ -113,13 +100,13 @@ function Navbar() {
           <Search />
         </Box>
         <Flex alignItems="center" gap={6}>
-          <Acount />
           <Box as="span" onClick={handleCartClick} cursor="pointer">
             <Cart ref={cartRef} num={num} />
           </Box>
-          <Box as="span" onClick={() => navigate('/CartPage')} cursor="pointer">
-            <Order />
+          <Box as="span" onClick={() => navigate("/order")} cursor="pointer">
+            <OrderPopover />
           </Box>{" "}
+          <Acount />
         </Flex>
       </Box>
     </Flex>
