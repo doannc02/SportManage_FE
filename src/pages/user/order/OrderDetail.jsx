@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Container,
@@ -48,6 +48,8 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryOrderDetail } from "../../../services/customers/orders";
+import { BASE_URL } from "../../../configs/auth";
+import CoreLoading from "../../../components/atoms/CoreLoading";
 
 // Mock order data
 const mockOrderData = {
@@ -245,7 +247,7 @@ const OrderTimeline = ({ timeline }) => {
 
 // Product item component
 const OrderItem = ({ item }) => {
-  const { productId, productName, quantity, unitPrice, totalPrice } = item;
+  const { productId, productName, quantity, unitPrice, totalPrice, imageUrl } = item;
 
   return (
     <Box
@@ -257,7 +259,7 @@ const OrderItem = ({ item }) => {
       <HStack align="flex-start" spacing={4}>
         <Image
           src={
-            "https://png.pngtree.com/png-clipart/20191120/original/pngtree-package-glyph-icon-vector-png-image_5058430.jpg"
+            imageUrl ? `${BASE_URL}${imageUrl}` : "https://png.pngtree.com/png-clipart/20191120/original/pngtree-package-glyph-icon-vector-png-image_5058430.jpg"
           }
           alt={productName}
           boxSize="64px"
@@ -305,13 +307,13 @@ const OrderDetailPage = () => {
   const cardBg = useColorModeValue("white", "gray.800");
 
   const currentStatus = statusConfig[mockOrderData?.status];
-  const { data } = useQueryOrderDetail({ id: id });
+  const { data, isLoading } = useQueryOrderDetail({ id: id });
   console.log("order detail", data);
   const finalAmount =
     data?.subTotal - (data?.discountAmount ? data?.discountAmount : 0);
   const handleCopyOrderId = async () => {
     try {
-      await navigator.clipboard.writeText(orderData?.id);
+      await navigator.clipboard.writeText(data?.id);
       toast({
         title: "Đã sao chép mã đơn hàng",
         status: "success",
@@ -348,7 +350,7 @@ const OrderDetailPage = () => {
   };
 
   return (
-    <Box minH="100vh" bg={bgColor}>
+    <>{isLoading ? <CoreLoading /> : <Box minH="100vh" bg={bgColor}>
       {/* Header */}
       <Box bg={cardBg} borderBottom="1px" borderColor="gray.200">
         <Container maxW="6xl" py={6}>
@@ -356,7 +358,7 @@ const OrderDetailPage = () => {
             <HStack spacing={4}>
               <IconButton
                 icon={<ArrowLeft size={20} />}
-                onClick={() =>navigate(-1)}
+                onClick={() => navigate(-1)}
                 // variant="ghost"
                 aria-label="Back"
               />
@@ -553,15 +555,15 @@ const OrderDetailPage = () => {
                           orderData?.paymentStatus === "paid"
                             ? "green.600"
                             : orderData?.paymentStatus === "failed"
-                            ? "red.600"
-                            : "yellow.600"
+                              ? "red.600"
+                              : "yellow.600"
                         }
                       >
                         {orderData?.paymentStatus === "paid"
                           ? "Đã thanh toán"
                           : orderData?.paymentStatus === "failed"
-                          ? "Thanh toán thất bại"
-                          : "Chưa thanh toán"}
+                            ? "Thanh toán thất bại"
+                            : "Chưa thanh toán"}
                       </Text>
                     </Box>
                   </HStack>
@@ -637,7 +639,7 @@ const OrderDetailPage = () => {
           </GridItem>
         </Grid>
       </Container>
-    </Box>
+    </Box>}</>
   );
 };
 

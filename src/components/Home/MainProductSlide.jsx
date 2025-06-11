@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import {  Pagination } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -19,6 +19,21 @@ const fallbackImages = [
   "https://picsum.photos/id/1020/400/200",
   "https://picsum.photos/id/1024/400/200",
   "https://picsum.photos/id/1025/400/200",
+  "https://picsum.photos/id/1015/400/200",
+  "https://picsum.photos/id/1016/400/200",
+  "https://picsum.photos/id/1020/400/200",
+  "https://picsum.photos/id/1024/400/200",
+  "https://picsum.photos/id/1025/400/200",
+  "https://picsum.photos/id/1015/400/200",
+  "https://picsum.photos/id/1016/400/200",
+  "https://picsum.photos/id/1020/400/200",
+  "https://picsum.photos/id/1024/400/200",
+  "https://picsum.photos/id/1025/400/200",
+  "https://picsum.photos/id/1015/400/200",
+  "https://picsum.photos/id/1016/400/200",
+  "https://picsum.photos/id/1020/400/200",
+  "https://picsum.photos/id/1024/400/200",
+  "https://picsum.photos/id/1025/400/200",
 ];
 
 // Hàm chọn ngẫu nhiên 1 ảnh fallback
@@ -29,12 +44,12 @@ const getFallbackImage = () => {
 
 export const ProductSlider = ({ products }) => {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 w-full">
       <div className="text-2xl md:text-3xl font-bold text-center mb-2 text-[#222] tracking-tight">
         Top những sản phẩm bán chạy nhất
       </div>
       <Swiper
-        slidesPerView={5}
+        slidesPerView={6}
         pagination={{
           dynamicBullets: true,
         }}
@@ -60,7 +75,7 @@ export const ProductSlider = ({ products }) => {
           }
 
           return (
-            <SwiperSlide key={product.Id ?? index}>
+            <SwiperSlide key={product.Id ?? index} width="100%">
               <Card
                 sx={{
                   maxWidth: 180,
@@ -175,7 +190,7 @@ export const ProductSlider = ({ products }) => {
           );
         })}
       </Swiper>
-    </div>
+    </div >
   );
 };
 

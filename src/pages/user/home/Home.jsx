@@ -180,7 +180,7 @@ const mockProducts = [
         Attribute: [],
       },
     ],
-  },  
+  },
 ];
 export default function Home() {
   return (
@@ -190,7 +190,7 @@ export default function Home() {
         <Categories />
       </Box>
 
-      <Box m={8} w={"90%"}>
+      <Box m={8} w={"75%"}>
         <ProductSlider products={mockProducts} />
       </Box>
       <Box w={"90%"}>
