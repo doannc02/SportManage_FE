@@ -25,12 +25,12 @@ import RoleAssignment from './admin/user-manager/assign-roles'
 import BrandListAdmin from './admin/brands/list'
 import CategoryListAdmin from './admin/categories/list'
 import SupplierListAdmin from './admin/suppliers/list'
-import OrderDetailPage from './user/order/OrderDetail'
 import OrderManagement from './shipper/order-deliverys/list'
 import CategoryAdmin from './admin/categories/detail'
 import AddMultipleCategories from './admin/categories/add-multiple'
 import UserOrderList from './user/order/list'
 import ListOrderAdmin from './admin/orders/list'
+import OrderDetailUserPage from './user/order/detail'
 
 export default function AllRouter() {
 
@@ -105,7 +105,7 @@ export default function AllRouter() {
         <Route index element={<Home />} />
         <Route path="productpage" element={<ProtectedRoute><ProductPage /></ProtectedRoute>} />
         <Route path="product/:id" element={<Productdetails />} />
-        <Route path="order/:id" element={<OrderDetailPage />} />
+        <Route path="order/:id" element={<OrderDetailUserPage />} />
         <Route path="order" element={<UserOrderList />} />
         <Route path="cartpage" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
         <Route path="creditcardform" element={<ProtectedRoute><CreditCardForm /></ProtectedRoute>} />
