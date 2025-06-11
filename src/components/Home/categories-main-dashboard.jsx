@@ -11,14 +11,13 @@ const getLogoUrl = (logo) =>
     ? `${BASE_URL}${logo}`
     : "https://godecor.com.vn/wp-content/uploads/2024/08/pngtree-product-line-icon-png-image_9015777.png";
 
-const data = () => {
+const CategoryMainDashBoard = () => {
   const { data } = useQueryCategoryList({
     keyword: "",
     sizeNumber: 20,
     pageNumber: 0,
   });
 
-  console.log("data ", data);
   return (
     <div className="flex flex-col gap-2">
       <Text textTransform={"uppercase"} textAlign={"center"} size={"28px"}>
@@ -91,4 +90,4 @@ const data = () => {
   );
 };
 
-export default data;
+export default CategoryMainDashBoard;

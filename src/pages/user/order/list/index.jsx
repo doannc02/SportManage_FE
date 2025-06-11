@@ -1,121 +1,102 @@
 import {
-  Text,
-  Container,
-  Box,
+    Text,
+    Container,
+    Box,
+    Flex,
+    Button,
 } from "@chakra-ui/react";
 import CoreTable from "../../../../components/atoms/CoreTable";
-import useListOrders from "./useListOrders";
+import useListOrders from "./use-list-order-user";
+import CoreInput from "../../../../components/atoms/CoreInput";
+import CoreSelectCustom from "../../../../components/atoms/CoreAutoComplete";
 
-const UserOrderList = () => {
-  const [
-    {
-      methodForm,
-      columns,
-      isLoading,
-      openDialog,
-      selectedProductName,
-      dataTable,
-      totalPages,
-      pageNumber,
-      pageSize,
-    },
-    {
-      handleCloseDialog,
-      handleConfirmDelete,
-      onChangePage,
-      onChangePageSize,
-      navigate,
-    },
-  ] = useListOrders();
-//   const { data } = useUserOrderList({
-//     pageNumber: 0,
-//     pageSize: 20,
-//     // keyWord: "",
-//   });
-//   console.log(data);
+import { OrderStateOptions } from "../../../../const/enum";
 
-return (
-    <Container maxW="container.xl" py={8}>
-        <Box
-            bg="white"
-            boxShadow="md"
-            borderRadius="lg"
-            p={6}
-            mb={8}
-            textAlign="center"
-        >
-            <Text fontSize="2xl" fontWeight="bold" color="teal.600" mb={2}>
-                Danh sách đơn hàng
-            </Text>
-            <Text fontSize="md" color="gray.500">
-                Quản lý và theo dõi các đơn hàng của bạn
-            </Text>
-        </Box>
-        <Box
-            bg="white"
-            boxShadow="sm"
-            borderRadius="lg"
-            mb={6}
-        >
-            {/* <Flex mb={4} justify="flex-end">
-                <Box w={["100%", "50%", "30%"]}>
-                    <CoreInput
-                        control={methodForm.control}
-                        name="keyword"
-                        label="Tìm kiếm"
-                        placeholder="Nhập tên hoặc mã đơn hàng"
-                    />
-                </Box>
-            </Flex> */}
-            <CoreTable
-                onChangePage={onChangePage}
-                columns={columns}
-                paginationHidden={dataTable.length < 1}
-                data={dataTable}
-                onChangePageSize={onChangePageSize}
-                totalPages={totalPages}
-                page={pageNumber}
-                size={pageSize}
-                isLoading={isLoading}
-                onRowClick={(id) => {
-                    navigate(`/order/${id}`);
-                }}
-            />
-        </Box>
-        {/* <Modal isOpen={openDialog} onClose={handleCloseDialog} isCentered>
-            <ModalOverlay />
-            <ModalContent borderRadius="lg">
-                <ModalHeader color="red.500" fontWeight="bold">
-                    Xác nhận xoá voucher
-                </ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    <Alert status="error" borderRadius="md" mb={4}>
-                        <AlertIcon />
-                        <Text fontWeight="bold" color="red.500">
-                            Cảnh báo: Khi xóa, bạn sẽ không thể khôi phục voucher!
-                        </Text>
-                    </Alert>
-                    <Text>
-                        Bạn có chắc chắn muốn xoá voucher{" "}
-                        <Text as="span" fontWeight="bold" color="teal.600">
-                            {selectedProductName}
-                        </Text>{" "}
-                        này không?
-                    </Text>
-                </ModalBody>
-                <ModalFooter>
-                    <Button onClick={handleCloseDialog} variant="outline" mr={3}>
-                        Huỷ
-                    </Button>
-                    <Button colorScheme="red" onClick={handleConfirmDelete}>
-                        Xoá
-                    </Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal> */}
-    </Container>
-);
+const ListOrderUser = () => {
+    const [
+        {
+            methodForm,
+            columns,
+            isLoading,
+            dataTable,
+            totalPages,
+            pageNumber,
+            pageSize,
+        },
+        {
+            onChangePage,
+            onChangePageSize,
+            navigate,
+            onReset,
+        },
+    ] = useListOrders();
+
+    return (
+        <Container maxW="-moz-fit-content" pb={8}>
+            <Box
+                bg="white"
+                boxShadow="md"
+                borderRadius="lg"
+                p={6}
+                mb={8}
+                textAlign="center"
+            >
+                <Text fontSize="2xl" fontWeight="bold" color="teal.600" mb={2}>
+                    Danh sách đơn hàng
+                </Text>
+                <Text fontSize="md" color="gray.500">
+                    Quản lý và theo dõi các đơn hàng của bạn
+                </Text>
+            </Box>
+            <Box
+                bg="white"
+                boxShadow="sm"
+                borderRadius="lg"
+                px={16}
+                pb={10}
+                mb={6}
+            >
+                <Flex mb={4} gap={4} justify="flex-start">
+                    <Box w={["100%", "50%", "30%"]}>
+                        <CoreInput
+                            control={methodForm.control}
+                            name="keyWord"
+                            label="Tìm kiếm"
+                            placeholder="Nhập tên hoặc mã đơn hàng"
+                        />
+                    </Box>
+                    <Box w={["100%", "50%", "30%"]}>
+                        <CoreSelectCustom
+                            control={methodForm.control}
+                            name="state"
+                            label="Trạng thái đơn hàng"
+                            options={OrderStateOptions}
+                            placeholder="Nhập tên hoặc mã đơn hàng"
+                        />
+                    </Box>
+                    <Box w={["100%", "50%", "30%"]}>
+                        <Button onClick={onReset}>
+                            Reset filter
+                        </Button>
+                    </Box>
+                </Flex>
+                <CoreTable
+                    onChangePage={onChangePage}
+                    columns={columns}
+                    paginationHidden={dataTable.length < 1}
+                    data={dataTable}
+                    onChangePageSize={onChangePageSize}
+                    totalPages={totalPages}
+                    page={pageNumber}
+                    size={pageSize}
+                    isLoading={isLoading}
+                    onRowClick={(id) => {
+                        navigate(`/order/${id}`);
+                    }}
+                />
+            </Box>
+        </Container>
+    );
 };
 
-export default UserOrderList;
+export default ListOrderUser;

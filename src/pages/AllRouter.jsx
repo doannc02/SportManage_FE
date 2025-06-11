@@ -30,6 +30,7 @@ import OrderManagement from './shipper/order-deliverys/list'
 import CategoryAdmin from './admin/categories/detail'
 import AddMultipleCategories from './admin/categories/add-multiple'
 import UserOrderList from './user/order/list'
+import ListOrderAdmin from './admin/orders/list'
 
 export default function AllRouter() {
 
@@ -84,7 +85,7 @@ export default function AllRouter() {
           </Route>
 
           <Route path="/order-admin" element={<DashboardLayout title='Order Manager' />}>
-            <Route path='list' element={<OrderManagement />} />
+            <Route path='list' element={<ListOrderAdmin />} />
           </Route>
 
           <Route path="/users" element={<DashboardLayout title='User Manager' />}>

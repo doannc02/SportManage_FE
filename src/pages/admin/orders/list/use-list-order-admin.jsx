@@ -7,7 +7,6 @@ import { BASE_URL } from "../../../../configs/auth";
 import { Box } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useQueryVouchers } from "../../../../services/admins/vouchers";
 
 const defaultValues = {
     pageNumber: 0,
@@ -15,7 +14,7 @@ const defaultValues = {
     keyword: "",
 };
 
-const useListOrders = () => {
+const useListOrderAdmin = () => {
     const methodForm = useForm({ defaultValues });
     const keyword = methodForm.watch("keyword");
 
@@ -174,4 +173,4 @@ const useListOrders = () => {
     }];
 };
 
-export default useListOrders
+export default useListOrderAdmin

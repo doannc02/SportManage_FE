@@ -5,7 +5,7 @@ import { defaultOption } from "../../../configs/reactQuery";
 export const getOrdersPagingAdmin = async ({
     pageNumber = 1,
     pageSize = 20,
-    keyword = '',
+    keyWord = '',
     startDate = '',
     endDate = '',
     state = '',
@@ -20,7 +20,7 @@ export const getOrdersPagingAdmin = async ({
         params: {
             pageNumber,
             pageSize,
-            keyword,
+            keyWord,
             startDate,
             endDate,
             state,
@@ -32,32 +32,12 @@ export const getOrdersPagingAdmin = async ({
     return data
 }
 
-export const useQueryOrdersPagingAdmin = ({
-    pageNumber,
-    pageSize,
-    keyword = '',
-    startDate = '',
-    endDate = '',
-    state = '',
-    customerId = '',
-    fromDate = '',
-    toDate = ''
-},
+export const useQueryOrdersPagingAdmin = (params,
     options
 ) => {
     return useQuery(
-        ['/api/orders/admin-paging', pageNumber, pageSize, keyword, startDate, endDate, state, customerId, fromDate, toDate],
-        () => getOrdersPagingAdmin({
-            pageNumber,
-            pageSize,
-            keyword,
-            startDate,
-            endDate,
-            state,
-            customerId,
-            fromDate,
-            toDate
-        }),
+        ['/api/orders/admin-paging', params],
+        () => getOrdersPagingAdmin(params),
         {
             ...defaultOption,
             ...options,
@@ -99,15 +79,23 @@ export const useQueryDetailVoucher = ({
 
 export const putOrderState = async (
     {
-        id,
-        state
+        orderId,
+        newStatus,
+        reason,
+        shipperId,
+        imageConfirmed
     }
 ) => {
     const { data } = await authApi({
         method: 'put',
-        url: `/api/orders/${id}/state`,
+        url: `/api/orders/${orderId}/status`,
+        params: orderId,
         data: {
-            state
+            orderId,
+            newStatus,
+            reason,
+            shipperId,
+            imageConfirmed
         }
     })
     return data

@@ -27,19 +27,21 @@ export const createOrderUser = async (
 
 
 export const getOrderList = async (
-
+    params
 ) => {
     const { data } = await authApi({
         method: 'get',
         url: '/api/orders/user-paging',
+        params: params
     })
     return data
 }
 
 export const useUserOrderList = (
+    params,
     options
 ) => {
-    return useQuery(['/orders/user-paging'], () => getOrderList(), {
+    return useQuery(['/orders/user-paging', params], () => getOrderList(params), {
         ...options,
     })
 }

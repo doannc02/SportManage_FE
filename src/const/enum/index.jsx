@@ -1,4 +1,4 @@
-import { CheckCircle, Clock, Package, Truck, XCircle } from "lucide-react";
+import { Box, CheckCircle, Clock, Package, Truck, XCircle } from "lucide-react";
 import { FaCreditCard, FaMoneyBillWave, FaUserShield, FaWallet } from "react-icons/fa";
 import {
     FiHome,
@@ -45,8 +45,6 @@ export const optionSizeByUnit = {
     // Các loại đơn vị khác hiện chưa có size cụ thể, có thể mở rộng sau nếu cần
 };
 
-
-
 export const getOptionsSizeByUnit = (unitId) => {
     if (!unitId) return [];
     return optionSizeByUnit[unitId] || [];
@@ -77,7 +75,6 @@ export const optionsColor = [
     { value: "brown", label: "Nâu - Brown 🟤" },
     { value: "multicolor", label: "Nhiều màu - Multicolor 🌈" },
 ];
-
 
 
 export const groupedAttributeExtension = [
@@ -128,12 +125,56 @@ export const paymentMethodEnums = [
 ]
 
 export const ORDER_STATES = {
-    Pending: { label: 'Chờ xử lý', color: 'yellow', icon: Clock },
-    Receivered: { label: 'Đã xác nhận', color: 'blue', icon: Package },
-    Shipped: { label: 'Đang giao', color: 'purple', icon: Truck },
-    Sendered: { label: 'Đã giao', color: 'green', icon: CheckCircle },
-    Cancelled: { label: 'Đã hủy', color: 'red', icon: XCircle }
+    Pending: {
+        label: 'Chờ xử lý',
+        colorScheme: 'yellow',
+        icon: Clock,
+        bgColor: 'yellow.50',
+        borderColor: 'yellow.200'
+    },
+    Confirmed: {
+        label: 'Đã xác nhận',
+        colorScheme: 'blue',
+        icon: Package,
+        bgColor: 'blue.50',
+        borderColor: 'blue.200'
+    },
+    Processing: {
+        label: 'Đang chuẩn bị hàng',
+        colorScheme: 'cyan',
+        icon: Box,
+        bgColor: 'cyan.50',
+        borderColor: 'cyan.200'
+    },
+    Shipped: {
+        label: 'Đang giao',
+        colorScheme: 'purple',
+        icon: Truck,
+        bgColor: 'purple.50',
+        borderColor: 'purple.200'
+    },
+    Delivered: {
+        label: 'Đã giao',
+        colorScheme: 'green',
+        icon: CheckCircle,
+        bgColor: 'green.50',
+        borderColor: 'green.200'
+    },
+    Canceled: {
+        label: 'Đã hủy',
+        colorScheme: 'red',
+        icon: XCircle,
+        bgColor: 'red.50',
+        borderColor: 'red.200'
+    }
 };
+
+export const OrderStateOptions = Object.entries(ORDER_STATES).map(([key, value]) => ({
+    value: key,
+    label: value.label,
+    color: value.color,
+    icon: value.icon
+}));
 
 export const TYPE_ORDER_STATE = "Pending" | "Receivered" | "Shipped" | "Sendered" | "Cancelled";
 
