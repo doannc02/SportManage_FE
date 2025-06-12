@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Box,
   chakra,
@@ -20,34 +20,42 @@ import { useQueryProductsList } from "../../../services/customers/products";
 import { BASE_URL } from "../../../configs/auth";
 import { Checkbox, Empty } from "antd";
 import useDetailProduct from "../../admin/products/detail/useDetail";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ProductPage = () => {
-  const navigate = useNavigate()
-  const { search, setSearch } = useContext(UserContext);
-  const [noofElements, setNoofElements] = useState(10);
+  const navigate = useNavigate();
+  const { search } = useContext(UserContext);
+  const [noofElements] = useState(10);
   const [selectCategory, setSelectCategory] = useState([]);
   const [{ dataCategory }] = useDetailProduct();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const categoryValue = queryParams.get("category");
 
   const handleCategoryChange = (value) => {
     setSelectCategory((prev) =>
       prev.includes(value)
-        ? prev.filter((item) => item !== value)
+        ? prev?.filter((item) => item !== value)
         : [...prev, value]
     );
   };
+
+  const getCategoryValue = () => {
+    if (categoryValue) {
+      setSelectCategory([categoryValue]);
+    }
+  };
+  useEffect(() => {
+    getCategoryValue();
+  }, []);
   const { data, isLoading } = useQueryProductsList({
     pageNumber: 0,
     pageSize: 20,
     keyword: search,
     categories: selectCategory,
   });
-  console.log(selectCategory);
-  
+
   const slice = data?.items?.slice(0, noofElements);
-  const loadMore = () => {
-    setNoofElements(noofElements + noofElements);
-  };
   if (isLoading) {
     return (
       <Image
@@ -67,7 +75,7 @@ const ProductPage = () => {
           {dataCategory?.items?.map((category) => (
             <Checkbox
               key={category.id}
-              checked={selectCategory.includes(category.id)}
+              checked={selectCategory.includes(category?.id) ?? null}
               onChange={() => handleCategoryChange(category.id)}
             >
               {category.name}
@@ -96,7 +104,7 @@ const ProductPage = () => {
                   transition="all 0.3s ease"
                   _hover={{ shadow: "xl", transform: "translateY(-4px)" }}
                   position="relative"
-                   onClick={() => navigate(`/product/${el.id}`)}
+                  onClick={() => navigate(`/product/${el.id}`)}
                 >
                   {el.quantity < 1 && (
                     <Alert status="error" roundedTop="xl">

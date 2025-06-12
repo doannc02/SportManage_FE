@@ -1,4 +1,3 @@
-import React, { useRef, useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Image, Button, Text } from "@chakra-ui/react";
@@ -10,7 +9,7 @@ import "swiper/css/pagination";
 // import "./styles.css";
 
 // import required modules
-import { Pagination, Autoplay, Navigation, Scrollbar } from "swiper/modules";
+import {  Autoplay, Scrollbar } from "swiper/modules";
 import { Box } from "@chakra-ui/react";
 
 export default function App() {

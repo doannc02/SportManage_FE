@@ -5,6 +5,7 @@ import { Text } from "@chakra-ui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { BASE_URL } from "../../configs/auth";
+import { useNavigate } from "react-router-dom";
 
 const getLogoUrl = (logo) =>
   logo
@@ -12,6 +13,7 @@ const getLogoUrl = (logo) =>
     : "https://godecor.com.vn/wp-content/uploads/2024/08/pngtree-product-line-icon-png-image_9015777.png";
 
 const CategoryMainDashBoard = () => {
+  const navigate = useNavigate();
   const { data } = useQueryCategoryList({
     keyword: "",
     sizeNumber: 20,
@@ -50,6 +52,13 @@ const CategoryMainDashBoard = () => {
                     {group.map((cat) => (
                       <Tooltip title={cat.name} key={cat.id}>
                         <Card
+                          onClick={() => {
+                            navigate(
+                              `/productpage?category=${encodeURIComponent(
+                                cat.id
+                              )}`
+                            );
+                          }}
                           hoverable
                           className={twMerge(
                             "w-40 min-h-[150px] flex flex-col items-center shadow-md transition-transform duration-200 cursor-pointer bg-white",
@@ -65,7 +74,11 @@ const CategoryMainDashBoard = () => {
                           <img
                             src={getLogoUrl(cat.logo)}
                             alt={cat.name}
-                            style={{ objectFit: "cover", height: "80px", width: "80px" }}
+                            style={{
+                              objectFit: "cover",
+                              height: "80px",
+                              width: "80px",
+                            }}
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src =

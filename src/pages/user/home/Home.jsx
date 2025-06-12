@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import Crousel from "../../../components/Home/Crousel";
 import Trending from "../../../components/Home/Trending";
-import CardSlide from "../../../components/Home/CardSlide";
+import CardSlide from "../../../components/Home/card-slide";
 import Middle from "../../../components/Home/Middle";
 import { ProductSlider } from "../../../components/Home/MainProductSlide";
 import ProductList from "../../../components/Home/ProductList";

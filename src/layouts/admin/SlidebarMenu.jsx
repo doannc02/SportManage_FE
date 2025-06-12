@@ -1,19 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  FiHome,
-  FiUsers,
-  FiBox,
-  FiSettings,
-  FiBarChart2,
   FiChevronDown,
   FiChevronRight,
-  FiList,
-  FiGift,
-  FiLogOut,
 } from "react-icons/fi";
-import { MdCategory } from "react-icons/md";
-import { FaUserShield } from "react-icons/fa";
 import { getAppToken, removeAppToken } from "../../configs/token";
 import PropTypes from "prop-types";
 import { MENU_ENUMS } from "../../const/enum";

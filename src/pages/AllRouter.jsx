@@ -2,8 +2,6 @@ import { Route, Routes } from 'react-router-dom'
 import Login from './Login'
 import Register from './Register'
 import Home from './user/home/Home'
-import ProductPage from './user/product/ProductPage'
-import Productdetails from './user/product/Productdetails'
 import Verification from './Verification'
 import CartPage from './user/cart/CartPage'
 import ForgotPass from './ForgotPass'
@@ -25,18 +23,19 @@ import RoleAssignment from './admin/user-manager/assign-roles'
 import BrandListAdmin from './admin/brands/list'
 import CategoryListAdmin from './admin/categories/list'
 import SupplierListAdmin from './admin/suppliers/list'
-import OrderDetailPage from './user/order/OrderDetail'
 import OrderManagement from './shipper/order-deliverys/list'
 import CategoryAdmin from './admin/categories/detail'
 import AddMultipleCategories from './admin/categories/add-multiple'
 import UserOrderList from './user/order/list'
 import ListOrderAdmin from './admin/orders/list'
+import OrderDetailUserPage from './user/order/detail'
+import ProductDetails from './user/product/detail'
+import ProductPage from './user/product/product-page'
 
 export default function AllRouter() {
 
   const tokenApp = getAppToken()
   const isAdmin = tokenApp?.roles?.includes('Admin')
-  const isUser = tokenApp?.roles?.includes('User')
   return (
     <Routes>
       {/* Public Routes */}
@@ -104,8 +103,8 @@ export default function AllRouter() {
       {!isAdmin && <Route path="/" element={<UserLayout />}>
         <Route index element={<Home />} />
         <Route path="productpage" element={<ProtectedRoute><ProductPage /></ProtectedRoute>} />
-        <Route path="product/:id" element={<Productdetails />} />
-        <Route path="order/:id" element={<OrderDetailPage />} />
+        <Route path="product/:id" element={<ProductDetails />} />
+        <Route path="order/:id" element={<OrderDetailUserPage />} />
         <Route path="order" element={<UserOrderList />} />
         <Route path="cartpage" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
         <Route path="creditcardform" element={<ProtectedRoute><CreditCardForm /></ProtectedRoute>} />
