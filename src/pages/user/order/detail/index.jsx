@@ -44,7 +44,8 @@ import CoreLoading from "../../../../components/atoms/CoreLoading";
 import {
   ORDER_STATES,
   paymentMethodEnums,
-  TIMELINE_STATUS,
+  paymentStatusEnums,
+  TimelineStatusEnum,
 } from "../../../../const/enum";
 import OrderTimelineUser from "../../../../components/orders/order-timeline-user";
 import OrderItemUser from "../../../../components/orders/order-items-user";
@@ -65,11 +66,14 @@ const OrderDetailUserPage = () => {
   const currentPaymentMethod = paymentMethodEnums.find(
     (method) => method.value === data?.payment?.method
   );
+  const currentPaymentStatus = paymentStatusEnums.find(
+    (status) => status.value === data?.payment?.status
+  );
   const getTimeline = () => {
     let items = [];
     let currentStatus = data?.state;
     let isCompleted = true;
-    for (const statusDraff of TIMELINE_STATUS) {
+    for (const statusDraff of TimelineStatusEnum) {
       items.push({
         ...statusDraff,
       });
@@ -87,7 +91,7 @@ const OrderDetailUserPage = () => {
     if (currentStatus !== "Canceled") {
       items = items.filter((obj) => obj?.status !== "Canceled");
     }
-    // Gán lại biến timestamp vào từng bước trong TIMELINE_STATUS
+    // Gán lại biến timestamp vào từng bước trong TimelineStatusEnum
     items = items.map((step) => {
       let timestamp = null;
       switch (step.status) {
@@ -99,6 +103,12 @@ const OrderDetailUserPage = () => {
           break;
         case "Shipped":
           timestamp = data?.shippedDate;
+          break;
+        case "Delivered":
+          timestamp = data?.deliveredDate;
+          break;
+        case "Canceled":
+          timestamp = data?.canceledDate;
           break;
         default:
           break;
@@ -246,25 +256,44 @@ const OrderDetailUserPage = () => {
                     <CardBody>
                       <OrderTimelineUser timeline={statusTimeline} />
 
-                      {data?.state !== "Canceled" && (
-                        <Alert status="info" mt={6} borderRadius="lg">
-                          <AlertIcon as={AlertCircle} />
-                          <Box>
-                            <AlertTitle>Thông tin giao hàng</AlertTitle>
-                            <AlertDescription>
-                              <Text>
-                                Dự kiến giao hàng:{" "}
-                                <Text as="span" fontWeight="bold">
-                                  {formatDate(addDays(data?.orderDate, 7))}
+                      {data?.state === "Canceled" ? (
+                        <>
+                          <Alert status="info" mt={6} borderRadius="lg">
+                            <AlertIcon as={AlertCircle} />
+                            <Box>
+                              <AlertTitle>Lý do đơn hàng bị hủy</AlertTitle>
+                              <AlertDescription>
+                                <Text>
+                                  {data?.reasonCancel ?? "Chưa rõ lý do hủy"}
                                 </Text>
-                              </Text>
-                              <Text mt={1}>
-                                Đơn hàng sẽ được giao sau 7 ngày kể từ ngày đặt
-                                hàng.
-                              </Text>
-                            </AlertDescription>
-                          </Box>
-                        </Alert>
+                              </AlertDescription>
+                            </Box>
+                          </Alert>
+                        </>
+                      ) : (
+                        <>
+                          <Alert status="info" mt={6} borderRadius="lg">
+                            <AlertIcon as={AlertCircle} />
+                            <Box>
+                              <AlertTitle>Thông tin giao hàng</AlertTitle>
+                              <AlertDescription>
+                                <Text>
+                                  Dự kiến giao hàng:{" "}
+                                  <Text as="span" fontWeight="bold">
+                                    {formatDate(
+                                      data?.expectedDeliveryDate ??
+                                        addDays(data?.orderDate, 7)
+                                    )}
+                                  </Text>
+                                </Text>
+                                <Text mt={1}>
+                                  Đơn hàng sẽ được giao sau 7 ngày kể từ ngày
+                                  đặt hàng.
+                                </Text>
+                              </AlertDescription>
+                            </Box>
+                          </Alert>
+                        </>
                       )}
                     </CardBody>
                   </Card>
@@ -374,21 +403,12 @@ const OrderDetailUserPage = () => {
                           <Text fontWeight="medium">
                             {currentPaymentMethod?.label}
                           </Text>
+
                           <Text
                             fontSize="sm"
-                            color={
-                              currentPaymentMethod?.status === "Paid"
-                                ? "green.600"
-                                : currentPaymentMethod?.status === "Failed"
-                                ? "red.600"
-                                : "yellow.600"
-                            }
+                            color={currentPaymentStatus?.color}
                           >
-                            {currentPaymentMethod?.status === "paid"
-                              ? "Đã thanh toán"
-                              : currentPaymentMethod?.status === "failed"
-                              ? "Thanh toán thất bại"
-                              : "Chưa thanh toán"}
+                            {currentPaymentStatus?.label}
                           </Text>
                         </Box>
                       </HStack>

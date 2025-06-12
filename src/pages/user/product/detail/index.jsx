@@ -29,21 +29,19 @@ import {
   IconButton,
   AspectRatio,
   Tag,
-  Input,
   FormControl,
-  FormLabel,
 } from "@chakra-ui/react";
-import { StarIcon, ChevronLeftIcon, ChevronRightIcon, CloseIcon, ChatIcon, ArrowBackIcon } from "@chakra-ui/icons";
-import { useQueryGetProductReview, useQueryProductsDetail } from "../../../services/customers/products";
-import { addToCartItem } from "../../../services/customers/carts";
-import { submitReview, submitReviewComment } from "../../../services/customers/reviews";
+import { StarIcon, ChevronLeftIcon, ChevronRightIcon, CloseIcon, ChatIcon } from "@chakra-ui/icons";
+import { useQueryGetProductReview, useQueryProductsDetail } from "../../../../services/customers/products";
+import { addToCartItem } from "../../../../services/customers/carts";
+import { submitReview, submitReviewComment } from "../../../../services/customers/reviews";
 import { useMutation } from "react-query";
-import { UserContext } from "../../../Contexts/UserContext";
-import { getAppToken } from "../../../configs/token";
-import { BASE_URL } from "../../../configs/auth";
-import { ProductOffers } from "../../../components/customer/product-detail/product-offers";
-import { GroupedAttributeDisplay } from "../../../components/customer/product-detail/product-group-attribute";
-import { ReviewComment } from "../../../components/products/review-comment";
+import { UserContext } from "../../../../Contexts/UserContext";
+import { getAppToken } from "../../../../configs/token";
+import { BASE_URL } from "../../../../configs/auth";
+import { ProductOffers } from "../../../../components/customer/product-detail/product-offers";
+import { GroupedAttributeDisplay } from "../../../../components/customer/product-detail/product-group-attribute";
+import { ReviewComment } from "../../../../components/products/review-comment";
 
 function buildCommentTree(comments) {
   // Nếu comments đã có cấu trúc cây (có thuộc tính replies), 
@@ -225,10 +223,10 @@ const ProductDetails = () => {
   const [isZoomed, setIsZoomed] = useState(false);
 
   const colorText = useColorModeValue("gray.900", "gray.400");
-  const bgVariant = useColorModeValue("gray.100", "gray.700");
+  // const bgVariant = useColorModeValue("gray.100", "gray.700");
   const thumbBg = useColorModeValue("white", "gray.800");
 
-  const { data, isLoading, refetch } = useQueryProductsDetail(
+  const { data, isLoading } = useQueryProductsDetail(
     { id: params.id },
     { enabled: !!params?.id }
   );
