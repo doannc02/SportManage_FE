@@ -1,18 +1,11 @@
-// Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Image, Button, Text } from "@chakra-ui/react";
-
-// Import Swiper styles
+import { Image, Button, Text, Box, useBreakpointValue } from "@chakra-ui/react";
 import "swiper/css";
 import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import { Autoplay, Scrollbar } from "swiper/modules";
 
-// import "./styles.css";
-
-// import required modules
-import {  Autoplay, Scrollbar } from "swiper/modules";
-import { Box } from "@chakra-ui/react";
-
-export default function App() {
+export default function ProductSlider() {
   let data = [
     {
       id: 1048,
@@ -23,7 +16,6 @@ export default function App() {
       currency: "CAD",
       image_link:
         "https://static.thcdn.com/images/xsmall/webp//productimg/original/13973768-8004998593922840.jpg",
-
       description:
         "Lippie Pencil A long-wearing and high-intensity lip pencil that glides on easily and prevents feathering. Many of our Lippie Stix have a coordinating Lippie Pencil designed to compliment it perfectly, but feel free to mix and match!",
     },
@@ -36,7 +28,6 @@ export default function App() {
       currency: "CAD",
       image_link:
         "https://static.thcdn.com/images/xsmall/webp//productimg/original/13953406-7084994955681930.jpg",
-
       description:
         "Blotted Lip Sheer matte lipstick that creates the perfect popsicle pout! Formula is lightweight, matte and buildable for light to medium coverage.",
     },
@@ -49,7 +40,6 @@ export default function App() {
       currency: "CAD",
       image_link:
         "https://static.thcdn.com/images/xsmall/webp//productimg/original/13953407-6534994956012731.jpg",
-
       description:
         "Lippie Stix Formula contains Vitamin E, Mango, Avocado, and Shea butter for added comfort and moisture. None of our Lippie formulas contain any nasty ingredients like Parabens or Sulfates.",
     },
@@ -62,7 +52,6 @@ export default function App() {
       currency: "CAD",
       image_link:
         "https://static.thcdn.com/images/xsmall/webp//productimg/1600/1600/12691024-3064813757049624.jpg",
-
       description:
         "Developed for the Selfie Age, our buildable full coverage, natural matte foundation delivers flawless looking skin from day-to-night. The oil-free, lightweight formula blends smoothly and is easily customizable to create the coverage you want. Build it up or sheer it out, it was developed with innovative soft-blurring pigments to deliver true color while looking and feeling natural. The lockable pump is easy to use and keeps your routine mess-free! As always, 100% cruelty-free and vegan.",
     },
@@ -89,7 +78,6 @@ export default function App() {
       currency: "CAD",
       image_link:
         "https://static.thcdn.com/images/xsmall/webp//productimg/original/12903729-5714884454997658.jpg",
-
       description:
         "Serum Foundations are lightweight medium-coverage formulations available in a comprehensive shade range across 21 shades. These foundations offer moderate coverage that looks natural with a very lightweight serum feel. They are very low in viscosity and are dispensed with the supplied pump or with the optional glass dropper available for purchase separately if preferred. ",
     },
@@ -117,11 +105,9 @@ export default function App() {
       currency: "USD",
       image_link:
         "https://static.thcdn.com/images/xsmall/webp//productimg/original/13890003-7054997222870475.jpg",
-
       description:
         "<strong>12 hours of long-lasting</strong> intense color, transfer-free (leaves no trace on crease above the eyelid) <strong>Pure Light Capture®</strong> <strong>minerals</strong> deliver color and radiance. Silky lines and refreshingly light, Pure Argan eyeliner leaves a weightless feel on the eyelids.<p align='LEFT'>Natural cosmetic certified by Ecocert Greenlife according to Ecocert Standard available at: http://cosmetiques.ecocert.com</p>98% of the total ingredients are from natural origin 5% of total ingredients are from organic farming",
     },
-
     {
       id: 1039,
       brand: "w3llpeople",
@@ -169,89 +155,100 @@ export default function App() {
     },
   ];
 
+  // Responsive values
+  const slidesPerView = useBreakpointValue({ base: 1.5, sm: 2, md: 3, lg: 4 });
+  const spaceBetween = useBreakpointValue({ base: 16, md: 24, lg: 30 });
+  const imageSize = useBreakpointValue({ base: "160px", sm: "180px", md: "200px", lg: "220px" });
+  const titleFontSize = useBreakpointValue({ base: "md", sm: "lg", md: "xl" });
+  const priceFontSize = useBreakpointValue({ base: "lg", sm: "xl", md: "2xl" });
+  const descFontSize = useBreakpointValue({ base: "xs", sm: "sm" });
+  const buttonSize = useBreakpointValue({ base: "md", md: "lg" });
+  const cardPadding = useBreakpointValue({ base: 3, md: 4, lg: 5 });
+
   return (
     <Box
-      maxW="1200px"
+      maxW="1400px"
       mx="auto"
-      py={10}
-      px={{ base: 2, md: 6 }}
+      py={{ base: 6, md: 10 }}
+      px={{ base: 4, md: 6 }}
       bg="white"
       borderRadius="lg"
       boxShadow="lg"
-      mt={10}
+      mt={{ base: 6, md: 10 }}
     >
       <Text
         fontWeight={700}
         w="100%"
         textAlign="center"
-        mb={8}
-        fontSize={{ base: "2xl", md: "3xl" }}
+        mb={{ base: 6, md: 8 }}
+        fontSize={{ base: "xl", sm: "2xl", md: "3xl" }}
         letterSpacing="wide"
         color="gray.800"
       >
         Gợi ý cho bạn
       </Text>
+      
       <Swiper
-        slidesPerView={3}
-        spaceBetween={30}
-        scrollbar={{
-          hide: true,
-        }}
+        slidesPerView={slidesPerView}
+        spaceBetween={spaceBetween}
+        scrollbar={{ hide: true }}
         modules={[Scrollbar, Autoplay]}
         autoplay={{
           delay: 2500,
           disableOnInteraction: false,
         }}
-        breakpoints={{
-          320: { slidesPerView: 1 },
-          600: { slidesPerView: 2 },
-          900: { slidesPerView: 3 },
-        }}
         className="mySwiper"
-        style={{ paddingBottom: "32px" }}
+        style={{ 
+          padding: "0 8px 32px 8px",
+          width: "100%"
+        }}
       >
         {data.map((el) => (
-          <SwiperSlide key={el.id}>
+          <SwiperSlide key={el.id} style={{ height: "auto" }}>
             <Box
               bg="gray.50"
               borderRadius="xl"
               boxShadow="md"
-              p={5}
+              p={cardPadding}
               h="100%"
               display="flex"
               flexDirection="column"
               alignItems="center"
-              transition="all 0.2s"
-              _hover={{ boxShadow: "xl", transform: "translateY(-4px)" }}
+              transition="all 0.3s ease"
+              _hover={{ 
+                boxShadow: "xl", 
+                transform: "translateY(-4px)",
+                bg: "gray.100"
+              }}
             >
               <Image
-                mb={5}
+                mb={{ base: 3, md: 4, lg: 5 }}
                 src={el.image_link}
                 alt={el.name}
                 borderRadius="md"
-                boxSize="220px"
+                boxSize={imageSize}
                 objectFit="cover"
                 bg="white"
                 boxShadow="sm"
+                loading="lazy"
               />
-              <Box flex="1" w="100%">
+              
+              <Box flex="1" w="100%" textAlign="center">
                 <Text
-                  className="truncate"
                   fontWeight={600}
-                  fontSize="lg"
+                  fontSize={titleFontSize}
                   mb={2}
                   color="gray.700"
                   noOfLines={2}
-                  textAlign="center"
                 >
                   {el.name}
                 </Text>
+                
                 <Text
                   fontWeight={500}
                   color="cyan.600"
-                  fontSize="xl"
+                  fontSize={priceFontSize}
                   mb={2}
-                  textAlign="center"
                 >
                   {el.price_sign}
                   {el.price}
@@ -259,23 +256,24 @@ export default function App() {
                     {el.currency}
                   </Text>
                 </Text>
+                
                 <Text
-                  fontSize="sm"
+                  fontSize={descFontSize}
                   color="gray.500"
-                  noOfLines={2}
-                  mb={4}
-                  textAlign="center"
+                  noOfLines={3}
+                  mb={{ base: 3, md: 4 }}
                 >
                   {el.description.replace(/<[^>]+>/g, "")}
                 </Text>
               </Box>
+              
               <Button
                 w="100%"
                 fontWeight="700"
                 bgGradient="linear(to-r, cyan.500, blue.500)"
                 color="white"
                 borderRadius="md"
-                size="lg"
+                size={buttonSize}
                 mt="auto"
                 _hover={{
                   bgGradient: "linear(to-r, blue.600, cyan.600)",

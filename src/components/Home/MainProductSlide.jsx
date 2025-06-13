@@ -1,209 +1,168 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import {
-  Typography,
-  Button,
-  Card,
-  CardMedia,
-  CardContent,
-} from "@mui/material";
+import { Box, Text, Button, useBreakpointValue } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 
-// Danh sách ảnh fallback
 const fallbackImages = [
   "https://picsum.photos/id/1015/400/200",
   "https://picsum.photos/id/1016/400/200",
   "https://picsum.photos/id/1020/400/200",
-  "https://picsum.photos/id/1024/400/200",
-  "https://picsum.photos/id/1025/400/200",
-  "https://picsum.photos/id/1015/400/200",
-  "https://picsum.photos/id/1016/400/200",
-  "https://picsum.photos/id/1020/400/200",
-  "https://picsum.photos/id/1024/400/200",
-  "https://picsum.photos/id/1025/400/200",
-  "https://picsum.photos/id/1015/400/200",
-  "https://picsum.photos/id/1016/400/200",
-  "https://picsum.photos/id/1020/400/200",
-  "https://picsum.photos/id/1024/400/200",
-  "https://picsum.photos/id/1025/400/200",
-  "https://picsum.photos/id/1015/400/200",
-  "https://picsum.photos/id/1016/400/200",
-  "https://picsum.photos/id/1020/400/200",
-  "https://picsum.photos/id/1024/400/200",
-  "https://picsum.photos/id/1025/400/200",
 ];
 
-// Hàm chọn ngẫu nhiên 1 ảnh fallback
 const getFallbackImage = () => {
   const index = Math.floor(Math.random() * fallbackImages.length);
   return fallbackImages[index];
 };
 
 export const ProductSlider = ({ products }) => {
+  const slidesPerView = useBreakpointValue({
+    base: 1.2,
+    sm: 2,
+    md: 3,
+    lg: 4,
+    xl: 5
+  });
+
+  const spaceBetween = useBreakpointValue({
+    base: 10,
+    sm: 15,
+    md: 20,
+    lg: 24
+  });
+
   return (
-    <div className="flex flex-col gap-6 w-full">
-      <div className="text-2xl md:text-3xl font-bold text-center mb-2 text-[#222] tracking-tight">
+    <Box w="100%" px={{ base: 4, md: 8 }} py={4}>
+      <Text 
+        fontSize={{ base: "xl", md: "2xl" }}
+        fontWeight="bold" 
+        textAlign="center" 
+        mb={6}
+      >
         Top những sản phẩm bán chạy nhất
-      </div>
+      </Text>
+
       <Swiper
-        slidesPerView={6}
+        slidesPerView={slidesPerView}
+        spaceBetween={spaceBetween}
         pagination={{
           dynamicBullets: true,
+          clickable: true,
         }}
-        modules={[Pagination]}
+        modules={[Pagination, Autoplay]}
         autoplay={{
-          delay: 2500,
+          delay: 3000,
           disableOnInteraction: false,
         }}
-        style={{ padding: "8px 0" }}
+        loop={true}
+        style={{ 
+          paddingBottom: "40px",
+          "--swiper-pagination-color": "#1976d2",
+          "--swiper-pagination-bullet-inactive-color": "#ccc",
+        }}
       >
-        {(products ?? []).map((product, index) => {
-          let imageSrc = "";
-
-          if (product?.Images?.length > 0) {
-            imageSrc = product.Images[0];
-          } else if (
-            product?.Variants?.length > 0 &&
-            product.Variants[0]?.Images?.length > 0
-          ) {
-            imageSrc = product.Variants[0].Images[0];
-          } else {
-            imageSrc = getFallbackImage();
-          }
-
-          return (
-            <SwiperSlide key={product.Id ?? index} width="100%">
-              <Card
-                sx={{
-                  maxWidth: 180,
-                  minHeight: 260,
-                  borderRadius: 2.5,
-                  border: "1px solid #f0f0f0",
-                  boxShadow: "0 2px 8px 0 rgba(0,0,0,0.06)",
-                  display: "flex",
-                  flexDirection: "column",
-                  background: "#fff",
-                  transition: "box-shadow 0.2s, transform 0.2s",
-                  "&:hover": {
-                    boxShadow: "0 8px 24px 0 rgba(25, 118, 210, 0.10)",
-                    transform: "translateY(-4px) scale(1.03)",
-                  },
-                  cursor: "pointer",
-                }}
+        {(products ?? Array(6).fill(null)).map((product, index) => (
+          <SwiperSlide key={product?.Id || index} style={{ height: "auto" }}>
+            <Box
+              borderWidth="1px"
+              borderRadius="lg"
+              overflow="hidden"
+              boxShadow="md"
+              _hover={{
+                transform: "translateY(-5px)",
+                boxShadow: "xl"
+              }}
+              transition="all 0.3s ease"
+              h="100%"
+              display="flex"
+              flexDirection="column"
+            >
+              <Box
+                width="100%"
+                aspectRatio="1/1"
+                overflow="hidden"
+                position="relative"
               >
-                <CardMedia
-                  component="img"
-                  height="120"
-                  image={imageSrc}
-                  alt={product.Name || "Product image"}
-                  sx={{
-                    objectFit: "cover",
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
-                    background: "#f5f5f5",
-                    width: "100%",
-                  }}
+                <Box
+                  as="img"
+                  src={
+                    product?.Images?.[0] || 
+                    product?.Variants?.[0]?.Images?.[0] || 
+                    getFallbackImage()
+                  }
+                  alt={product?.Name || "Product image"}
+                  objectFit="cover"
+                  width="100%"
+                  height="100%"
                 />
-                <CardContent
-                  sx={{
-                    flexGrow: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 1,
-                    p: 1.5,
-                  }}
+              </Box>
+              
+              <Box p={4} flex={1} display="flex" flexDirection="column">
+                <Text
+                  fontWeight="semibold"
+                  fontSize="md"
+                  mb={2}
+                  noOfLines={2}
                 >
-                  <Typography
-                    variant="subtitle2"
-                    fontWeight={700}
-                    sx={{
-                      overflow: "hidden",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 1,
-                      WebkitBoxOrient: "vertical",
-                      color: "#222",
-                      fontSize: 15,
-                      mb: 0.5,
-                    }}
-                  >
-                    {product.Name}
-                  </Typography>
+                  {product?.Name || "Tên sản phẩm"}
+                </Text>
 
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{
-                      overflow: "hidden",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      fontSize: 12.5,
-                      mb: 0.5,
-                    }}
-                  >
-                    {product.Description}
-                  </Typography>
+                <Text
+                  color="gray.600"
+                  fontSize="sm"
+                  mb={3}
+                  noOfLines={2}
+                  flex={1}
+                >
+                  {product?.Description || "Mô tả sản phẩm"}
+                </Text>
 
-                  {product?.Variants?.[0] && (
-                    <Typography
-                      sx={{
-                        mt: 0.5,
-                        fontWeight: 700,
-                        color: "#e53935",
-                        fontSize: 16,
-                        letterSpacing: 0.2,
-                      }}
-                    >
-                      {product.Variants[0].Price.toLocaleString()}{" "}
-                      <span style={{ fontSize: 12 }}>VND</span>
-                    </Typography>
-                  )}
-
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={{
-                      mt: "auto",
-                      borderRadius: 2,
-                      fontWeight: 600,
-                      textTransform: "none",
-                      fontSize: 13,
-                      background:
-                        "linear-gradient(90deg, #1976d2 0%, #42a5f5 100%)",
-                      boxShadow: "none",
-                      py: 0.7,
-                      "&:hover": {
-                        background:
-                          "linear-gradient(90deg, #1565c0 0%, #1976d2 100%)",
-                        boxShadow: "0 2px 8px 0 rgba(25, 118, 210, 0.15)",
-                      },
-                    }}
+                <Box display="flex" alignItems="center" mb={4}>
+                  <Text
+                    fontWeight="bold"
+                    color="red.500"
+                    fontSize="lg"
                   >
-                    Xem chi tiết
-                  </Button>
-                </CardContent>
-              </Card>
-            </SwiperSlide>
-          );
-        })}
+                    {product?.Variants?.[0]?.Price?.toLocaleString() || "999,999"}
+                  </Text>
+                  <Text
+                    ml={1}
+                    color="gray.500"
+                    fontSize="sm"
+                  >
+                    VND
+                  </Text>
+                </Box>
+
+                <Button
+                  colorScheme="blue"
+                  size="sm"
+                  width="full"
+                  variant="solid"
+                >
+                  Xem chi tiết
+                </Button>
+              </Box>
+            </Box>
+          </SwiperSlide>
+        ))}
       </Swiper>
-    </div >
+    </Box>
   );
 };
 
 ProductSlider.propTypes = {
   products: PropTypes.arrayOf(
     PropTypes.shape({
-      Id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      Name: PropTypes.string.isRequired,
+      Id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      Name: PropTypes.string,
       Description: PropTypes.string,
       Images: PropTypes.arrayOf(PropTypes.string),
       Variants: PropTypes.arrayOf(
         PropTypes.shape({
-          Price: PropTypes.number.isRequired,
+          Price: PropTypes.number,
           Images: PropTypes.arrayOf(PropTypes.string),
         })
       ),

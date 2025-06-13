@@ -3,8 +3,8 @@ import { Image, Box } from "@chakra-ui/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import "./style.css";
-import {  Scrollbar } from "swiper/modules";
+import "swiper/css/scrollbar";
+import { Autoplay, Scrollbar } from "swiper/modules";
 
 const images = [
   "https://yumo.ca/cdn/shop/files/25.01.23-2.png?v=1737677229",
@@ -15,13 +15,13 @@ const images = [
   "https://aocaulongthietke.com/wp-content/uploads/2021/06/Banner-trang-chu-ao-bong-chuyen-thiet-ke.jpg",
 ];
 
-export default function App() {
+export default function Carousel() {
   return (
     <Box
-      h={{ base: "30vh", md: "50vh", lg: "60vh" }}
       w="100%"
-      maxW="90vw"
-      mt={"50px"}
+      maxW={{ base: "100vw", md: "90vw" }}
+      h={{ base: "180px", sm: "220px", md: "350px", lg: "450px" }}
+      mt={{ base: "10px", md: "30px" }}
       mx="auto"
       position="relative"
       overflow="hidden"
@@ -29,13 +29,13 @@ export default function App() {
       boxShadow="lg"
       bg="gray.100"
       display="flex"
-      flexDirection="row"
-      gap={4}
-      p={4}
+      flexDirection={{ base: "column", md: "row" }}
+      gap={{ base: 2, md: 4 }}
+      p={{ base: 1, md: 4 }}
     >
-      {/* Swiper bên trái */}
+      {/* Main Swiper - Chiếm toàn bộ chiều rộng trên mobile */}
       <Box
-        w="70%"
+        w="100%"
         h="100%"
         borderRadius="xl"
         overflow="hidden"
@@ -48,22 +48,22 @@ export default function App() {
             delay: 3000,
             disableOnInteraction: false,
           }}
-          loop
+          loop={true}
           scrollbar={{
             hide: true,
           }}
-          modules={[Scrollbar]}
+          modules={[Autoplay, Scrollbar]}
           className="mySwiper"
-          style={{ height: "100%", width: "100%" }}
+          style={{ 
+            height: "100%", 
+            width: "100%",
+          }}
         >
           {images.map((src, idx) => (
             <SwiperSlide key={idx}>
               <Box
                 h="100%"
                 w="100%"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
                 position="relative"
                 overflow="hidden"
               >
@@ -71,48 +71,64 @@ export default function App() {
                   src={src}
                   alt={`Banner ${idx + 1}`}
                   objectFit="cover"
-                  h="100%"
                   w="100%"
-                  transition="transform 0.5s"
+                  h="100%"
+                  minH="100%"
+                  transition="transform 0.5s ease"
                   _hover={{ transform: "scale(1.03)" }}
                   borderRadius="xl"
-                  boxShadow="md"
+                  loading="eager"
                 />
               </Box>
             </SwiperSlide>
           ))}
         </Swiper>
       </Box>
-      {/* Hai ảnh bên phải */}
+
+      {/* Side Images - Chỉ hiển thị trên tablet/desktop */}
       <Box
-        w="30%"
+        w={{ base: "0", md: "30%" }}
         h="100%"
-        display="flex"
+        display={{ base: "none", md: "flex" }}
         flexDirection="column"
         gap={4}
       >
-        <Image
-          src={'https://rikisport.vn/wp-content/uploads/2024/09/WEBSITE-BANNER-NU.jpg'}
-          alt="Banner 1"
-          objectFit="cover"
-          h="50%"
+        <Box
+          flex={1}
           w="100%"
-          transition="transform 0.5s"
-          _hover={{ transform: "scale(1.03)" }}
+          position="relative"
+          overflow="hidden"
           borderRadius="xl"
           boxShadow="md"
-        />
-        <Image
-          src={'https://rikisport.vn/wp-content/uploads/2024/09/WEBSITE-BANNER-NAM.jpg'}
-          alt="Banner 2"
-          objectFit="cover"
-          h="50%"
+        >
+          <Image
+            src="https://rikisport.vn/wp-content/uploads/2024/09/WEBSITE-BANNER-NU.jpg"
+            alt="Banner 1"
+            objectFit="cover"
+            w="100%"
+            h="100%"
+            transition="transform 0.5s ease"
+            _hover={{ transform: "scale(1.03)" }}
+          />
+        </Box>
+        <Box
+          flex={1}
           w="100%"
-          transition="transform 0.5s"
-          _hover={{ transform: "scale(1.03)" }}
+          position="relative"
+          overflow="hidden"
           borderRadius="xl"
           boxShadow="md"
-        />
+        >
+          <Image
+            src="https://rikisport.vn/wp-content/uploads/2024/09/WEBSITE-BANNER-NAM.jpg"
+            alt="Banner 2"
+            objectFit="cover"
+            w="100%"
+            h="100%"
+            transition="transform 0.5s ease"
+            _hover={{ transform: "scale(1.03)" }}
+          />
+        </Box>
       </Box>
     </Box>
   );

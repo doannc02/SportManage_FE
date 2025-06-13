@@ -1,4 +1,4 @@
-import { Box, CheckCircle, Clock, Package, Truck, XCircle } from "lucide-react";
+import { AlertCircle, Box, CheckCircle, Clock, Home, MapPin, Package, Truck, XCircle } from "lucide-react";
 import {
   FaCreditCard,
   FaMoneyBillWave,
@@ -339,4 +339,38 @@ export const menuShipperItems = [
 export const MENU_ENUMS = [
   { value: menuAdminItems, role: "ADMIN" },
   { value: menuShipperItems, role: "SHIPPER" },
+];
+
+
+export const SHIPPING_TIMELINE_STEPS = [
+  {
+    status: "PickedUp",
+    title: "Đã lấy hàng",
+    description: "Đơn vị vận chuyển đã lấy hàng từ kho",
+    icon: Package
+  },
+  {
+    status: "InTransit", 
+    title: "Đang vận chuyển",
+    description: "Hàng đang được vận chuyển đến điểm trung chuyển",
+    icon: Truck
+  },
+  {
+    status: "OutForDelivery",
+    title: "Đang giao hàng", 
+    description: "Shipper đang trên đường giao hàng đến bạn",
+    icon: MapPin
+  },
+  {
+    status: "Delivered",
+    title: "Đã giao thành công",
+    description: "Đơn hàng đã được giao thành công",
+    icon: Home
+  },
+  {
+    status: "Failed",
+    title: "Giao hàng thất bại",
+    description: "Không thể giao hàng, sẽ thử lại sau",
+    icon: AlertCircle
+  }
 ];

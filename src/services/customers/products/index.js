@@ -1,13 +1,14 @@
 import { useQuery } from "react-query"
 import { authApi } from "../../../configs/auth"
 import { defaultOption } from "../../../configs/reactQuery"
+import queryString from "query-string"
 
 export const getProductList = async (
     {
         pageSize,
         pageNumber,
         keyword,
-        categories
+        categoryIds
     }
 ) => {
     const { data } = await authApi({
@@ -17,19 +18,23 @@ export const getProductList = async (
             pageSize,
             pageNumber,
             keyword,
-            categories
-        }
+            categoryIds
+        },
+        paramsSerializer: (params) => {
+            // Xử lý serialization cho mảng
+            return queryString.stringify(params, { arrayFormat: 'repeat' })
+          }
     })
     return data
 }
 
 export const useQueryProductsList = (
-    { pageSize, pageNumber, keyword, categories },
+    { pageSize, pageNumber, keyword, categoryIds },
     options
 ) => {
     return useQuery(
-        ['/api/products/paging', pageSize, pageNumber, keyword, categories],
-        () => getProductList({ pageSize, pageNumber, keyword, categories }),
+        ['/api/products/paging', pageSize, pageNumber, keyword, categoryIds],
+        () => getProductList({ pageSize, pageNumber, keyword, categoryIds }),
         {
             ...defaultOption,
             ...options,
