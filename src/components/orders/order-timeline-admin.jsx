@@ -141,8 +141,6 @@ const OrderTimelineAdmin = () => {
   useEffect(() => {
     getTimeline();
   }, [data?.state]);
-  console.log(data);
-
   return (
     <>
       <VStack align="stretch" spacing={6}>
