@@ -109,7 +109,11 @@ const ListOrder = ({
                     size={pageSize}
                     isLoading={isLoading}
                     onRowClick={(id) => {
-                        navigate(`/order/${id}`);
+                        if (userRole === "admin") {
+                            navigate(`/order-admin/detail/${id}`);
+                        }else{
+                         navigate(`/order/${id}`);   
+                        }
                     }}
                 />
             </Box>
