@@ -21,7 +21,8 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import _ from "lodash";
 import { toast } from "react-toastify";
-import { useQueryBrandsList } from "../../../../services/admins/brands";
+import { deleteBrand, useQueryBrandsList } from "../../../../services/admins/brands";
+import { countiesCitiesEnums } from "../../../../const/enum";
 
 const defaultValues = {
     pageNumber: 0,
@@ -64,10 +65,6 @@ const BrandListAdmin = () => {
         }));
     }, []);
 
-    const onReset = useCallback(() => {
-        methodForm.reset(defaultValues);
-        setQueryPage(_.omitBy(defaultValues, _.isNil));
-    }, [methodForm]);
 
     const handleOpenDialog = useCallback((brandId, name) => {
         setSelectedBrand({ id: brandId, name });
@@ -81,7 +78,7 @@ const BrandListAdmin = () => {
 
     const handleConfirmDelete = async () => {
         try {
-            // await deleteBrand({ id: selectedBrand.id });
+            await deleteBrand({ id: selectedBrand.id });
             toast.success(`Xoá thương hiệu "${selectedBrand.name}" thành công!`);
             handleCloseDialog();
             refetch();
@@ -94,7 +91,7 @@ const BrandListAdmin = () => {
         () => [
             { header: "Tên thương hiệu", fieldName: "name" },
             { header: "Slug", fieldName: "slug" },
-            { header: "Quốc gia", fieldName: "country" },
+            { header: "Quốc gia", fieldName: "countryId" },
             { header: "Thành phố", fieldName: "city" },
             { header: "Năm thành lập", fieldName: "foundedYear" },
             { header: "Website", fieldName: "website" },
@@ -108,6 +105,20 @@ const BrandListAdmin = () => {
 
     const dataTable = (data?.items ?? []).map((item) => ({
         ...item,
+        foundedYear:(item.foundedYear).toString(),
+        countryId:countiesCitiesEnums.find(i => i.value === item.countryId).label || item.countryId,
+        city:
+            (() => {
+            // Tìm country chứa cities
+            const countryWithCities = countiesCitiesEnums.find(
+                c => Array.isArray(c.cities) && c.cities.some(city => city.value === item.city)
+            );
+            if (countryWithCities) {
+                const cityObj = countryWithCities.cities.find(city => city.value === item.city);
+                return cityObj ? cityObj.label : item.city;
+            }
+            return item.city;
+            })(),
         isActive: item.isActive ? "Đang hoạt động" : "Ngưng hoạt động",
         action: (
             <Button

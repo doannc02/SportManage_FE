@@ -1,4 +1,14 @@
-import { AlertCircle, Box, CheckCircle, Clock, Home, MapPin, Package, Truck, XCircle } from "lucide-react";
+import {
+  AlertCircle,
+  Box,
+  CheckCircle,
+  Clock,
+  Home,
+  MapPin,
+  Package,
+  Truck,
+  XCircle,
+} from "lucide-react";
 import {
   FaCreditCard,
   FaMoneyBillWave,
@@ -17,6 +27,48 @@ import {
 } from "react-icons/fi";
 import { MdOutlineCategory } from "react-icons/md";
 
+export const countiesCitiesEnums = [
+  {
+    value: "japan",
+    label: "Nhật Bản",
+    cities: [
+      { value: "tokyo", label: "Tokyo" },
+      { value: "osaka", label: "Osaka" },
+      { value: "kyoto", label: "Kyoto" },
+      { value: "hiroshima", label: "Hiroshima" },
+      { value: "sapporo", label: "Sapporo" },
+    ],
+  },
+  {
+    value: "vietnam",
+    label: "Việt Nam",
+  },
+  {
+    value: "malaysia",
+    label: "Malaysia",
+    cities: [
+      { value: "kuala_lumpur", label: "Kuala Lumpur" },
+      { value: "george_town", label: "George Town" },
+      { value: "johor_bahru", label: "Johor Bahru" },
+      { value: "ipoh", label: "Ipoh" },
+    ],
+  },
+  {
+    value: "indonesia",
+    label: "Indonesia",
+    cities: [
+      { value: "jakarta", label: "Jakarta" },
+      { value: "surabaya", label: "Surabaya" },
+      { value: "bandung", label: "Bandung" },
+      { value: "medan", label: "Medan" },
+    ],
+  },
+];
+
+export const isActiveBrands = [
+  { value: true, label: "Còn hoạt động" },
+  { value: false, label: "Đã đóng cửa" },
+];
 export const optionSizeByUnit = {
   1: [
     // Box - Hộp 📦
@@ -129,10 +181,10 @@ export const paymentMethodEnums = [
   },
 ];
 export const paymentStatusEnums = [
-  { value: "Pending", label: "Chờ thanh toán",color:"yellow.600" },
-  { value: "Completed", label: "Đã thanh toán",color:"green.600" },
-  { value: "Failed", label: "Thanh toán thất bại",color:"red.600" },
-  { value: "Refunded", label: "Hoàn tiền",color:"gray.600" },
+  { value: "Pending", label: "Chờ thanh toán", color: "yellow.600" },
+  { value: "Completed", label: "Đã thanh toán", color: "green.600" },
+  { value: "Failed", label: "Thanh toán thất bại", color: "red.600" },
+  { value: "Refunded", label: "Hoàn tiền", color: "gray.600" },
 ];
 export const ORDER_STATES = {
   Pending: {
@@ -245,7 +297,6 @@ export const OrderStateOptions = Object.entries(ORDER_STATES).map(
   })
 );
 
-
 export const TYPE_ORDER_STATE =
   "Pending" | "Receivered" | "Shipped" | "Sendered" | "Cancelled";
 
@@ -353,36 +404,35 @@ export const MENU_ENUMS = [
   { value: menuShipperItems, role: "SHIPPER" },
 ];
 
-
 export const SHIPPING_TIMELINE_STEPS = [
   {
     status: "PickedUp",
     title: "Đã lấy hàng",
     description: "Đơn vị vận chuyển đã lấy hàng từ kho",
-    icon: Package
+    icon: Package,
   },
   {
-    status: "InTransit", 
+    status: "InTransit",
     title: "Đang vận chuyển",
     description: "Hàng đang được vận chuyển đến điểm trung chuyển",
-    icon: Truck
+    icon: Truck,
   },
   {
     status: "OutForDelivery",
-    title: "Đang giao hàng", 
+    title: "Đang giao hàng",
     description: "Shipper đang trên đường giao hàng đến bạn",
-    icon: MapPin
+    icon: MapPin,
   },
   {
     status: "Delivered",
     title: "Đã giao thành công",
     description: "Đơn hàng đã được giao thành công",
-    icon: Home
+    icon: Home,
   },
   {
     status: "Failed",
     title: "Giao hàng thất bại",
     description: "Không thể giao hàng, sẽ thử lại sau",
-    icon: AlertCircle
-  }
+    icon: AlertCircle,
+  },
 ];

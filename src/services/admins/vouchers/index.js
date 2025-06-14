@@ -85,7 +85,6 @@ export const useQueryDetailVoucher = ({
 export const postVoucher = async (
     input
 ) => {
-    console.log(input, 'loon')
     const { data } = await authApi({
         method: 'post',
         url: '/api/vouchers/create',
