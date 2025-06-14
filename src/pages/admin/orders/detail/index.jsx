@@ -505,7 +505,7 @@ const OrderDetailAdminPage = () => {
                     <Divider />
 
                     {/* Customer Actions */}
-                    <Box>
+                    {/* <Box>
                       <Heading size="sm" mb={4}>
                         Hành động
                       </Heading>
@@ -523,7 +523,7 @@ const OrderDetailAdminPage = () => {
                           Đánh giá sản phẩm
                         </Button>
                       </Grid>
-                    </Box>
+                    </Box> */}
                   </VStack>
                 </CardBody>
               </Card>
