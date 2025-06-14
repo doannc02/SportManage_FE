@@ -1,32 +1,34 @@
 import { Box, Button, Grid, GridItem, Stack, Text } from "@chakra-ui/react";
 import CoreInput from "../../../../components/atoms/CoreInput";
-import { useDetailBrands } from "./useDetailBrands";
+import {  useDetailSuppliers } from "./useDetailSuppliers";
 import CoreAutoComplete from "../../../../components/atoms/CoreAutoComplete";
 import { countiesCitiesEnums, isActiveBrands } from "../../../../const/enum";
-import { useQueryAddressLv1 } from "../../../../services/common";
+import { useQueryAddressLv1, useQueryAddressLv2 } from "../../../../services/common";
 import { Avatar, Flex } from "antd";
 import { MultiImageUploader } from "../../../../components/atoms/ImageUploader";
 import { BASE_URL } from "../../../../configs/auth";
 
-const BrandsDetailAdmin = () => {
+const SuppliersDetailAdmin = () => {
   const { data: dataAddressLv1, isLoading: isLoadingAddressLv1 } =
     useQueryAddressLv1();
-  const [{ methodForm, isLoadingSubmit, isEdit }, { onSubmit }] =
-    useDetailBrands();
+    const { data: dataAddressLv2, isLoading: isLoadingAddressLv2 } =
+    useQueryAddressLv2();
 
-  const logoValue = methodForm.watch("logoUrl");
+  const [{ methodForm, isLoadingSubmit, isEdit }, { onSubmit }] =
+    useDetailSuppliers();
+
 
   const getCityByCountry = () => {
-    const selectedCountryId = methodForm.watch("countryId");
+    const selectedCountry = methodForm.watch("country");
 
-    if (selectedCountryId === "vietnam") {
+    if (selectedCountry === "vietnam") {
       return (dataAddressLv1?.data ?? []).map((item) => ({
         value: item.id,
         label: item.full_name,
       }));
-    } else if (selectedCountryId) {
+    } else if (selectedCountry) {
       const country = countiesCitiesEnums.find(
-        (item) => item.value === selectedCountryId
+        (item) => item.value === selectedCountry
       );
       return country?.cities ?? [];
     }
@@ -200,4 +202,4 @@ return (
 );
 };
 
-export default BrandsDetailAdmin;
+export default SuppliersDetailAdmin;
