@@ -4,12 +4,7 @@ import { useMutation, useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
-import {
-  getDetailBrand,
-  postBrand,
-  putBrand,
-} from "../../../../services/admins/brands";
+import { getDetailSupplier, postSupplier, putSupplier } from "../../../../services/admins/suppliers";
 
 export const useDetailSuppliers = () => {
   const { id } = useParams();
@@ -20,34 +15,33 @@ export const useDetailSuppliers = () => {
   const methodForm = useForm({
     defaultValues: {
       name: "",
-      slug: "",
-      logoUrl: "",
-      website: "",
-      country: "",
-      countryId: "vietnam",
+      contactPhone:"",
+      address: "",
+      region: "",
+      postalCode: "",
+      country: "vietnam",
+      phone:"",
       city: "",
-      descriptions: null,
+      fax:"",
+      description: null,
       isActive: true,
-      foundedYear: "",
+      contactEmail: "",
     },
   });
 
   const {  refetch } = useQuery({
     enabled: isEdit,
-    queryKey: ["brand-detail", id],
-    queryFn: () => getDetailBrand({ id }),
+    queryKey: ["supplier-detail", id],
+    queryFn: () => getDetailSupplier({ id }),
     onSuccess: (data) => {
       methodForm.reset({
         ...data,
-        foundedYear: !isEdit
-          ? dayjs(Date.now()).format("YYYY").toString()
-          : data.foundedYear,
       });
     },
   });
 
   const mutation = useMutation({
-    mutationFn: (values) => (isEdit ? putBrand(values) : postBrand(values)),
+    mutationFn: (values) => (isEdit ? putSupplier(values) : postSupplier(values)),
     onSuccess: () => {
       toast({
         title: isEdit ? "Cập nhật thành công" : "Tạo mới thành công",
@@ -55,7 +49,7 @@ export const useDetailSuppliers = () => {
         position: "top",
       });
       refetch();
-      navigate(`/brands/list`);
+      navigate(`/suppliers/list`);
     },
     onError: () => {
       toast({
