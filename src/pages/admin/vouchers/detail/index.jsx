@@ -226,7 +226,6 @@ const VoucherDetailAdmin = () => {
       </Grid>
     </form>
   );
-};
         <GridItem colSpan={[12, 12]}>
           <CoreInput
             control={methodForm.control}
@@ -253,5 +252,4 @@ const VoucherDetailAdmin = () => {
   );
 };
 
-export default VoucherDetailAdmin;
 export default VoucherDetailAdmin;
