@@ -32,18 +32,6 @@ import {
   Skeleton,
   ScaleFade,
   Icon,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalCloseButton,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  Spinner,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -58,7 +46,7 @@ import {
   removeCartItem,
 } from "../../services/customers/carts";
 import { useQueryAvailableVouchers } from "../../services/customers/vouchers";
-import { FaCheck, FaShoppingCart, FaTags, FaTrash, FaCreditCard } from "react-icons/fa";
+import { FaCheck, FaShoppingCart, FaTags, FaTrash } from "react-icons/fa";
 import { BiChevronRight } from "react-icons/bi";
 import { BsCheck2Circle } from "react-icons/bs";
 import RecommendProductSection from "./recommend-product-section";
@@ -79,7 +67,7 @@ import { DialogSuccessPayment } from "./dialogs/dialog-susccess-payment";
 // Animation variants for framer-motion
 const listItemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
+  visible: { opacity: 1, y: 0 },
 };
 
 // Styled motion component for each cart row
@@ -91,13 +79,13 @@ const CartTable = () => {
   const [selectedVoucher, setSelectedVoucher] = useState(null);
   const [voucherDiscount, setVoucherDiscount] = useState(0);
   const [showVoucherList, setShowVoucherList] = useState(false);
-  const [voucherInputValue, setVoucherInputValue] = useState('');
-  const [shippingAddressId, setShippingAddressId] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('');
+  const [voucherInputValue, setVoucherInputValue] = useState("");
+  const [shippingAddressId, setShippingAddressId] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [creditCardInfo, setCreditCardInfo] = useState({
-    number: '',
-    name: '',
-    cvc: ''
+    number: "",
+    name: "",
+    cvc: "",
   });
 
   // State cho dialog thanh toán thành công
@@ -106,13 +94,22 @@ const CartTable = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const { isLoading, data, refetch } = useQueryCartDetail();
-  const { data: vouchers, isLoading: isLoadingVouchers } = useQueryAvailableVouchers();
+  const { data: vouchers, isLoading: isLoadingVouchers } =
+    useQueryAvailableVouchers();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen: isCreditModalOpen, onOpen: onOpenCreditCardModal, onClose: onCloseCreditCardModal } = useDisclosure();
+  const {
+    isOpen: isCreditModalOpen,
+    onOpen: onOpenCreditCardModal,
+    onClose: onCloseCreditCardModal,
+  } = useDisclosure();
 
   // Disclosure cho dialog thanh toán thành công
-  const { isOpen: isPaymentSuccessOpen, onOpen: onOpenPaymentSuccess, onClose: onClosePaymentSuccess } = useDisclosure();
+  const {
+    isOpen: isPaymentSuccessOpen,
+    onOpen: onOpenPaymentSuccess,
+    onClose: onClosePaymentSuccess,
+  } = useDisclosure();
 
   // State để theo dõi việc auto-create order
   const [isAutoCreatingOrder, setIsAutoCreatingOrder] = useState(false);
@@ -125,49 +122,54 @@ const CartTable = () => {
   const subtleColor = useColorModeValue("gray.50", "gray.700");
   const borderColor = useColorModeValue("gray.200", "gray.700");
 
-  const { mutate: createOrder, isLoading: isLoadingCreateOrder } = useMutation(createOrderUser, {
-    onSuccess: (res) => {
-      // Đóng dialog thanh toán thành công nếu đang mở
-      if (isPaymentSuccessOpen) {
+  const { mutate: createOrder, isLoading: isLoadingCreateOrder } = useMutation(
+    createOrderUser,
+    {
+      onSuccess: (res) => {
+        // Đóng dialog thanh toán thành công nếu đang mở
+        if (isPaymentSuccessOpen) {
+          onClosePaymentSuccess();
+        }
+        setIsAutoCreatingOrder(false);
         onClosePaymentSuccess();
-      }
-      setIsAutoCreatingOrder(false);
-      onClosePaymentSuccess()
 
-      toast({
-        title: "Tạo đơn hàng thành công!",
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-        position: "top",
-        icon: <FaCheck />,
-      });
-      setUser((prev) => ({ ...prev, totalCartItems: res.totalCartItems }));
-      refetch();
-      navigate(`/order/${res}`)
-    },
-    onError: (error) => {
-      onClosePaymentSuccess()
-      setIsAutoCreatingOrder(false);
-      if (paymentMethod === "CreditCard") {
-        const { number, name } = creditCardInfo;
+        toast({
+          title: "Tạo đơn hàng thành công!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+          position: "top",
+          icon: <FaCheck />,
+        });
+        setUser((prev) => ({ ...prev, totalCartItems: res.totalCartItems }));
+        refetch();
+        navigate(`/order/${res}`);
+      },
+      onError: (error) => {
+        onClosePaymentSuccess();
+        setIsAutoCreatingOrder(false);
+        if (paymentMethod === "CreditCard") {
+          const { number, name } = creditCardInfo;
+          toast({
+            title: "Lỗi khi tạo đơn hàng!",
+            description: `Số tiền ${(
+              cartTotal - voucherDiscount
+            ).toLocaleString()} VND đã thanh toán sẽ được hoàn về tài khoản ${name} - ${number}`,
+            status: "info",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
         toast({
           title: "Lỗi khi tạo đơn hàng!",
-          description: `Số tiền ${(cartTotal - voucherDiscount).toLocaleString()} VND đã thanh toán sẽ được hoàn về tài khoản ${name} - ${number}`,
-          status: "info",
-          duration: 5000,
+          description: error?.response?.data?.message || "Có lỗi xảy ra",
+          status: "error",
+          duration: 2000,
           isClosable: true,
         });
-      }
-      toast({
-        title: "Lỗi khi tạo đơn hàng!",
-        description: error?.response?.data?.message || "Có lỗi xảy ra",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-    },
-  });
+      },
+    }
+  );
 
   const { mutate: removeItem } = useMutation(removeCartItem, {
     onSuccess: (res) => {
@@ -242,19 +244,25 @@ const CartTable = () => {
   const handlePaymentSuccess = () => {
     setIsAutoCreatingOrder(true);
 
-    console.log(shippingAddressId, data, selectedVoucher, paymentMethod, "==============input=========")
+    console.log(
+      shippingAddressId,
+      data,
+      selectedVoucher,
+      paymentMethod,
+      "==============input========="
+    );
     const formatInputOrder = {
-      items: (data ?? []).map(i => {
+      items: (data ?? []).map((i) => {
         return {
           productVariantId: i.productVariantId,
-          quantity: i.quantity
-        }
+          quantity: i.quantity,
+        };
       }),
       shippingAddressId: shippingAddressId,
       voucherCode: selectedVoucher?.code ?? null,
       paymentMethod: paymentMethod,
-      notes: ""
-    }
+      notes: "",
+    };
     // Tự động tạo đơn hàng sau 2.5 giây để người dùng thấy thông báo thành công
     setTimeout(() => {
       createOrder(formatInputOrder);
@@ -266,7 +274,9 @@ const CartTable = () => {
     setIsProcessingPayment(true);
 
     // Mô phỏng thời gian xử lý thanh toán (2-3 giây)
-    await new Promise(resolve => setTimeout(resolve, 3000 + Math.random() * 1000));
+    await new Promise((resolve) =>
+      setTimeout(resolve, 3000 + Math.random() * 1000)
+    );
 
     setIsProcessingPayment(false);
 
@@ -300,7 +310,8 @@ const CartTable = () => {
       return;
     }
 
-    if (!paymentMethod) {
+    let method = paymentMethod;
+    if (!method) {
       toast({
         title: "Vui lòng chọn phương thức thanh toán",
         status: "warning",
@@ -310,7 +321,7 @@ const CartTable = () => {
       return;
     }
 
-    if (paymentMethod === "CreditCard") {
+    if (method === "CreditCard") {
       // Kiểm tra thông tin thẻ trước khi thanh toán
       if (!validateCreditCardInfo()) {
         return;
@@ -319,19 +330,19 @@ const CartTable = () => {
       await simulateCreditCardPayment();
     } else {
       const formatInputOrder = {
-        items: (data ?? []).map(i => {
+        items: (data ?? []).map((i) => {
           return {
             productVariantId: i.productVariantId,
-            quantity: i.quantity
-          }
+            quantity: i.quantity,
+          };
         }),
         shippingAddressId: shippingAddressId,
         voucherCode: selectedVoucher.code,
-        paymentMethod: paymentMethod,
-        notes: ""
-      }
+        paymentMethod: method,
+        notes: "",
+      };
       // Nếu thanh toán COD hoặc phương thức khác, tạo đơn hàng trực tiếp
-      createOrder(formatInputOrder);
+      await createOrder({ formatInputOrder });
     }
   };
 
@@ -381,7 +392,7 @@ const CartTable = () => {
       // Deselect if already selected
       setSelectedVoucher(null);
       setVoucherDiscount(0);
-      setVoucherInputValue('');
+      setVoucherInputValue("");
       toast({
         title: "Đã hủy mã giảm giá",
         status: "info",
@@ -404,11 +415,12 @@ const CartTable = () => {
     setShowVoucherList(false);
   };
 
-  const handleSelectPaymentMethod = (method) => {
+  const handleSelectPaymentMethod = async (method) => {
     if (method === "CreditCard" && paymentMethod !== "CreditCard") {
       onOpenCreditCardModal(); // Chỉ mở khi lần đầu chọn CreditCard
     }
     setPaymentMethod(method);
+    await handleCheckout();
   };
 
   const handleVoucherCodeSubmit = (e) => {
@@ -416,7 +428,7 @@ const CartTable = () => {
 
     if (!voucherInputValue.trim()) return;
 
-    const foundVoucher = vouchers?.find(v => v.code === voucherInputValue);
+    const foundVoucher = vouchers?.find((v) => v.code === voucherInputValue);
 
     if (foundVoucher) {
       handleSelectVoucher(foundVoucher);
@@ -438,12 +450,7 @@ const CartTable = () => {
       <Flex direction="column" gap={6}>
         {/* Header */}
         <Box mb={2}>
-          <Heading
-            size="lg"
-            mb={2}
-            display="flex"
-            alignItems="center"
-          >
+          <Heading size="lg" mb={2} display="flex" alignItems="center">
             <Icon as={FaShoppingCart} mr={3} color={accentColor} />
             Giỏ hàng
             {data && data.length > 0 && (
@@ -468,11 +475,7 @@ const CartTable = () => {
           align="flex-start"
         >
           {/* Cart items list and payment info */}
-          <Box
-            flex="1"
-            overflow="hidden"
-            w="full"
-          >
+          <Box flex="1" overflow="hidden" w="full">
             {isLoading ? (
               // Loading skeleton
               <LoadingSkeletonCart />
@@ -508,7 +511,11 @@ const CartTable = () => {
                             initial="hidden"
                             animate="visible"
                             transition={{ duration: 0.3, delay: index * 0.1 }}
-                            bg={hoveredItemId === item.id ? subtleColor : "transparent"}
+                            bg={
+                              hoveredItemId === item.id
+                                ? subtleColor
+                                : "transparent"
+                            }
                             onMouseEnter={() => setHoveredItemId(item.id)}
                             onMouseLeave={() => setHoveredItemId(null)}
                             _hover={{ transform: "translateY(-2px)" }}
@@ -521,14 +528,26 @@ const CartTable = () => {
                                 borderRadius="md"
                                 src={`${BASE_URL}${variant.images?.[0]}`}
                                 alt={variant.name}
-                                fallback={<Center boxSize="80px" bg="gray.100" borderRadius="md">No image</Center>}
+                                fallback={
+                                  <Center
+                                    boxSize="80px"
+                                    bg="gray.100"
+                                    borderRadius="md"
+                                  >
+                                    No image
+                                  </Center>
+                                }
                               />
                             </Td>
                             <Td>
                               <VStack align="start" spacing={1}>
                                 <Text fontWeight="medium">{variant.name}</Text>
                                 {variant.stockQuantity <= 5 && (
-                                  <Badge colorScheme="red" variant="subtle" fontSize="xs">
+                                  <Badge
+                                    colorScheme="red"
+                                    variant="subtle"
+                                    fontSize="xs"
+                                  >
                                     Còn {variant.stockQuantity} sản phẩm
                                   </Badge>
                                 )}
@@ -544,13 +563,19 @@ const CartTable = () => {
                             </Td>
                             <Td isNumeric>
                               <VStack align="end" spacing={0}>
-                                <Text fontWeight="medium">{variant.price.toLocaleString()} VND</Text>
+                                <Text fontWeight="medium">
+                                  {variant.price.toLocaleString()} VND
+                                </Text>
                                 <Text
                                   fontSize="sm"
                                   color={accentColor}
                                   fontWeight="medium"
                                 >
-                                  = {(variant.price * item.quantity).toLocaleString()} VND
+                                  ={" "}
+                                  {(
+                                    variant.price * item.quantity
+                                  ).toLocaleString()}{" "}
+                                  VND
                                 </Text>
                               </VStack>
                             </Td>
@@ -596,11 +621,20 @@ const CartTable = () => {
                   {paymentMethod === "CreditCard" && (
                     <CreditCardForm onCardInfoChange={setCreditCardInfo} />
                   )}
-                  <InfoDetailPayment accentColor={accentColor} cartTotal={cartTotal} selectedVoucher={selectedVoucher} voucherDiscount={voucherDiscount} />
+                  <InfoDetailPayment
+                    accentColor={accentColor}
+                    cartTotal={cartTotal}
+                    selectedVoucher={selectedVoucher}
+                    voucherDiscount={voucherDiscount}
+                  />
 
                   <GroupButton
                     navigate={navigate}
-                    isLoadingCreateOrder={isLoadingCreateOrder || isProcessingPayment || isAutoCreatingOrder}
+                    isLoadingCreateOrder={
+                      isLoadingCreateOrder ||
+                      isProcessingPayment ||
+                      isAutoCreatingOrder
+                    }
                     onClick={handleCheckout}
                   />
 
@@ -611,11 +645,7 @@ const CartTable = () => {
           </Box>
 
           {/* Order summary */}
-          <Box
-            w={{ base: "full", lg: "350px" }}
-            position="sticky"
-            top="20px"
-          >
+          <Box w={{ base: "full", lg: "350px" }} position="sticky" top="20px">
             {/* Vouchers */}
             <SlideFade in={!emptyCart} offsetY="20px">
               <Card
@@ -665,7 +695,12 @@ const CartTable = () => {
                   </form>
 
                   <Collapse in={showVoucherList} animateOpacity>
-                    <VStack align="stretch" pt={2} maxH="300px" overflowY="auto">
+                    <VStack
+                      align="stretch"
+                      pt={2}
+                      maxH="300px"
+                      overflowY="auto"
+                    >
                       {isLoadingVouchers ? (
                         <Stack spacing={3}>
                           <Skeleton height="60px" />
@@ -700,12 +735,20 @@ const CartTable = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                     >
-                      <Icon as={BsCheck2Circle} color="teal.500" boxSize={5} mr={3} />
+                      <Icon
+                        as={BsCheck2Circle}
+                        color="teal.500"
+                        boxSize={5}
+                        mr={3}
+                      />
                       <Box flex="1">
                         <Text fontWeight="medium">
                           Mã "{selectedVoucher.code}" được áp dụng
                         </Text>
-                        <Text fontSize="sm" color={useColorModeValue("teal.600", "teal.200")}>
+                        <Text
+                          fontSize="sm"
+                          color={useColorModeValue("teal.600", "teal.200")}
+                        >
                           Giảm {voucherDiscount.toLocaleString()} VND
                         </Text>
                       </Box>
@@ -718,7 +761,7 @@ const CartTable = () => {
                         onClick={() => {
                           setSelectedVoucher(null);
                           setVoucherDiscount(0);
-                          setVoucherInputValue('');
+                          setVoucherInputValue("");
                         }}
                       />
                     </Flex>
@@ -731,15 +774,25 @@ const CartTable = () => {
           </Box>
         </Flex>
       </Flex>
-      <DialogRemove selectedItemId={selectedItemId} cancelRef={cancelRef} removeItem={removeItem} isOpen={isOpen} onClose={onClose} />
+      <DialogRemove
+        selectedItemId={selectedItemId}
+        cancelRef={cancelRef}
+        removeItem={removeItem}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
       {/* Dialog thanh toán thành công */}
-      <DialogSuccessPayment cartTotal={cartTotal} isAutoCreatingOrder={isAutoCreatingOrder} isPaymentSuccessOpen={isPaymentSuccessOpen} selectedVoucher={selectedVoucher} voucherDiscount={voucherDiscount} />
+      <DialogSuccessPayment
+        cartTotal={cartTotal}
+        isAutoCreatingOrder={isAutoCreatingOrder}
+        isPaymentSuccessOpen={isPaymentSuccessOpen}
+        selectedVoucher={selectedVoucher}
+        voucherDiscount={voucherDiscount}
+      />
       {/* Modal xử lý thanh toán */}
       <DialogProceessingPayment isProcessingPayment={isProcessingPayment} />
       {/* Recommended Products Section */}
-      {!emptyCart && (
-        <RecommendProductSection />
-      )}
+      {!emptyCart && <RecommendProductSection />}
     </Container>
   );
 };

@@ -497,7 +497,6 @@ import OrderItemUser from "../../../../components/orders/order-items-user";
 
 // export default OrderDetailUserPage;
 
-
 // Thêm shipping status enums (nếu chưa có trong enum file)
 const SHIPPING_STATES = {
   Pending: {
@@ -505,7 +504,7 @@ const SHIPPING_STATES = {
     colorScheme: "yellow",
   },
   PickedUp: {
-    label: "Đã lấy hàng", 
+    label: "Đã lấy hàng",
     colorScheme: "blue",
   },
   InTransit: {
@@ -527,7 +526,7 @@ const SHIPPING_STATES = {
   Returned: {
     label: "Đã trả lại",
     colorScheme: "gray",
-  }
+  },
 };
 
 const OrderDetailUserPage = () => {
@@ -555,13 +554,13 @@ const OrderDetailUserPage = () => {
     let items = [];
     let currentStatus = data?.state;
     let isCompleted = true;
-    
+
     for (const statusDraff of TimelineStatusEnum) {
       items.push({
         ...statusDraff,
       });
     }
-    
+
     if (currentStatus === "Canceled") {
       const canceledStep = items.find((step) => step.status === "Canceled");
       if (canceledStep) {
@@ -572,11 +571,11 @@ const OrderDetailUserPage = () => {
       }
       return;
     }
-    
+
     if (currentStatus !== "Canceled") {
       items = items.filter((obj) => obj?.status !== "Canceled");
     }
-    
+
     // Gán lại biến timestamp vào từng bước trong TimelineStatusEnum
     items = items.map((step) => {
       let timestamp = null;
@@ -601,7 +600,7 @@ const OrderDetailUserPage = () => {
       }
       return { ...step, timestamp };
     });
-    
+
     // Tìm vị trí (index) của trạng thái hiện tại
     const currentIndex = items.findIndex(
       (step) => step.status === currentStatus
@@ -612,13 +611,13 @@ const OrderDetailUserPage = () => {
       ...step,
       completed: index <= currentIndex,
     }));
-    
+
     setStatusTimeline(updatedSteps);
   };
 
   const finalAmount =
     data?.subTotal - (data?.discountAmount ? data?.discountAmount : 0);
-    
+
   const handleCopyOrderId = async () => {
     try {
       await navigator.clipboard.writeText(data?.id);
@@ -656,7 +655,7 @@ const OrderDetailUserPage = () => {
     date.setDate(date.getDate() + days);
     return date;
   };
-  
+
   useEffect(() => {
     getTimeline();
   }, [data?.state]);
@@ -741,25 +740,26 @@ const OrderDetailUserPage = () => {
                               </Text>
                             </HStack>
                           </Badge>
-                          
+
                           {/* Show shipping status if order is shipped */}
-                          {data?.state === "Shipped" && currentShippingStatus && (
-                            <Badge
-                              colorScheme={currentShippingStatus?.colorScheme}
-                              variant="outline"
-                              px={2}
-                              py={1}
-                              borderRadius="full"
-                              fontSize="xs"
-                            >
-                              {currentShippingStatus?.label}
-                            </Badge>
-                          )}
+                          {data?.state === "Shipped" &&
+                            currentShippingStatus && (
+                              <Badge
+                                colorScheme={currentShippingStatus?.colorScheme}
+                                variant="outline"
+                                px={2}
+                                py={1}
+                                borderRadius="full"
+                                fontSize="xs"
+                              >
+                                {currentShippingStatus?.label}
+                              </Badge>
+                            )}
                         </VStack>
                       </Flex>
                     </CardHeader>
                     <CardBody>
-                      <OrderTimelineUser 
+                      <OrderTimelineUser
                         timeline={statusTimeline}
                         currentShippingStatus={data?.shippingStatus}
                         shippingHistories={data?.shippingHistories}
@@ -799,18 +799,23 @@ const OrderDetailUserPage = () => {
                                   Đơn hàng sẽ được giao sau 7 ngày kể từ ngày
                                   đặt hàng.
                                 </Text>
-                                
+
                                 {/* Show carrier and shipper info if available */}
                                 {data?.carrier && (
                                   <Text mt={2}>
-                                    <Text as="span" fontWeight="medium">Đơn vị vận chuyển:</Text>{" "}
+                                    <Text as="span" fontWeight="medium">
+                                      Đơn vị vận chuyển:
+                                    </Text>{" "}
                                     {data?.carrier?.name}
                                   </Text>
                                 )}
                                 {data?.shipper && (
                                   <Text mt={1}>
-                                    <Text as="span" fontWeight="medium">Shipper:</Text>{" "}
-                                    {data?.shipper?.fullName} - {data?.shipper?.phoneNumber}
+                                    <Text as="span" fontWeight="medium">
+                                      Shipper:
+                                    </Text>{" "}
+                                    {data?.shipper?.fullName} -{" "}
+                                    {data?.shipper?.phoneNumber}
                                   </Text>
                                 )}
                               </AlertDescription>
@@ -858,8 +863,8 @@ const OrderDetailUserPage = () => {
                 </VStack>
               </GridItem>
 
-               {/* Sidebar */}
-               <GridItem>
+              {/* Sidebar */}
+              <GridItem>
                 <VStack spacing={6} align="stretch">
                   {/* Order Summary */}
                   <Card bg={cardBg}>
