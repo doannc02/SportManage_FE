@@ -1,8 +1,7 @@
-import { Grid, GridItem, Flex, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Text, ModalFooter, Alert, AlertIcon } from "@chakra-ui/react"
+import { Grid, GridItem, Flex, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Text, ModalFooter, Alert, AlertIcon } from "@chakra-ui/react"
 import CoreInput from "../../../../components/atoms/CoreInput"
 import CoreTable from "../../../../components/atoms/CoreTable"
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material"
-import { CloseIcon } from "@chakra-ui/icons"
+import { Button } from "@mui/material"
 import useListVouchers from "./useListVoucher"
 
 const VoucherListAdmin = () => {

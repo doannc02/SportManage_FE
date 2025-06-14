@@ -2,9 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import { deleteProduct } from "../../../../services/customers/products";
 import _ from "lodash";
-import { Button, Tooltip } from "@mui/material";
-import { BASE_URL } from "../../../../configs/auth";
-import { Box } from "@chakra-ui/react";
+import { Button } from "@mui/material";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useQueryVouchers } from "../../../../services/admins/vouchers";

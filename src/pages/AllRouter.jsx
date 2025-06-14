@@ -32,6 +32,7 @@ import OrderDetailUserPage from './user/order/detail'
 import ProductDetails from './user/product/detail'
 import ProductPage from './user/product/product-page'
 import OrderDetailAdminPage from './admin/orders/detail'
+import BrandsDetailAdmin from './admin/brands/detail'
 
 export default function AllRouter() {
 
@@ -68,8 +69,8 @@ export default function AllRouter() {
 
           <Route path="/brands" element={<DashboardLayout title='Brands Manager' />}>
             <Route path="list" element={<BrandListAdmin />} />
-            <Route path='add' element={<VoucherDetailAdmin />} />
-            <Route path='detail/:id' element={<VoucherDetailAdmin title='Voucher detail' />} />
+            <Route path='add' element={<BrandsDetailAdmin />} />
+            <Route path='detail/:id' element={<BrandsDetailAdmin title='Brands detail' />} />
           </Route>
 
           <Route path="/suppliers" element={<DashboardLayout title='Supplier Manager' />}>
