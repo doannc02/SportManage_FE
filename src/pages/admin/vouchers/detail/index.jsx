@@ -9,8 +9,7 @@ import { discountTypeEnums } from "../../../../const/enum";
 const VoucherDetailAdmin = () => {
   const [{ id, methodForm, isLoadingSubmit, isEdit }, { onSubmit }] =
     useDetailVoucher();
-  const [{ id, methodForm, isLoadingSubmit, isEdit }, { onSubmit }] =
-    useDetailVoucher();
+
 
   return (
     <form onSubmit={onSubmit}>
