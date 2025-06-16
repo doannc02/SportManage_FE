@@ -63,6 +63,7 @@ import { ItemCartEmpty } from "./item-cart-emtpy";
 import { GroupButton } from "./group-button";
 import { DialogProceessingPayment } from "./dialogs/dialog-processing-payment";
 import { DialogSuccessPayment } from "./dialogs/dialog-susccess-payment";
+import DialogConfirmPayment from "./dialogs/dialog-confirm-payment";
 
 // Animation variants for framer-motion
 const listItemVariants = {
@@ -102,6 +103,12 @@ const CartTable = () => {
     isOpen: isCreditModalOpen,
     onOpen: onOpenCreditCardModal,
     onClose: onCloseCreditCardModal,
+  } = useDisclosure();
+
+  const {
+    isOpen: isConfirmPaymentOpen,
+    onOpen: onOpenConfirmPayment,
+    onClose: onCloseConfirmPayment,
   } = useDisclosure();
 
   // Disclosure cho dialog thanh toán thành công
@@ -329,20 +336,41 @@ const CartTable = () => {
       // Nếu thanh toán bằng thẻ, mô phỏng quá trình thanh toán
       await simulateCreditCardPayment();
     } else {
-      const formatInputOrder = {
-        items: (data ?? []).map((i) => {
-          return {
-            productVariantId: i.productVariantId,
-            quantity: i.quantity,
-          };
-        }),
-        shippingAddressId: shippingAddressId,
-        voucherCode: selectedVoucher.code,
-        paymentMethod: method,
-        notes: "",
-      };
-      // Nếu thanh toán COD hoặc phương thức khác, tạo đơn hàng trực tiếp
-      await createOrder({ formatInputOrder });
+      // const formatInputOrder = {
+      //   items: (data ?? []).map((i) => {
+      //     return {
+      //       productVariantId: i.productVariantId,
+      //       quantity: i.quantity,
+      //     };
+      //   }),
+      //   shippingAddressId: shippingAddressId,
+      //   voucherCode: selectedVoucher?.code ?? null,
+      //   paymentMethod: method,
+      //   notes: "",
+      // };
+      // // Nếu thanh toán COD hoặc phương thức khác, tạo đơn hàng trực tiếp
+      // await createOrder(formatInputOrder);
+      onOpenConfirmPayment();
+    }
+  };
+
+  const handleConfirmPayment = async () => {
+    const formatInputOrder = {
+      items: (data ?? []).map((i) => ({
+        productVariantId: i.productVariantId,
+        quantity: i.quantity,
+      })),
+      shippingAddressId: shippingAddressId,
+      voucherCode: selectedVoucher?.code ?? null,
+      paymentMethod: paymentMethod,
+      notes: "",
+    };
+
+    try {
+      await createOrder(formatInputOrder);
+      onCloseConfirmPayment();
+    } catch (error) {
+      onCloseConfirmPayment();
     }
   };
 
@@ -420,7 +448,6 @@ const CartTable = () => {
       onOpenCreditCardModal(); // Chỉ mở khi lần đầu chọn CreditCard
     }
     setPaymentMethod(method);
-    await handleCheckout();
   };
 
   const handleVoucherCodeSubmit = (e) => {
@@ -791,6 +818,14 @@ const CartTable = () => {
       />
       {/* Modal xử lý thanh toán */}
       <DialogProceessingPayment isProcessingPayment={isProcessingPayment} />
+      <DialogConfirmPayment
+        isOpen={isConfirmPaymentOpen}
+        onClose={onCloseConfirmPayment}
+        onConfirm={handleConfirmPayment}
+        paymentMethod={paymentMethod}
+        totalAmount={cartTotal - voucherDiscount}
+        isLoading={isLoadingCreateOrder}
+      />
       {/* Recommended Products Section */}
       {!emptyCart && <RecommendProductSection />}
     </Container>
