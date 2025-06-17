@@ -17,21 +17,15 @@ export default function Home() {
       bg={"#fafafa"}
       maxW={"100vw"}
     >
+      <Box w={{base:"95%", md:"90%"}}>
       <Crousel />
-
-      <Box m={8} p={4} w={"90%"}>
-        <Categories />
-      </Box>
-
-      <Box m={8} w={"75%"}>
-        <ProductSlider products={mockProducts} />
-      </Box>
-      <Box w={{base:"90%", md:"80%"}}>
-        <ProductList />
-      </Box>
+      <Categories />
+      <ProductSlider products={mockProducts} />
+      <ProductList />
       <Trending />
       <CardSlide />
       <Middle />
+      </Box>
     </Flex>
   );
 }

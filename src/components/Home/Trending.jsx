@@ -7,7 +7,7 @@ const Trending = () => {
 
   return (
     <Box
-      maxW="1200px"
+      maxW="100%"
       mx="auto"
       py={10}
       px={{ base: 4, md: 8 }}

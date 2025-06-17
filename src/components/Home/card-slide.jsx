@@ -167,7 +167,7 @@ export default function ProductSlider() {
 
   return (
     <Box
-      maxW={{ base: "95vw", md: "90vw" }}
+      maxW={"100%"}
       mx="auto"
       py={{ base: 6, md: 10 }}
       px={{ base: 4, md: 6 }}

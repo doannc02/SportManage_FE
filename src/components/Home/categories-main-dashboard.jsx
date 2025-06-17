@@ -1,7 +1,7 @@
 import { Card } from "antd";
 import { twMerge } from "tailwind-merge";
 import { useQueryCategoryList } from "../../services/admins/categories";
-import { Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { BASE_URL } from "../../configs/auth";
@@ -50,7 +50,15 @@ const CategoryMainDashBoard = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   return (
-    <div className="flex flex-col gap-4 bg-white" style={{ padding: "2rem " }}>
+    <Box
+      display={"flex"}
+      flexDirection={"column"}
+      gap={4}
+      bg={"white"}
+      p={"2rem"}
+      my={8}  
+      w={"100%"}
+    >
       <Text
         textTransform="uppercase"
         className="mb-4"
@@ -153,7 +161,7 @@ const CategoryMainDashBoard = () => {
           })()}
         </Swiper>
       </div>
-    </div>
+    </Box>
   );
 };
 
