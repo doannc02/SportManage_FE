@@ -40,7 +40,7 @@ function Navbar() {
       position="sticky"
       top="0"
     >
-      <TopNav />
+      {/* <TopNav /> */}
       {/* Mobile Navbar */}
       <Flex
         display={{ base: "flex", md: "flex", lg: "none" }}

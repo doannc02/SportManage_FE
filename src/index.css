@@ -5,6 +5,9 @@
   font-family: "Lato-Light", Helvetica, Arial, sans-serif;
 }
 
+.ant-card-custom .ant-card{
+  border-radius: 0px !important;
+}
 .cart-animation {
   position: absolute;
   z-index: 999;

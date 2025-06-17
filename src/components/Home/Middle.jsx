@@ -30,7 +30,7 @@ const sponsors = [
 
 const Middle = () => {
   return (
-    <Box w="90%" bg="white" py={12} px={[4, 8, 16]} >
+    <Box w="90%" bg="white" py={12} px={[4, 8, 16]} my={8}>
       <Box textAlign="center" mb={8}>
         <Box
           as="h2"

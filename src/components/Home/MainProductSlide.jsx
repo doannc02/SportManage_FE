@@ -3,8 +3,9 @@ import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Box, Text, Button, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Text, useBreakpointValue } from "@chakra-ui/react";
 import PropTypes from "prop-types";
+import { ArrowBigUpDash } from "lucide-react";
 
 const fallbackImages = [
   "https://picsum.photos/id/1015/400/200",
@@ -23,25 +24,30 @@ export const ProductSlider = ({ products }) => {
     sm: 2,
     md: 3,
     lg: 4,
-    xl: 5
+    xl: 6,
   });
 
   const spaceBetween = useBreakpointValue({
     base: 10,
-    sm: 15,
-    md: 20,
-    lg: 24
+    sm: 12,
+    md: 14,
+    lg: 16,
   });
 
   return (
     <Box w="100%" px={{ base: 4, md: 8 }} py={4}>
-      <Text 
-        fontSize={{ base: "xl", md: "2xl" }}
-        fontWeight="bold" 
-        textAlign="center" 
+      <Text
+        fontSize={{ base: "md", md: "2xl" }}
+        fontWeight="bold"
+        textAlign="center"
         mb={6}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        gap={2}
       >
         Top những sản phẩm bán chạy nhất
+        <ArrowBigUpDash />
       </Text>
 
       <Swiper
@@ -57,13 +63,13 @@ export const ProductSlider = ({ products }) => {
           disableOnInteraction: false,
         }}
         loop={true}
-        style={{ 
+        style={{
           paddingBottom: "40px",
           "--swiper-pagination-color": "#1976d2",
           "--swiper-pagination-bullet-inactive-color": "#ccc",
         }}
       >
-        {(products ?? Array(6).fill(null)).map((product, index) => (
+        {products.map((product, index) => (
           <SwiperSlide key={product?.Id || index} style={{ height: "auto" }}>
             <Box
               borderWidth="1px"
@@ -72,7 +78,7 @@ export const ProductSlider = ({ products }) => {
               boxShadow="md"
               _hover={{
                 transform: "translateY(-5px)",
-                boxShadow: "xl"
+                boxShadow: "xl",
               }}
               transition="all 0.3s ease"
               h="100%"
@@ -88,8 +94,8 @@ export const ProductSlider = ({ products }) => {
                 <Box
                   as="img"
                   src={
-                    product?.Images?.[0] || 
-                    product?.Variants?.[0]?.Images?.[0] || 
+                    product?.Images?.[0] ||
+                    product?.Variants?.[0]?.Images?.[0] ||
                     getFallbackImage()
                   }
                   alt={product?.Name || "Product image"}
@@ -98,16 +104,8 @@ export const ProductSlider = ({ products }) => {
                   height="100%"
                 />
               </Box>
-              
+
               <Box p={4} flex={1} display="flex" flexDirection="column">
-                <Text
-                  fontWeight="semibold"
-                  fontSize="md"
-                  mb={2}
-                  noOfLines={2}
-                >
-                  {product?.Name || "Tên sản phẩm"}
-                </Text>
 
                 <Text
                   color="gray.600"
@@ -116,34 +114,22 @@ export const ProductSlider = ({ products }) => {
                   noOfLines={2}
                   flex={1}
                 >
-                  {product?.Description || "Mô tả sản phẩm"}
+                  {product?.Name || "Tên sản phẩm"}
                 </Text>
 
                 <Box display="flex" alignItems="center" mb={4}>
-                  <Text
-                    fontWeight="bold"
-                    color="red.500"
-                    fontSize="lg"
-                  >
-                    {product?.Variants?.[0]?.Price?.toLocaleString() || "999,999"}
-                  </Text>
-                  <Text
-                    ml={1}
-                    color="gray.500"
-                    fontSize="sm"
-                  >
-                    VND
+                  <Text fontWeight="bold" color="red.500" fontSize="lg">
+                    {product?.Variants?.[0]?.Price?.toLocaleString() ||
+                      "999,999"}
+                    ₫
                   </Text>
                 </Box>
-
-                <Button
-                  colorScheme="blue"
-                  size="sm"
-                  width="full"
-                  variant="solid"
-                >
-                  Xem chi tiết
-                </Button>
+                <Box display="flex" alignItems="center" gap={2} mb={2}>
+                  {/* <ArrowUpNarrowWide size={18} color="#3182ce" /> */}
+                  <Text fontSize="sm" color="gray.600" fontWeight="medium">
+                    Đã bán {product?.BoughtCount ?? 0}
+                  </Text>
+                </Box>
               </Box>
             </Box>
           </SwiperSlide>
