@@ -167,7 +167,7 @@ export default function ProductSlider() {
 
   return (
     <Box
-      maxW="1400px"
+      maxW={"100%"}
       mx="auto"
       py={{ base: 6, md: 10 }}
       px={{ base: 4, md: 6 }}
@@ -266,23 +266,6 @@ export default function ProductSlider() {
                   {el.description.replace(/<[^>]+>/g, "")}
                 </Text>
               </Box>
-              
-              <Button
-                w="100%"
-                fontWeight="700"
-                bgGradient="linear(to-r, cyan.500, blue.500)"
-                color="white"
-                borderRadius="md"
-                size={buttonSize}
-                mt="auto"
-                _hover={{
-                  bgGradient: "linear(to-r, blue.600, cyan.600)",
-                  boxShadow: "md",
-                }}
-                transition="all 0.2s"
-              >
-                Mua ngay
-              </Button>
             </Box>
           </SwiperSlide>
         ))}

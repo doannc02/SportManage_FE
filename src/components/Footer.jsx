@@ -31,7 +31,7 @@ export default function Footer() {
   const token = getAppToken()
   return (
     <Box>
-      <Container as={Stack} maxW={"6xl"} py={10}>
+      <Container as={Stack} maxW={"100vw"} py={10}>
         <SimpleGrid
           templateColumns={{ sm: "1fr 1fr", md: "1fr 1fr" }}
           spacing={8}

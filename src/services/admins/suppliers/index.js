@@ -34,3 +34,55 @@ export const useQuerySuppliersList = (
         }
     );
 }
+
+export const getDetailSupplier = async ({ id }) => {
+  const { data } = await authApi({
+    method: "get",
+    url: `/api/suppliers/${id}`,
+    params: {
+      id,
+    },
+  });
+  return data;
+};
+
+export const useQueryDetailSupplier = ({ id }, options) => {
+  return useQuery(
+    ["/api/suppliers/detail", id],
+    () =>
+      getDetailSupplier({
+        id,
+      }),
+    {
+      ...defaultOption,
+      ...options,
+    }
+  );
+};
+
+export const postSupplier = async (input) => {
+  const { data } = await authApi({
+    method: "post",
+    url: "/api/suppliers",
+    data: input,
+  });
+  return data;
+};
+
+export const putSupplier = async (input) => {
+  const { data } = await authApi({
+    method: "put",
+    url: "/api/suppliers",
+    data: input,
+  });
+  return data;
+};
+
+export const deleteSupplier = async ({ id }) => {
+  const { data } = await authApi({
+    method: "delete",
+    url: `/api/suppliers/${id}`,
+    data: id,
+  });
+  return data;
+};
