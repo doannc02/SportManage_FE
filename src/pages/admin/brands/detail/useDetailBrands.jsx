@@ -32,7 +32,9 @@ export const useDetailBrands = () => {
     },
   });
 
-  const {  refetch } = useQuery({
+  console.log(methodForm.getValues(), "methodForm");
+
+  const { refetch } = useQuery({
     enabled: isEdit,
     queryKey: ["brand-detail", id],
     queryFn: () => getDetailBrand({ id }),

@@ -180,12 +180,14 @@ export const paymentMethodEnums = [
     icon: FaWallet,
   },
 ];
+
 export const paymentStatusEnums = [
   { value: "Pending", label: "Chờ thanh toán", color: "yellow.600" },
   { value: "Completed", label: "Đã thanh toán", color: "green.600" },
   { value: "Failed", label: "Thanh toán thất bại", color: "red.600" },
   { value: "Refunded", label: "Hoàn tiền", color: "gray.600" },
 ];
+
 export const ORDER_STATES = {
   Pending: {
     label: "Chờ xử lý",
