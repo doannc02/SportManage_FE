@@ -35,7 +35,7 @@ export const ProductSlider = ({ products }) => {
   });
 
   return (
-    <Box w="100%" px={{ base: 4, md: 8 }} py={4}>
+    <Box  px={{ base: 4, md: 8 }} py={4} my={8} w={"100%"}>
       <Text
         fontSize={{ base: "md", md: "2xl" }}
         fontWeight="bold"

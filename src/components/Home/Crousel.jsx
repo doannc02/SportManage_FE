@@ -29,7 +29,7 @@ export default function Carousel() {
   return (
     <Box
       borderRadius="xl"
-      maxW={{ base: "95vw", md: "90vw" }}
+      maxW={"100%"}
       overflow={"auto"}
       boxShadow="lg"
       bg="white"

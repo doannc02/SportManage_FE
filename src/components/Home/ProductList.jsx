@@ -152,7 +152,7 @@ const ProductList = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   return (
-    <Box py={8} my={6} bg={"white"} p={5}>
+    <Box py={8} my={6} bg={"white"} p={5} w={"100%"}>
       <Text
         textTransform="uppercase" 
         className="mb-4"
@@ -175,7 +175,7 @@ const ProductList = () => {
         </Box>
       )}
 
-      <SimpleGrid columns={{ base: 2, md: 4, lg: 6 }} spacing={2} mb={6}>
+      <SimpleGrid columns={{ base: 2, md: 4, lg: 6 }} spacing={2} mb={6} px={7}>
         {isLoading ? (
           Array.from({ length: 10 }).map((_, i) => (
             <ChakraSkeleton key={i} height="260px" borderRadius="lg" />
