@@ -1,20 +1,30 @@
-import React, { useContext, useState, useCallback } from "react";
+import { useContext, useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
 import { AutoComplete, ConfigProvider } from "antd";
 import { Search2Icon } from "@chakra-ui/icons";
-import { debounce, set } from "lodash";
+import _, { debounce } from "lodash";
 import { useQueryProductsList } from "../../services/customers/products";
+import { getLabelValueOptions } from "../../helpers/get-label-value-options";
+import { Clock8 } from "lucide-react";
 
+const defaultValues = {
+  pageNumber: 0,
+  pageSize: 5,
+  keyword: "",
+};
 function Search() {
   const [options, setOptions] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [history, setHistory] = useState([]);
+  const [queryPage, setQueryPage] = useState(_.omitBy(defaultValues, _.isNil));
+  const [debouncedInput, setDebouncedInput] = useState(history[1]);
+
   const navigate = useNavigate();
-  const { setSearch, search } = useContext(UserContext);
+  const { setSearch } = useContext(UserContext);
   const handleSearch = () => {
     setSearch(searchInput);
-    navigate(`/productpage?q=${searchInput}`);
-    console.log("Search initiated:", searchInput);
+    saveSearchHistory(searchInput);
   };
 
   const handleKeyPress = (e) => {
@@ -22,46 +32,86 @@ function Search() {
       handleSearch();
     }
   };
-  const { data } = useQueryProductsList({
-    pageNumber: 0,
-    pageSize: 20,
-    keyword: search,
-  });
-  // fetchSuggestions now uses the input value and sets options
+  useEffect(() => {
+    const stored = localStorage.getItem("search_history");
+    if (stored) {
+      setHistory(getLabelValueOptions(JSON.parse(stored)));
+    }
+  }, []);
+
+  const saveSearchHistory = (newTerm) => {
+    const stored = localStorage.getItem("search_history");
+    const prev = stored ? JSON.parse(stored) : [];
+    const filtered = prev.filter((item) => item !== newTerm);
+    // Thêm giá trị mới lên đầu, chỉ giữ 4 giá trị gần nhất
+    const updated = [newTerm, ...filtered].slice(0, 4);
+    localStorage.setItem("search_history", JSON.stringify(updated));
+    setHistory(getLabelValueOptions(updated));
+  };
+
+  const { data } = useQueryProductsList(queryPage);
+
   const fetchSuggestions = useCallback(
-    debounce(async (value) => {
-      try {
-        // Assuming useQueryProductsList is a function that returns a promise
-        setSearchInput(value);
-        setOptions(
-          data?.items.map((item) => ({
-            value: item.name,
-            label: item.name,
-          }))
-        );
-      } catch (e) {
-        console.log(e);
-      }
-    }, 500),
-    [data]
+    debounce((value) => {
+      setDebouncedInput(value);
+    }, 800),
+    []
   );
+  const getOptions = () => {
+    if (searchInput) {
+      return options;
+    }
+    return history;
+  };
+  const handleSearchInput = (value) => {
+    setSearchInput(value);
+    fetchSuggestions(value);
+  };
+
+  useEffect(() => {
+    setQueryPage((prev) => ({
+      ...prev,
+      keyword: debouncedInput,
+      pageNumber: 0,
+    }));
+  }, [debouncedInput]);
+
+  useEffect(() => {
+    setOptions(
+      data?.items?.map((item) => ({
+        value: item.name,
+        label: item.name,
+      })) || []
+    );
+  }, [data]);
 
   return (
     <ConfigProvider
       theme={{
         token: {
-          borderRadius: 12,
-          colorTextDisabled: "#666D80",
-          colorTextPlaceholder: "#666D80",
-          colorText: "#666d80",
-          fontSize: 16,
+          borderRadius: 4,
+          onSearch: { handleSearchInput },
         },
       }}
     >
       <AutoComplete
+        size="large "
         allowClear
+        onClick={handleSearch}
         onInputKeyDown={handleKeyPress}
-        options={options}
+        options={getOptions()}
+        popupRender={(menu) => (
+          <>
+            {menu}
+            {searchInput === "" && history.length > 0 && (
+              <div className="flex justify-end px-3 py-1 text-xs text-gray-500 mt-2 ">
+                <span className="flex gap-1 justify-center items-center mx-3">
+                  Lịch sử tìm kiếm <Clock8 size={16} strokeWidth={1.5} />
+                </span>
+              </div>
+            )}
+          </>
+        )}
         className="h-[48px] w-full rounded-[12px] text-[16px] placeholder:text-[#666D80]"
         onSearch={(value) => {
           setSearchInput(value);
@@ -72,19 +122,19 @@ function Search() {
           <Search2Icon className="cursor-pointer" onClick={handleSearch} />
         }
         value={searchInput}
-        notFoundContent={
-          options.length === 0 ? "Không tìm thấy sản phẩm nào" : null
-        }
+        notFoundContent={options?.length === 0 ? "Đang tải sản phẩm" : null}
         onClear={() => {
-          setSearchInput("");
+          // setSearchInput("");
           setSearch("");
           setOptions([]);
+          setHistory([]);
         }}
         onSelect={(value) => {
           setSearch(value);
           setSearchInput(value);
           navigate(`/productpage?q=${value}`);
           setOptions([]);
+          saveSearchHistory(value);
         }}
       />
     </ConfigProvider>

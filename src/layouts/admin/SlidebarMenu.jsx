@@ -31,9 +31,21 @@ function SidebarMenu({ roleName, collapsed, onMenuClick }) {
   };
 
   const isActive = (path) => {
-    return (
-      location.pathname === path || location.pathname.startsWith(`${path}/`)
-    );
+    if (!path) return false;
+    
+    // Exact match
+    if (location.pathname === path) return true;
+    
+    if (path !== '/' && location.pathname.startsWith(path)) return true;
+    
+    const currentSegments = location.pathname.split('/').filter(Boolean);
+    const menuSegments = path.split('/').filter(Boolean);
+    
+    if (menuSegments.length > 0 && currentSegments[0] === menuSegments[0]) {
+      return true;
+    }
+    
+    return false;
   };
 
   const handleMenuItemClick = () => {

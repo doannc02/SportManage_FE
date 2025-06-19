@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 
-const ProductCard = ({ product }) => {
+export const ProductCard = ({ product }) => {
 
   const navigate = useNavigate();
   return (
@@ -46,21 +46,21 @@ const ProductCard = ({ product }) => {
         <Text fontSize="md" color="gray.600" noOfLines={2} mb={2}>
           {product?.name}
         </Text>
-        {product.variants?.[0] && (
+        {product?.variants?.[0] && (
           <Flex justifyContent={"space-between"} alignItems={"center"}>
             <Text fontSize="md" fontWeight="bold" color="blue.600">
-              ₫{product.variants[0].price.toLocaleString()}
+              ₫{product?.variants[0].price.toLocaleString()}
             </Text>
             <Flex justifyContent={"center"} alignItems={"center"}>
               <ShoppingCart size={16} color="#000000" strokeWidth={1} />
               <Text ml={1} fontSize="sm" color="gray.600">
-                {product.variants[0].stockQuantity || 0}
+                {product?.variants[0]?.stockQuantity || 0}
               </Text>
             </Flex>
           </Flex>
         )}
         <Text fontSize="sm" color="gray.500" noOfLines={1} mt={1}>
-          {product.reviews ? product.reviews.length : 0} lượt đánh giá
+          {product?.reviews ? product.reviews.length : 0} lượt đánh giá
         </Text>
       </Box>
     </Box>
