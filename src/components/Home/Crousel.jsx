@@ -24,6 +24,8 @@ export default function Carousel() {
     { src: Images.coin, label: "Săn xu ngay" },
     { src: Images.shopping, label: "Shopping mall" },
     { src: Images.members, label: "Khách hàng thân thiết" },
+    { src: Images.promotion, label: "Hàng chọn giá hời" },
+    { src: Images.voucher, label: "Giảm giá" },
   ];
 
   return (
@@ -38,7 +40,7 @@ export default function Carousel() {
       <Box
         w="100%"
         // maxW={{ base: "95vw", md: "90vw" }}
-        h={{ base: "180px", sm: "220px", md: "250px", lg: "300px" }}
+        h={{ base: "180px", sm: "320px", md: "450px", lg: "500px" }}
         mx="auto"
         position="relative"
         overflow="hidden"

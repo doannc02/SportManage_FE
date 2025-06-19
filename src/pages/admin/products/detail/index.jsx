@@ -199,6 +199,8 @@ const ProductDetailAdmin = () => {
 
                     <GridItem colSpan={12}>
                         <CoreInput
+                            required
+                            rules={{ required: "Trường này là bắt buộc!" }}
                             control={methodForm.control}
                             name='description'
                             label='Mô tả'

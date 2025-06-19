@@ -337,27 +337,27 @@ export const menuAdminItems = [
     ],
   },
   {
-    title: "Brands",
+    title: "Thương hiệu",
     icon: <FiBox />,
     path: "/brands/list",
   },
   {
-    title: "Suppliers",
+    title: "Nhà cung cấp",
     icon: <FiBox />,
     path: "/suppliers/list",
   },
   {
-    title: "Categories",
+    title: "Danh mục sản phẩm",
     icon: <FiBox />,
     path: "/categories/list",
   },
   {
-    title: "Voucher",
+    title: "Chương trình khuyến mãi",
     icon: <FiGift />,
     path: "/vouchers/list",
   },
   {
-    title: "Order Management",
+    title: "Quản lý đơn hàng",
     icon: <FiList />,
     path: "/order-admin/list",
   },

@@ -49,6 +49,7 @@ import {
 } from "../../../../const/enum";
 import OrderTimelineUser from "../../../../components/orders/order-timeline-user";
 import OrderItemUser from "../../../../components/orders/order-items-user";
+import { MdCancel } from "react-icons/md";
 
 // const OrderDetailUserPage = () => {
 //   const { id } = useParams();
@@ -697,7 +698,20 @@ const OrderDetailUserPage = () => {
                 </HStack>
                 <HStack spacing={3}>
                   <Button
+                    leftIcon={<MdCancel size={16} />}
+                    variant="ghost"
+                    bg={"red.50"}
+                    color={"red.500"}
+                    onClick={handleRefreshOrder}
+                    isLoading={isRefreshing}
+                    loadingText="Đang làm mới"
+                  >
+                    Yêu cầu huỷ đơn hàng
+                  </Button>
+                  <Button
                     leftIcon={<RefreshCw size={16} />}
+                    bg={"gray.50"}
+                    color={"gray.500"}  
                     variant="ghost"
                     onClick={handleRefreshOrder}
                     isLoading={isRefreshing}

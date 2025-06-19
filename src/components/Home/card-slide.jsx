@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Image, Button, Text, Box, useBreakpointValue } from "@chakra-ui/react";
+import { Image, Text, Box, useBreakpointValue } from "@chakra-ui/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
@@ -162,7 +162,7 @@ export default function ProductSlider() {
   const titleFontSize = useBreakpointValue({ base: "md", sm: "lg", md: "xl" });
   const priceFontSize = useBreakpointValue({ base: "lg", sm: "xl", md: "2xl" });
   const descFontSize = useBreakpointValue({ base: "xs", sm: "sm" });
-  const buttonSize = useBreakpointValue({ base: "md", md: "lg" });
+ // const buttonSize = useBreakpointValue({ base: "md", md: "lg" });
   const cardPadding = useBreakpointValue({ base: 3, md: 4, lg: 5 });
 
   return (
