@@ -51,7 +51,7 @@ const CategoryAdmin = () => {
                   <Flex direction="column" gap={3}>
                     <Flex align="center" gap={3}>
                       <Avatar
-                        src={`${BASE_URL}${logoValue}`}
+                        src={`${logoValue}`}
                         size="xl"
                         borderRadius="md"
                         bg="gray.100"

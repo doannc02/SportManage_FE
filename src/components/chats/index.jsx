@@ -96,7 +96,7 @@ const ChatInterface = () => {
     const renderImagePreviews = () => (
         <HStack spacing={2} mb={3} p={2} bg="gray.50" borderRadius="md" overflowX="auto">
             {newImages.map((img, idx) => {
-                const src = typeof img === 'string' ? `${BASE_URL}${img}` : URL.createObjectURL(img);
+                const src = typeof img === 'string' ? `${img}` : URL.createObjectURL(img);
                 return (
                     <Box key={idx} position="relative" borderRadius="md">
                         <Image src={src} alt={`Preview ${idx}`} boxSize="60px" objectFit="cover" />

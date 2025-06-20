@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 
 const getLogoUrl = (logo) =>
   logo
-    ? `${BASE_URL}${logo}`
+    ? `${logo}`
     : "https://godecor.com.vn/wp-content/uploads/2024/08/pngtree-product-line-icon-png-image_9015777.png";
 
 const CategoryMainDashBoard = () => {

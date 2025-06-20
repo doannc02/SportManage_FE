@@ -553,7 +553,7 @@ const CartTable = () => {
                                 boxSize="80px"
                                 objectFit="cover"
                                 borderRadius="md"
-                                src={`${BASE_URL}${variant.images?.[0]}`}
+                                src={`${variant.images?.[0]}`}
                                 alt={variant.name}
                                 fallback={
                                   <Center

@@ -369,7 +369,7 @@
 //                     </Text>
 //                     {msg.messageType === "Image" || msg.messageType == 1 ? (
 //                         <Image
-//                             src={`${BASE_URL}${msg.content}`}
+//                             src={`${msg.content}`}
 //                             alt={`Preview ${msg.content}`}
 //                             objectFit="cover"
 //                             borderRadius="md"

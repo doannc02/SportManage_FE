@@ -28,7 +28,7 @@ const MessageList = ({ messages, token }) => {
 
                     {isImage ? (
                         <Image
-                            src={`${BASE_URL}${msg.content}`}
+                            src={`${msg.content}`}
                             alt="Message image"
                             borderRadius="md"
                             objectFit="cover"

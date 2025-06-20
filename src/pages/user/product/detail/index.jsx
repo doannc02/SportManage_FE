@@ -129,7 +129,7 @@ const ProductReview = ({ review, productId, onCommentAdded }) => {
               {review.images.map((img, idx) => (
                 <Image
                   key={idx}
-                  src={`${BASE_URL}${img}`}
+                  src={`${img}`}
                   alt={`Review image ${idx + 1}`}
                   boxSize="80px"
                   objectFit="cover"
@@ -277,7 +277,7 @@ const ProductDetails = () => {
       setSelectedVariant(variant);
       setQuantity(1);
       if (variant.images?.length) {
-        setMainImage(`${BASE_URL}${variant.images[0]}`);
+        setMainImage(`${variant.images[0]}`);
         setCurrentImageIndex(0);
       }
     }
@@ -306,21 +306,21 @@ const ProductDetails = () => {
     ? selectedVariant.images
     : data.images;
 
-  const initialImage = mainImage || `${BASE_URL}${thumbnails?.[0]}`;
+  const initialImage = mainImage || `${thumbnails?.[0]}`;
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => (prev === 0 ? thumbnails.length - 1 : prev - 1));
-    setMainImage(`${BASE_URL}${thumbnails[(currentImageIndex === 0 ? thumbnails.length - 1 : currentImageIndex - 1)]}`);
+    setMainImage(`${thumbnails[(currentImageIndex === 0 ? thumbnails.length - 1 : currentImageIndex - 1)]}`);
   };
 
   const handleNextImage = () => {
     setCurrentImageIndex((prev) => (prev === thumbnails.length - 1 ? 0 : prev + 1));
-    setMainImage(`${BASE_URL}${thumbnails[(currentImageIndex === thumbnails.length - 1 ? 0 : currentImageIndex + 1)]}`);
+    setMainImage(`${thumbnails[(currentImageIndex === thumbnails.length - 1 ? 0 : currentImageIndex + 1)]}`);
   };
 
   const handleThumbnailClick = (index) => {
     setCurrentImageIndex(index);
-    setMainImage(`${BASE_URL}${thumbnails[index]}`);
+    setMainImage(`${thumbnails[index]}`);
   };
 
   const toggleZoom = () => {
@@ -413,7 +413,7 @@ const ProductDetails = () => {
                 h="16"
               >
                 <Image
-                  src={`${BASE_URL}${img}`}
+                  src={`${img}`}
                   alt={`${data.name} thumbnail ${idx + 1}`}
                   objectFit="cover"
                   w="full"

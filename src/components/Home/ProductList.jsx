@@ -29,7 +29,7 @@ export const ProductCard = ({ product }) => {
     >
       <Box height="250px" overflow="hidden" mb={2}>
         <img
-          src={`${BASE_URL}${product?.images?.[0]}` || "/placeholder.png"}
+          src={`${product?.images?.[0]}` || "/placeholder.png"}
           alt={product?.name}
           style={{
             transition: "transform 0.3s ease",
