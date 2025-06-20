@@ -64,6 +64,7 @@ import { GroupButton } from "./group-button";
 import { DialogProceessingPayment } from "./dialogs/dialog-processing-payment";
 import { DialogSuccessPayment } from "./dialogs/dialog-susccess-payment";
 import DialogConfirmPayment from "./dialogs/dialog-confirm-payment";
+import { ArrowLeft } from "lucide-react";
 
 // Animation variants for framer-motion
 const listItemVariants = {
@@ -477,9 +478,10 @@ const CartTable = () => {
       <Flex direction="column" gap={6}>
         {/* Header */}
         <Box mb={2}>
-          <Heading size="lg" mb={2} display="flex" alignItems="center">
-            <Icon as={FaShoppingCart} mr={3} color={accentColor} />
+          <Heading size="lg" mb={2} gap={2} display="flex" alignItems="center">
+            <ArrowLeft onClick={() => navigate("/")} cursor={"pointer"} />
             Giỏ hàng
+            <Icon as={FaShoppingCart} mr={3} color={accentColor} />
             {data && data.length > 0 && (
               <Badge
                 ml={2}

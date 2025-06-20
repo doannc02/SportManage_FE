@@ -56,7 +56,8 @@ const CategoryMainDashBoard = () => {
       gap={4}
       bg={"white"}
       p={"2rem"}
-      my={8}  
+      my={8}
+      h={"max-content"}
       w={"100%"}
     >
       <Text
@@ -101,12 +102,12 @@ const CategoryMainDashBoard = () => {
                   <div
                     className={twMerge(
                       // 2 cột 2 hàng trên mobile, 3x2 trên sm, 4x2 trên md, 6x2 trên lg, 8x2 trên xl
-                      "grid grid-cols-2 grid-rows-2",
-                      "sm:grid-cols-3 sm:grid-rows-2",
-                      "md:grid-cols-4 md:grid-rows-2",
-                      "lg:grid-cols-6 lg:grid-rows-2",
-                      "xl:grid-cols-8 xl:grid-rows-2",
-                      "px-4 my-2"
+                      "grid grid-cols-2",
+                      "sm:grid-cols-3",
+                      "md:grid-cols-4",
+                      "lg:grid-cols-6",
+                      "xl:grid-cols-8",
+                      " px-4 my-2"
                     )}
                   >
                     {group.map((cat) => (
