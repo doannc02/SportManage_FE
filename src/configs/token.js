@@ -13,9 +13,9 @@ export const getAppToken = () => {
 
 
 export const setAppToken = (val) => {
-    if (window.location.origin.includes('localhost')) {
+  
         return cookie.set('ACCESS_TOKEN', JSON.stringify(val))
-    }
+    
     // return cookie.set('ACCESS_TOKEN', JSON.stringify(val), {
     //     domain: SUBDOMAIN,
     // })
