@@ -50,6 +50,7 @@ import {
 import OrderTimelineUser from "../../../../components/orders/order-timeline-user";
 import OrderItemUser from "../../../../components/orders/order-items-user";
 import { MdCancel } from "react-icons/md";
+import { Spin } from "antd";
 
 // const OrderDetailUserPage = () => {
 //   const { id } = useParams();
@@ -663,9 +664,7 @@ const OrderDetailUserPage = () => {
 
   return (
     <>
-      {isLoading ? (
-        <CoreLoading />
-      ) : (
+      <Spin spinning={isLoading}>
         <Box minH="100vh" bg={bgColor}>
           {/* Header */}
           <Box bg={cardBg} borderBottom="1px" borderColor="gray.200">
@@ -711,7 +710,7 @@ const OrderDetailUserPage = () => {
                   <Button
                     leftIcon={<RefreshCw size={16} />}
                     bg={"gray.50"}
-                    color={"gray.500"}  
+                    color={"gray.500"}
                     variant="ghost"
                     onClick={handleRefreshOrder}
                     isLoading={isRefreshing}
@@ -1032,7 +1031,7 @@ const OrderDetailUserPage = () => {
             </Grid>
           </Container>
         </Box>
-      )}
+      </Spin>
     </>
   );
 };

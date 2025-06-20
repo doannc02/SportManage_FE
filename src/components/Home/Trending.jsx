@@ -31,12 +31,12 @@ const Trending = () => {
         mb={12}
       >
         {[
-          "https://static.thcdn.com/images/small/webp/widgets/121-us/57/original-Page-001%5B1%5D-054257.png",
-          "https://static.thcdn.com/images/small/webp/widgets/121-us/01/original-Page-002%5B1%5D-054301.png",
-          "https://static.thcdn.com/images/small/webp/widgets/121-us/10/original-Page-003%5B1%5D-054310.png",
-          "https://static.thcdn.com/images/small/webp/widgets/121-us/19/original-Page-004%5B1%5D-054319.png",
-          "https://static.thcdn.com/images/small/webp/widgets/121-us/28/original-Page-005%5B1%5D-054328.png",
-          "https://static.thcdn.com/images/small/webp/widgets/121-us/36/original-Page-006%5B1%5D-054336.png",
+          "https://cdn.shopvnb.com/uploads/images/tin_tuc/top-12-dung-cu-va-phu-kien-cau-long-ma-nguoi-choi-can-mang-theo-khi-ra-san-1.webp",
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQv1HUQJGHitmejzZRzCqJJ9ZU0WMTQVSUqQ&s",
+          "https://product.hstatic.net/200000099191/product/z6141436574698_23c61467a1914d1db59fcd5f4203d9ea_5a965ec611544f42abbb946020cd5b75.jpg",
+          "https://hidosport.vn/wp-content/uploads/2024/01/ao-cau-long-yonex-co-tru-TYN2302-xanh.jpg",
+          "https://badmintonworldbalcatta.com/cdn/shop/files/IMG-0209.png?v=1717510289",
+          "https://bizweb.dktcdn.net/100/504/891/products/z5183007652125-b514d76928dbba518e242c7845a307c1-1708596030618.jpg?v=1708596033647",
         ].map((src, idx) => (
           <Link to="/" key={idx}>
             <Box
@@ -61,7 +61,7 @@ const Trending = () => {
 
       <Box mb={12} borderRadius="lg" overflow="hidden" boxShadow="md">
         <Image
-          src="https://static.thcdn.com/images/xlarge/webp/widgets/121-us/08/original-Page-120%5B1%5D-103608.png"
+          src="https://dasxsport.vn/storage/promotion/z5359930446165-06f56edd24238b5a4542f1d91dce1d15.jpg"
           w="100%"
           objectFit="cover"
         />
@@ -84,22 +84,22 @@ const Trending = () => {
       >
         {[
           {
-            img: "https://static.thcdn.com/images/small/webp/widgets/121-us/53/original-500x500-041753.jpeg",
-            title: "Skin Ceuticals Gift",
+            img: "https://noidia.b-cdn.net/thumbnails/769157226300.jpg",
+            title: "Bộ đồ cầu lông mới nam nữ",
             desc:
-              "Nhận ngay SkinCeuticals Resveratrol BE 4ml (trị giá $21) khi mua hàng từ $220 trở lên.",
+              "Nhận ngay voucher free ship và thẻ giảm giá 30% cho đơn hàng từ 2 bộ trở lên",
           },
           {
-            img: "https://static.thcdn.com/images/small/webp/widgets/121-us/05/original-500x500-041805.jpeg",
-            title: "25% off SkinMedica + Quà tặng $135",
+            img: "https://thethaotruonggiang.vn/wp-content/uploads/2018/09/vot-cau-long-yonex-4.jpg",
+            title: "Combo 3 vợt cầu lông Yonex",
             desc:
-              "Nhận bộ quà tặng SkinMedica Eye Illuminating Kit (trị giá $135) khi mua từ $250.",
+              "Nhận bộ quà tặng dụng cụ sửa chữa cầu lông (trị giá $135) khi mua từ $250.",
           },
           {
-            img: "https://static.thcdn.com/images/small/webp/widgets/121-us/14/original-500x500-060614.jpg",
-            title: "25% off 111SKIN + Quà tặng $95",
+            img: "https://cbu01.alicdn.com/img/ibank/O1CN01gMJ2ue1npFyPPwjV4_!!2208023765138-0-cib.jpg",
+            title: "Vợt cầu lông dành cho bé gái",
             desc:
-              "Nhận 111SKIN Space Defence Bright Eye Lift Gel Mini 7.5ml (trị giá $95) khi mua từ $250.",
+              "Mặt hàng mới ra mắt, mua 2 tặng 1, miễn phí 1 năm bảo hành",
           },
         ].map((offer, idx) => (
           <Box
