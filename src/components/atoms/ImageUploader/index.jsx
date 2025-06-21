@@ -32,18 +32,18 @@ export const MultiImageUploader = ({
     }, [JSON.stringify(defaultValue)]);
 
     const handleRemoveImage = async (index) => {
-        const removedUrl = previews[index];
-        if (typeof removedUrl === 'string' && removedUrl.startsWith('/uploads/')) {
-            const fileName = removedUrl.split('/').pop();
-            try {
-                await authApi({
-                    method: 'delete',
-                    url: `/api/upload-image?fileName=${fileName}`
-                });
-            } catch (err) {
-                toast({ title: 'Không thể xoá ảnh', description: err.message, status: 'error' });
-            }
-        }
+        // const removedUrl = previews[index];
+        // if (typeof removedUrl === 'string' && removedUrl.startsWith('/uploads/')) {
+        //     const fileName = removedUrl.split('/').pop();
+        //     try {
+        //         await authApi({
+        //             method: 'delete',
+        //             url: `/api/upload-image?fileName=${fileName}`
+        //         });
+        //     } catch (err) {
+        //         toast({ title: 'Không thể xoá ảnh', description: err.message, status: 'error' });
+        //     }
+        // }
         const updated = previews.filter((_, i) => i !== index);
         setPreviews(updated);
         onChange(updated);
@@ -103,7 +103,7 @@ export const MultiImageUploader = ({
                         borderColor="gray.200"
                     >
                         <Image
-                            src={src.startsWith('http') ? src : `${BASE_URL}${src}`}
+                            src={src.startsWith('http') ? src : `${src}`}
                             alt={`image-${index}`}
                             width="100%"
                             height="100%"

@@ -31,10 +31,22 @@ import {
   Tag,
   FormControl,
 } from "@chakra-ui/react";
-import { StarIcon, ChevronLeftIcon, ChevronRightIcon, CloseIcon, ChatIcon } from "@chakra-ui/icons";
-import { useQueryGetProductReview, useQueryProductsDetail } from "../../../../services/customers/products";
+import {
+  StarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CloseIcon,
+  ChatIcon,
+} from "@chakra-ui/icons";
+import {
+  useQueryGetProductReview,
+  useQueryProductsDetail,
+} from "../../../../services/customers/products";
 import { addToCartItem } from "../../../../services/customers/carts";
-import { submitReview, submitReviewComment } from "../../../../services/customers/reviews";
+import {
+  submitReview,
+  submitReviewComment,
+} from "../../../../services/customers/reviews";
 import { useMutation } from "react-query";
 import { UserContext } from "../../../../Contexts/UserContext";
 import { getAppToken } from "../../../../configs/token";
@@ -42,12 +54,14 @@ import { BASE_URL } from "../../../../configs/auth";
 import { ProductOffers } from "../../../../components/customer/product-detail/product-offers";
 import { GroupedAttributeDisplay } from "../../../../components/customer/product-detail/product-group-attribute";
 import { ReviewComment } from "../../../../components/products/review-comment";
+import { ArrowLeft, ShoppingBag } from "lucide-react";
+import { DEFAULT_COLOR } from "../../../../const/enum";
 
 function buildCommentTree(comments) {
-  // Nếu comments đã có cấu trúc cây (có thuộc tính replies), 
+  // Nếu comments đã có cấu trúc cây (có thuộc tính replies),
   // thì chỉ cần lọc ra các comment gốc (parentCommentId is null)
-  if (comments && comments.length > 0 && 'replies' in comments[0]) {
-    return comments.filter(comment => comment.parentCommentId === null);
+  if (comments && comments.length > 0 && "replies" in comments[0]) {
+    return comments.filter((comment) => comment.parentCommentId === null);
   }
 
   // Nếu comments là danh sách phẳng, thì xây dựng cây như cũ
@@ -55,17 +69,17 @@ function buildCommentTree(comments) {
   const roots = [];
 
   // Tạo mapping cho mỗi comment
-  comments.forEach(comment => {
+  comments.forEach((comment) => {
     map[comment.id] = { ...comment, replies: [] };
   });
 
   // Sắp xếp comments để tạo cấu trúc cây
-  comments.forEach(comment => {
+  comments.forEach((comment) => {
     if (comment.parentCommentId) {
       if (map[comment.parentCommentId]) {
         map[comment.parentCommentId].replies.push(map[comment.id]);
       } else {
-        // Nếu không tìm thấy comment cha (có thể do lỗi dữ liệu), 
+        // Nếu không tìm thấy comment cha (có thể do lỗi dữ liệu),
         // thêm vào danh sách gốc
         roots.push(map[comment.id]);
       }
@@ -85,28 +99,46 @@ const ProductReview = ({ review, productId, onCommentAdded }) => {
   const tokenApp = getAppToken();
   const bgReview = useColorModeValue("gray.100", "gray.700");
 
-  const { mutate: sendComment, isLoading: isSendingComment } = useMutation(submitReviewComment, {
-    onSuccess: () => {
-      toast({ title: "Bình luận đã được gửi!", status: "success", duration: 3000, isClosable: true });
-      setCommentContent("");
-      setIsCommenting(false);
-      if (onCommentAdded) onCommentAdded();
-    },
-    onError: () => {
-      toast({ title: "Lỗi khi gửi bình luận", status: "error", duration: 3000, isClosable: true });
-    },
-  });
+  const { mutate: sendComment, isLoading: isSendingComment } = useMutation(
+    submitReviewComment,
+    {
+      onSuccess: () => {
+        toast({
+          title: "Bình luận đã được gửi!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setCommentContent("");
+        setIsCommenting(false);
+        if (onCommentAdded) onCommentAdded();
+      },
+      onError: () => {
+        toast({
+          title: "Lỗi khi gửi bình luận",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      },
+    }
+  );
 
   const handleSubmitComment = () => {
     if (!commentContent.trim()) {
-      toast({ title: "Vui lòng nhập nội dung bình luận", status: "warning", duration: 3000, isClosable: true });
+      toast({
+        title: "Vui lòng nhập nội dung bình luận",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
       return;
     }
 
     sendComment({
       reviewId: review.id,
       productId: productId,
-      comment: commentContent
+      comment: commentContent,
     });
   };
 
@@ -118,7 +150,11 @@ const ProductReview = ({ review, productId, onCommentAdded }) => {
           <Text fontWeight="bold">{review.userName || "Khách hàng"}</Text>
           <HStack>
             {[1, 2, 3, 4, 5].map((i) => (
-              <StarIcon key={i} color={i <= review.rating ? "yellow.400" : "gray.300"} boxSize={4} />
+              <StarIcon
+                key={i}
+                color={i <= review.rating ? "yellow.400" : "gray.300"}
+                boxSize={4}
+              />
             ))}
           </HStack>
           <Text mt={1}>{review.comment}</Text>
@@ -129,7 +165,7 @@ const ProductReview = ({ review, productId, onCommentAdded }) => {
               {review.images.map((img, idx) => (
                 <Image
                   key={idx}
-                  src={`${BASE_URL}${img}`}
+                  src={`${img}`}
                   alt={`Review image ${idx + 1}`}
                   boxSize="80px"
                   objectFit="cover"
@@ -164,7 +200,11 @@ const ProductReview = ({ review, productId, onCommentAdded }) => {
                 />
               </FormControl>
               <HStack mt={2} justifyContent="flex-end">
-                <Button size="sm" variant="outline" onClick={() => setIsCommenting(false)}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setIsCommenting(false)}
+                >
                   Hủy
                 </Button>
                 <Button
@@ -231,44 +271,61 @@ const ProductDetails = () => {
     { enabled: !!params?.id }
   );
 
-  const { data: dataReviews, isLoading: isLoadingReview, refetch: refetchReview } = useQueryGetProductReview(
-    { id: params.id },
-    { enabled: !!params?.id }
+  const {
+    data: dataReviews,
+    isLoading: isLoadingReview,
+    refetch: refetchReview,
+  } = useQueryGetProductReview({ id: params.id }, { enabled: !!params?.id });
+
+  const { mutate: addToCart, isLoading: isAdding } = useMutation(
+    addToCartItem,
+    {
+      onSuccess: (res) => {
+        setUser((prev) => ({ ...prev, totalCartItems: res.totalCartItems }));
+        toast({
+          title: "Đã thêm vào giỏ hàng",
+          description: `${selectedVariant.name} đã được thêm.`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      },
+      onError: (err) => {
+        toast({
+          title: "Thêm vào giỏ hàng thất bại",
+          description: err?.response?.data?.message || "Có lỗi xảy ra.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      },
+    }
   );
 
-  const { mutate: addToCart, isLoading: isAdding } = useMutation(addToCartItem, {
-    onSuccess: (res) => {
-      setUser((prev) => ({ ...prev, totalCartItems: res.totalCartItems }));
-      toast({
-        title: "Đã thêm vào giỏ hàng",
-        description: `${selectedVariant.name} đã được thêm.`,
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    },
-    onError: (err) => {
-      toast({
-        title: "Thêm vào giỏ hàng thất bại",
-        description: err?.response?.data?.message || "Có lỗi xảy ra.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    },
-  });
-
-  const { mutate: sendReview, isLoading: isSubmittingReview } = useMutation(submitReview, {
-    onSuccess: () => {
-      toast({ title: "Cảm ơn bạn đã đánh giá!", status: "success", duration: 3000, isClosable: true });
-      refetchReview();
-      setRating(0);
-      setComment("");
-    },
-    onError: () => {
-      toast({ title: "Lỗi khi gửi đánh giá", status: "error", duration: 3000, isClosable: true });
-    },
-  });
+  const { mutate: sendReview, isLoading: isSubmittingReview } = useMutation(
+    submitReview,
+    {
+      onSuccess: () => {
+        toast({
+          title: "Cảm ơn bạn đã đánh giá!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        refetchReview();
+        setRating(0);
+        setComment("");
+      },
+      onError: () => {
+        toast({
+          title: "Lỗi khi gửi đánh giá",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      },
+    }
+  );
 
   const handleVariantSelect = (variant) => {
     if (selectedVariant?.id === variant.id) {
@@ -277,7 +334,7 @@ const ProductDetails = () => {
       setSelectedVariant(variant);
       setQuantity(1);
       if (variant.images?.length) {
-        setMainImage(`${BASE_URL}${variant.images[0]}`);
+        setMainImage(`${variant.images[0]}`);
         setCurrentImageIndex(0);
       }
     }
@@ -286,7 +343,12 @@ const ProductDetails = () => {
   const handleAddToCart = () => {
     if (!tokenApp) return onOpen();
     if (!selectedVariant)
-      return toast({ title: "Vui lòng chọn biến thể", status: "warning", duration: 3000, isClosable: true });
+      return toast({
+        title: "Vui lòng chọn biến thể",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
     if (quantity > selectedVariant.stockQuantity)
       return toast({
         title: "Vượt quá tồn kho",
@@ -299,28 +361,58 @@ const ProductDetails = () => {
     addToCart({ productVariantId: selectedVariant.id, quantity });
   };
 
-  if (isLoading) return <Center mt="150px"><Spinner size="xl" /></Center>;
-  if (!data) return <Center mt="150px"><Text>Không tìm thấy sản phẩm</Text></Center>;
+  if (isLoading)
+    return (
+      <Center mt="150px">
+        <Spinner size="xl" />
+      </Center>
+    );
+  if (!data)
+    return (
+      <Center mt="150px">
+        <Text>Không tìm thấy sản phẩm</Text>
+      </Center>
+    );
 
   const thumbnails = selectedVariant?.images?.length
     ? selectedVariant.images
     : data.images;
 
-  const initialImage = mainImage || `${BASE_URL}${thumbnails?.[0]}`;
+  const initialImage = mainImage || `${thumbnails?.[0]}`;
 
   const handlePrevImage = () => {
-    setCurrentImageIndex((prev) => (prev === 0 ? thumbnails.length - 1 : prev - 1));
-    setMainImage(`${BASE_URL}${thumbnails[(currentImageIndex === 0 ? thumbnails.length - 1 : currentImageIndex - 1)]}`);
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? thumbnails.length - 1 : prev - 1
+    );
+    setMainImage(
+      `${
+        thumbnails[
+          currentImageIndex === 0
+            ? thumbnails.length - 1
+            : currentImageIndex - 1
+        ]
+      }`
+    );
   };
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prev) => (prev === thumbnails.length - 1 ? 0 : prev + 1));
-    setMainImage(`${BASE_URL}${thumbnails[(currentImageIndex === thumbnails.length - 1 ? 0 : currentImageIndex + 1)]}`);
+    setCurrentImageIndex((prev) =>
+      prev === thumbnails.length - 1 ? 0 : prev + 1
+    );
+    setMainImage(
+      `${
+        thumbnails[
+          currentImageIndex === thumbnails.length - 1
+            ? 0
+            : currentImageIndex + 1
+        ]
+      }`
+    );
   };
 
   const handleThumbnailClick = (index) => {
     setCurrentImageIndex(index);
-    setMainImage(`${BASE_URL}${thumbnails[index]}`);
+    setMainImage(`${thumbnails[index]}`);
   };
 
   const toggleZoom = () => {
@@ -329,6 +421,14 @@ const ProductDetails = () => {
 
   return (
     <Container maxW="6xl" py={10}>
+      <Box mb={2}>
+        <Heading size="lg" mb={2} display="flex" gap={2} alignItems="center">
+          <ArrowLeft onClick={() => navigate(-1)}/>
+          Chi tiết sản phẩm 
+          <ShoppingBag  color={DEFAULT_COLOR}/>
+        </Heading>
+        <Divider />
+      </Box>
       <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={10}>
         <Flex direction="column">
           {/* Image Gallery */}
@@ -383,7 +483,14 @@ const ProductDetails = () => {
             />
 
             {/* Current image indicator */}
-            <HStack justify="center" spacing={1} position="absolute" bottom="2" left="0" right="0">
+            <HStack
+              justify="center"
+              spacing={1}
+              position="absolute"
+              bottom="2"
+              left="0"
+              right="0"
+            >
               {thumbnails?.map((_, idx) => (
                 <Box
                   key={idx}
@@ -402,7 +509,9 @@ const ProductDetails = () => {
                 key={idx}
                 onClick={() => handleThumbnailClick(idx)}
                 borderWidth={2}
-                borderColor={currentImageIndex === idx ? "teal.500" : "transparent"}
+                borderColor={
+                  currentImageIndex === idx ? "teal.500" : "transparent"
+                }
                 borderRadius="md"
                 p={1}
                 bg={thumbBg}
@@ -413,7 +522,7 @@ const ProductDetails = () => {
                 h="16"
               >
                 <Image
-                  src={`${BASE_URL}${img}`}
+                  src={`${img}`}
                   alt={`${data.name} thumbnail ${idx + 1}`}
                   objectFit="cover"
                   w="full"
@@ -424,13 +533,14 @@ const ProductDetails = () => {
             ))}
           </Flex>
           {/*Attribute*/}
-          {selectedVariant && <GroupedAttributeDisplay
-            size={selectedVariant?.size}
-            attribute={selectedVariant?.attribute ?? []}
-            unit={selectedVariant?.unit}
-            description={selectedVariant?.description}
-          />
-          }
+          {selectedVariant && (
+            <GroupedAttributeDisplay
+              size={selectedVariant?.size}
+              attribute={selectedVariant?.attribute ?? []}
+              unit={selectedVariant?.unit}
+              description={selectedVariant?.description}
+            />
+          )}
         </Flex>
 
         <Stack spacing={6}>
@@ -451,24 +561,32 @@ const ProductDetails = () => {
                 >
                   #{name}
                 </Tag>
-
               );
             })}
             <Text color={colorText} fontWeight="bold" fontSize="2xl" mt={2}>
-              {new Intl.NumberFormat("en-US").format(selectedVariant?.price ?? 0)} VND
+              {new Intl.NumberFormat("en-US").format(
+                selectedVariant?.price ?? 0
+              )}{" "}
+              VND
             </Text>
           </Box>
 
-          <Text fontSize="md" color="gray.500">{data.description}</Text>
+          <Text fontSize="md" color="gray.500">
+            {data.description}
+          </Text>
 
           <Box>
-            <Text fontWeight="bold" mb={2}>Chọn biến thể:</Text>
+            <Text fontWeight="bold" mb={2}>
+              Chọn biến thể:
+            </Text>
             <HStack wrap="wrap" spacing={4}>
               {data.variants.map((variant) => (
                 <Button
                   key={variant.id}
                   onClick={() => handleVariantSelect(variant)}
-                  variant={selectedVariant?.id === variant.id ? "solid" : "outline"}
+                  variant={
+                    selectedVariant?.id === variant.id ? "solid" : "outline"
+                  }
                   colorScheme="teal"
                   size={{ base: "sm", md: "md" }}
                   mb={2}
@@ -489,11 +607,22 @@ const ProductDetails = () => {
             >
               -
             </Button>
-            <Box px={3} py={2} borderWidth={1} borderRadius="md" minW={10} textAlign="center">
+            <Box
+              px={3}
+              py={2}
+              borderWidth={1}
+              borderRadius="md"
+              minW={10}
+              textAlign="center"
+            >
               {quantity}
             </Box>
             <Button
-              onClick={() => setQuantity((q) => Math.min(q + 1, selectedVariant?.stockQuantity || 99))}
+              onClick={() =>
+                setQuantity((q) =>
+                  Math.min(q + 1, selectedVariant?.stockQuantity || 99)
+                )
+              }
               size={{ base: "sm", md: "md" }}
               colorScheme="teal"
               variant="outline"
@@ -523,16 +652,36 @@ const ProductDetails = () => {
 
       {/* Product Reviews Section */}
       <Box mt={10}>
-        <Heading size="lg" mb={5}>Đánh giá sản phẩm</Heading>
+        <Heading size="lg" mb={5}>
+          Đánh giá sản phẩm
+        </Heading>
         <Divider mb={5} />
 
         {/* Add Review Section */}
         <Box mb={8}>
           {!tokenApp ? (
-            <Text color="red.500">Vui lòng <Button variant="link" colorScheme="teal" onClick={() => navigate("/login")}>đăng nhập</Button> để đánh giá.</Text>
+            <Text color="red.500">
+              Vui lòng{" "}
+              <Button
+                variant="link"
+                colorScheme="teal"
+                onClick={() => navigate("/login")}
+              >
+                đăng nhập
+              </Button>{" "}
+              để đánh giá.
+            </Text>
           ) : (
-            <VStack align="start" spacing={4} p={5} borderWidth={1} borderRadius="md">
-              <Text fontSize="lg" fontWeight="semibold">Thêm đánh giá mới</Text>
+            <VStack
+              align="start"
+              spacing={4}
+              p={5}
+              borderWidth={1}
+              borderRadius="md"
+            >
+              <Text fontSize="lg" fontWeight="semibold">
+                Thêm đánh giá mới
+              </Text>
               <HStack>
                 <Text>Đánh giá:</Text>
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -576,7 +725,9 @@ const ProductDetails = () => {
 
         {/* Reviews List */}
         <Box>
-          <Heading size="md" mb={4}>Đánh giá từ khách hàng</Heading>
+          <Heading size="md" mb={4}>
+            Đánh giá từ khách hàng
+          </Heading>
           {isLoadingReview ? (
             <Center p={10}>
               <Spinner />
@@ -661,14 +812,30 @@ const ProductDetails = () => {
         </Box>
       )}
 
-      <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">Chưa đăng nhập</AlertDialogHeader>
-            <AlertDialogBody>Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.</AlertDialogBody>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Chưa đăng nhập
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.
+            </AlertDialogBody>
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>Huỷ</Button>
-              <Button colorScheme="teal" onClick={() => navigate("/login")} ml={3}>Đăng nhập</Button>
+              <Button ref={cancelRef} onClick={onClose}>
+                Huỷ
+              </Button>
+              <Button
+                colorScheme="teal"
+                onClick={() => navigate("/login")}
+                ml={3}
+              >
+                Đăng nhập
+              </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialogOverlay>

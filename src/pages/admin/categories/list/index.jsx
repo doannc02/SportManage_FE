@@ -115,7 +115,7 @@ const CategoryListAdmin = () => {
     ...item,
     logo: item?.logo ? (
       <Avatar
-        src={`${BASE_URL}${item.logo}`}
+        src={`${item.logo}`}
         size="xl"
         borderRadius="md"
         bg="gray.100"

@@ -26,7 +26,7 @@ import {
   FiLogOut,
 } from "react-icons/fi";
 import { MdOutlineCategory } from "react-icons/md";
-
+export const DEFAULT_COLOR = "#319795"
 export const countiesCitiesEnums = [
   {
     value: "japan",

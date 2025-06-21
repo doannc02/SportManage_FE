@@ -101,7 +101,7 @@ const useListProduct = () => {
     const dataTable = (data?.items ?? []).map((item) => ({
         id: item.id,
         image: (item?.images && item.images.length > 0)
-            ? <img src={`${BASE_URL}${item.images[0]}`} alt="Product Image" style={{ width: 45, height: 40, objectFit: 'cover' }} />
+            ? <img src={`${item.images[0]}`} alt="Product Image" style={{ width: 45, height: 40, objectFit: 'cover' }} />
             : "No Image",
         productName: item?.name || "",
         brandName: item?.brand?.name || "",
@@ -122,7 +122,7 @@ const useListProduct = () => {
                                     paddingY={1}
                                 >
                                     <img
-                                        src={`${BASE_URL}${variant?.images[0]}`}
+                                        src={`${variant?.images[0]}`}
                                         alt={variant?.name}
                                         style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, border: '1px solid #ccc' }}
                                     />

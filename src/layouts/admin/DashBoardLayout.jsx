@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import "./DashboardLayout.css";
+import "./DashBoardLayout.css";
 import SidebarMenu from "./SlidebarMenu";
 import { getAppToken } from "../../configs/token";
 import { Outlet } from "react-router-dom";

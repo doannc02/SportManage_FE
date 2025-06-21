@@ -9,14 +9,12 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../configs/auth";
-import {
-  ShoppingCart,
-} from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useEffect } from "react";
+import { ConfigProvider, Pagination, Popover } from "antd";
+import { DEFAULT_COLOR } from "../../const/enum";
 
 export const ProductCard = ({ product }) => {
-
   const navigate = useNavigate();
   return (
     <Box
@@ -29,7 +27,7 @@ export const ProductCard = ({ product }) => {
     >
       <Box height="250px" overflow="hidden" mb={2}>
         <img
-          src={`${BASE_URL}${product?.images?.[0]}` || "/placeholder.png"}
+          src={`${product?.images?.[0]}` || "/placeholder.png"}
           alt={product?.name}
           style={{
             transition: "transform 0.3s ease",
@@ -43,12 +41,12 @@ export const ProductCard = ({ product }) => {
         />
       </Box>
       <Box p={3}>
-        <Text fontSize="md" color="gray.600" noOfLines={2} mb={2}>
-          {product?.name}
+        <Text fontSize="md" color="gray.600" isTruncated mb={2}>
+          <Popover content={product?.name}>{product?.name}</Popover>
         </Text>
         {product?.variants?.[0] && (
           <Flex justifyContent={"space-between"} alignItems={"center"}>
-            <Text fontSize="md" fontWeight="bold" color="blue.600">
+            <Text fontSize="md" fontWeight="bold" color={DEFAULT_COLOR}>
               ₫{product?.variants[0].price.toLocaleString()}
             </Text>
             <Flex justifyContent={"center"} alignItems={"center"}>
@@ -67,86 +65,20 @@ export const ProductCard = ({ product }) => {
   );
 };
 
-const PagingControls = ({ currentPage, totalPages, onPageChange }) => {
-  if (totalPages <= 1) return null;
-
-  // Generate page numbers with ellipsis if needed
-  const getPageNumbers = () => {
-    const pages = [];
-    if (totalPages <= 5) {
-      for (let i = 0; i < totalPages; i++) pages.push(i);
-    } else {
-      if (currentPage > 2) pages.push(0, "...");
-      else for (let i = 0; i < Math.min(3, totalPages); i++) pages.push(i);
-
-      let start = Math.max(1, currentPage - 1);
-      let end = Math.min(totalPages - 2, currentPage + 1);
-
-      for (let i = start; i <= end; i++) {
-        if (!pages.includes(i)) pages.push(i);
-      }
-
-      if (currentPage < totalPages - 3) pages.push("...", totalPages - 1);
-      else
-        for (let i = totalPages - 3; i < totalPages; i++)
-          if (i > 1) pages.push(i);
-    }
-    return pages;
-  };
-
-  return (
-    <Flex justify="center" align="center" gap={2} mt={8}>
-      <Button
-        size="sm"
-        onClick={() => onPageChange(currentPage - 1)}
-        isDisabled={currentPage === 0}
-        variant="outline"
-      >
-        Quay về
-      </Button>
-      {getPageNumbers().map((page, idx) =>
-        page === "..." ? (
-          <Text key={idx} px={2} color="gray.400" fontSize="md">
-            ...
-          </Text>
-        ) : (
-          <Button
-            key={page}
-            size="sm"
-            variant={page === currentPage ? "solid" : "ghost"}
-            colorScheme={page === currentPage ? "blue" : "gray"}
-            onClick={() => onPageChange(page)}
-            fontWeight={page === currentPage ? "bold" : "normal"}
-            borderRadius="md"
-            minW="32px"
-          >
-            {page + 1}
-          </Button>
-        )
-      )}
-      <Button
-        size="sm"
-        onClick={() => onPageChange(currentPage + 1)}
-        isDisabled={currentPage + 1 >= totalPages}
-        variant="outline"
-      >
-        Kế tiếp
-      </Button>
-    </Flex>
-  );
-};
-
 const ProductList = () => {
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(window.innerWidth < 768 ? 2 : 6);
+  const [pageSize, setPageSize] = useState(window.innerWidth < 768 ? 6 : 24);
   const { data, isLoading, isError } = useQueryProductsList({
     pageNumber: page,
     pageSize: pageSize,
   });
-
+  const handleChange = (currentPage) => {
+    setPage(currentPage - 1);
+  };
   useEffect(() => {
     const handleResize = () => {
-      setPageSize(window.innerWidth < 768 ? 2 : 6);
+      setPageSize(window.innerWidth < 768 ? 6 : 24);
+      setPage(0);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -154,10 +86,10 @@ const ProductList = () => {
   return (
     <Box py={8} my={6} bg={"white"} p={5} w={"100%"}>
       <Text
-        textTransform="uppercase" 
+        textTransform="uppercase"
         className="mb-4"
         textColor={"#787877"}
-        textAlign={{base:"center", md:"left"}}
+        textAlign={{ base: "center", md: "left" }}
         mb={4}
         gap={2}
       >
@@ -177,7 +109,7 @@ const ProductList = () => {
 
       <SimpleGrid columns={{ base: 2, md: 4, lg: 6 }} spacing={2} mb={6} px={7}>
         {isLoading ? (
-          Array.from({ length: 10 }).map((_, i) => (
+          Array.from({ length: pageSize }).map((_, i) => (
             <ChakraSkeleton key={i} height="260px" borderRadius="lg" />
           ))
         ) : data?.items?.length ? (
@@ -195,12 +127,21 @@ const ProductList = () => {
           </Box>
         )}
       </SimpleGrid>
-
-      <PagingControls
-        currentPage={page}
-        totalPages={data?.totalPages ?? 0}
-        onPageChange={setPage}
-      />
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#319795",
+          },
+        }}
+      >
+        <Pagination
+          align="center"
+          current={page + 1}
+          total={data?.totalRecords}
+          pageSize={pageSize}
+          onChange={handleChange}
+        />
+      </ConfigProvider>
     </Box>
   );
 };

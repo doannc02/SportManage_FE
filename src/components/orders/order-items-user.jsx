@@ -17,7 +17,7 @@ const OrderItemUser = ({ item }) => {
         <Image
           src={
             imageUrl
-              ? `${BASE_URL}${imageUrl}`
+              ? `${imageUrl}`
               : "https://png.pngtree.com/png-clipart/20191120/original/pngtree-package-glyph-icon-vector-png-image_5058430.jpg"
           }
           alt={productName}

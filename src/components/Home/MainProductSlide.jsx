@@ -6,6 +6,7 @@ import "swiper/css/pagination";
 import { Box, Text, useBreakpointValue } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import { ArrowBigUpDash } from "lucide-react";
+import { Popover } from "antd";
 
 const fallbackImages = [
   "https://picsum.photos/id/1015/400/200",
@@ -20,11 +21,11 @@ const getFallbackImage = () => {
 
 export const ProductSlider = ({ products }) => {
   const slidesPerView = useBreakpointValue({
-    base: 1.2,
-    sm: 2,
-    md: 3,
-    lg: 4,
-    xl: 6,
+    base: 2.5,
+    sm: 3,
+    md: 4,
+    lg: 6,
+    xl: 7,
   });
 
   const spaceBetween = useBreakpointValue({
@@ -35,7 +36,7 @@ export const ProductSlider = ({ products }) => {
   });
 
   return (
-    <Box  px={{ base: 4, md: 8 }} py={4} my={8} w={"100%"}>
+    <Box px={{ base: 4, md: 8 }} py={4} my={8} w={"100%"}>
       <Text
         fontSize={{ base: "md", md: "2xl" }}
         fontWeight="bold"
@@ -81,7 +82,8 @@ export const ProductSlider = ({ products }) => {
                 boxShadow: "xl",
               }}
               transition="all 0.3s ease"
-              h="100%"
+              h={{ base: "250px", md: "280px" }}
+              w={{ base: "120px", md: "150px" }}
               display="flex"
               flexDirection="column"
             >
@@ -106,19 +108,20 @@ export const ProductSlider = ({ products }) => {
               </Box>
 
               <Box p={4} flex={1} display="flex" flexDirection="column">
-
                 <Text
                   color="gray.600"
-                  fontSize="sm"
-                  mb={3}
-                  noOfLines={2}
+                  fontSize="12px"
+                  mb={2}
+                  isTruncated
                   flex={1}
                 >
-                  {product?.Name || "Tên sản phẩm"}
+                  <Popover content={product?.Name}>
+                    {product?.Name || "Tên sản phẩm"}
+                  </Popover>
                 </Text>
 
                 <Box display="flex" alignItems="center" mb={4}>
-                  <Text fontWeight="bold" color="red.500" fontSize="lg">
+                  <Text fontWeight="bold" color="red.500" fontSize="13px">
                     {product?.Variants?.[0]?.Price?.toLocaleString() ||
                       "999,999"}
                     ₫
@@ -126,7 +129,7 @@ export const ProductSlider = ({ products }) => {
                 </Box>
                 <Box display="flex" alignItems="center" gap={2} mb={2}>
                   {/* <ArrowUpNarrowWide size={18} color="#3182ce" /> */}
-                  <Text fontSize="sm" color="gray.600" fontWeight="medium">
+                  <Text fontSize="13px" color="gray.600" fontWeight="medium">
                     Đã bán {product?.BoughtCount ?? 0}
                   </Text>
                 </Box>
