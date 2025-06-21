@@ -14,7 +14,8 @@ export default function ProductSlider() {
       price: "3.500.000",
       price_sign: "₫",
       currency: "VND",
-      image_link: "https://shopvnb.com//uploads/san_pham/vot-cau-long-yonex-astrox-100zz-kurenai-do-new-2021-5.webp",
+      image_link:
+        "https://shopvnb.com//uploads/san_pham/vot-cau-long-yonex-astrox-100zz-kurenai-do-new-2021-5.webp",
       description:
         "Vợt cầu lông Yonex Astrox 100ZZ dành cho người chơi chuyên nghiệp, trợ lực tốt, kiểm soát cầu chính xác, phù hợp đánh đôi và đơn.",
     },
@@ -25,7 +26,8 @@ export default function ProductSlider() {
       price: "1.200.000",
       price_sign: "₫",
       currency: "VND",
-      image_link: "https://product.hstatic.net/200000099191/product/sua_03f3a36d0c954dfb8e2487ce86dfca25.jpg",
+      image_link:
+        "https://product.hstatic.net/200000099191/product/sua_03f3a36d0c954dfb8e2487ce86dfca25.jpg",
       description:
         "Giày cầu lông Lining với đệm êm, chống trơn trượt, thiết kế ôm chân, hỗ trợ di chuyển linh hoạt trên sân.",
     },
@@ -36,7 +38,8 @@ export default function ProductSlider() {
       price: "450.000",
       price_sign: "₫",
       currency: "VND",
-      image_link: "https://luongsport.com/wp-content/uploads/2018/05/z5277607217776_f2256403b15cbaa2b4efff2bf6015f71.jpg",
+      image_link:
+        "https://luongsport.com/wp-content/uploads/2018/05/z5277607217776_f2256403b15cbaa2b4efff2bf6015f71.jpg",
       description:
         "Áo cầu lông Yonex chất liệu thấm hút mồ hôi, thoáng khí, kiểu dáng thể thao năng động, phù hợp thi đấu và tập luyện.",
     },
@@ -47,7 +50,8 @@ export default function ProductSlider() {
       price: "320.000",
       price_sign: "₫",
       currency: "VND",
-      image_link: "https://edwardthienhoang.wordpress.com/wp-content/uploads/2015/10/original2-1224936-1.jpg?w=640",
+      image_link:
+        "https://edwardthienhoang.wordpress.com/wp-content/uploads/2015/10/original2-1224936-1.jpg?w=640",
       description:
         "Quả cầu lông Mizuno lông vũ tự nhiên, bay ổn định, độ bền cao, thích hợp cho luyện tập và thi đấu.",
     },
@@ -58,7 +62,8 @@ export default function ProductSlider() {
       price: "650.000",
       price_sign: "₫",
       currency: "VND",
-      image_link: "https://shopvnb.com//uploads/san_pham/balo-cau-long-victor-br-9009-cr-den-xanh-chinh-hang-1.webp",
+      image_link:
+        "https://shopvnb.com//uploads/san_pham/balo-cau-long-victor-br-9009-cr-den-xanh-chinh-hang-1.webp",
       description:
         "Balo cầu lông Victor thiết kế nhiều ngăn, chất liệu chống thấm, đựng được vợt, giày và phụ kiện tiện lợi.",
     },
@@ -69,7 +74,8 @@ export default function ProductSlider() {
       price: "60.000",
       price_sign: "₫",
       currency: "VND",
-      image_link: "https://cdn.shopvnb.com/uploads/images/quan-can-yonex-xin-ac102ex-cai.webp",
+      image_link:
+        "https://cdn.shopvnb.com/uploads/images/quan-can-yonex-xin-ac102ex-cai.webp",
       description:
         "Quấn cán vợt Yonex giúp cầm vợt chắc chắn, thấm hút mồ hôi tốt, tăng độ bám khi thi đấu.",
     },
@@ -80,7 +86,8 @@ export default function ProductSlider() {
       price: "480.000",
       price_sign: "₫",
       currency: "VND",
-      image_link: "https://cdn.shopvnb.com/uploads/san_pham/tui-cau-long-lining-abjj-054-1-xam-do-3-ngan--2.webp",
+      image_link:
+        "https://cdn.shopvnb.com/uploads/san_pham/tui-cau-long-lining-abjj-054-1-xam-do-3-ngan--2.webp",
       description:
         "Túi đựng vợt Lining chất liệu bền đẹp, ngăn chứa rộng rãi, bảo vệ vợt khỏi va đập và bụi bẩn.",
     },
@@ -91,7 +98,8 @@ export default function ProductSlider() {
       price: "180.000",
       price_sign: "₫",
       currency: "VND",
-      image_link: "https://cdn.shopvnb.com/uploads/san_pham/day-cuoc-cang-vot-yonex-bg66-ultimax-2.webp",
+      image_link:
+        "https://cdn.shopvnb.com/uploads/san_pham/day-cuoc-cang-vot-yonex-bg66-ultimax-2.webp",
       description:
         "Dây cước Yonex BG66 Ultimax cho cảm giác đánh cầu nhạy, lực căng tốt, phù hợp mọi trình độ.",
     },
@@ -102,7 +110,8 @@ export default function ProductSlider() {
       price: "90.000",
       price_sign: "₫",
       currency: "VND",
-      image_link: "https://shopvnb.com//uploads/san_pham/vo-cau-long-mizuno-ngan-chinh-hang-1.webp",
+      image_link:
+        "https://shopvnb.com//uploads/san_pham/vo-cau-long-mizuno-ngan-chinh-hang-1.webp",
       description:
         "Vớ cầu lông Mizuno co giãn, thấm hút mồ hôi, bảo vệ bàn chân khi vận động mạnh.",
     },
@@ -113,7 +122,8 @@ export default function ProductSlider() {
       price: "70.000",
       price_sign: "₫",
       currency: "VND",
-      image_link: "https://bissport.com/uploads/images/product/detail/2024/10/2024-19-10-15-12-215bang-co-tay-cau-long-pickleball-lining-632-chinh-hang-mau-xam-tham-hut-mo-hoi-co-gian-tot-nhe-khong-xu-long%20(7).jpg.jpg",
+      image_link:
+        "https://bissport.com/uploads/images/product/detail/2024/10/2024-19-10-15-12-215bang-co-tay-cau-long-pickleball-lining-632-chinh-hang-mau-xam-tham-hut-mo-hoi-co-gian-tot-nhe-khong-xu-long%20(7).jpg.jpg",
       description:
         "Băng cổ tay Victor hỗ trợ cổ tay, thấm hút mồ hôi, giảm chấn thương khi chơi cầu lông.",
     },
@@ -124,7 +134,8 @@ export default function ProductSlider() {
       price: "110.000",
       price_sign: "₫",
       currency: "VND",
-      image_link: "https://inochi.vn/wp-content/uploads/2022/01/binh_nuoc_Kita-Actice_detail.jpg",
+      image_link:
+        "https://inochi.vn/wp-content/uploads/2022/01/binh_nuoc_Kita-Actice_detail.jpg",
       description:
         "Bình nước thể thao Lining dung tích lớn, chất liệu an toàn, tiện lợi mang theo khi tập luyện.",
     },
@@ -133,22 +144,28 @@ export default function ProductSlider() {
   // Responsive values
   const slidesPerView = useBreakpointValue({ base: 1.5, sm: 2, md: 3, lg: 4 });
   const spaceBetween = useBreakpointValue({ base: 16, md: 24, lg: 30 });
-  const imageSize = useBreakpointValue({ base: "160px", sm: "180px", md: "200px", lg: "220px" });
+  const imageSize = useBreakpointValue({
+    base: "160px",
+    sm: "180px",
+    md: "200px",
+    lg: "220px",
+  });
   const titleFontSize = useBreakpointValue({ base: "md", sm: "lg", md: "xl" });
   const priceFontSize = useBreakpointValue({ base: "lg", sm: "xl", md: "2xl" });
   const descFontSize = useBreakpointValue({ base: "xs", sm: "sm" });
- // const buttonSize = useBreakpointValue({ base: "md", md: "lg" });
   const cardPadding = useBreakpointValue({ base: 3, md: 4, lg: 5 });
 
   return (
+    // Box bao ngoài cùng, bỏ boxShadow và borderRadius cũ, thay bằng border mờ
     <Box
-      maxW={"100%"}
-      mx="auto"
+      w={{ base: "100%", md: "75%", lg: "63%" }} // Điều chỉnh width để khớp với các component khác
+      mx="auto" // Căn giữa
       py={{ base: 6, md: 10 }}
       px={{ base: 4, md: 6 }}
-      bg="white"
-      borderRadius="lg"
-      boxShadow="lg"
+      bg="white" // Giữ nền trắng để border hiện rõ
+      border="1px solid" // Thêm border
+      borderColor="gray.200" // Màu xám nhạt
+      borderRadius="md" // Bo góc nhẹ
       mt={{ base: 6, md: 10 }}
     >
       <Text
@@ -162,7 +179,7 @@ export default function ProductSlider() {
       >
         Gợi ý cho bạn
       </Text>
-      
+
       <Swiper
         slidesPerView={slidesPerView}
         spaceBetween={spaceBetween}
@@ -173,41 +190,44 @@ export default function ProductSlider() {
           disableOnInteraction: false,
         }}
         className="mySwiper"
-        style={{ 
-          padding: "0 8px 32px 8px",
-          width: "100%"
+        style={{
+          padding: "0 8px 32px 8px", // Giữ padding cho swiper
+          width: "100%",
         }}
       >
         {data.map((el) => (
           <SwiperSlide key={el.id} style={{ height: "auto" }}>
             <Box
-              bg="gray.50"
-              borderRadius="xl"
-              boxShadow="md"
+              bg="white" // Nền trắng cho từng item sản phẩm
+              borderRadius="md" // Bo góc nhẹ
+              // boxShadow="sm" // Có thể giữ hoặc bỏ đổ bóng nhẹ
+              border="1px solid" // Thêm border cho từng item
+              borderColor="gray.100" // Màu border nhạt hơn nữa
               p={cardPadding}
               h="100%"
               display="flex"
               flexDirection="column"
               alignItems="center"
               transition="all 0.3s ease"
-              _hover={{ 
-                boxShadow: "xl", 
+              _hover={{
+                boxShadow: "md", // Đổ bóng nhẹ khi hover
                 transform: "translateY(-4px)",
-                bg: "gray.100"
+                bg: "gray.50", // Đổi màu nền khi hover
+                borderColor: "gray.200", // Border đậm hơn khi hover
               }}
             >
               <Image
                 mb={{ base: 3, md: 4, lg: 5 }}
                 src={el.image_link}
                 alt={el.name}
-                borderRadius="md"
+                borderRadius="md" // Bo góc nhẹ cho ảnh
                 boxSize={imageSize}
                 objectFit="cover"
                 bg="white"
-                boxShadow="sm"
+                // boxShadow="sm" // Có thể giữ hoặc bỏ đổ bóng nhẹ cho ảnh
                 loading="lazy"
               />
-              
+
               <Box flex="1" w="100%" textAlign="center">
                 <Text
                   fontWeight={600}
@@ -218,7 +238,7 @@ export default function ProductSlider() {
                 >
                   {el.name}
                 </Text>
-                
+
                 <Text
                   fontWeight={500}
                   color="cyan.600"
@@ -231,7 +251,7 @@ export default function ProductSlider() {
                     {el.currency}
                   </Text>
                 </Text>
-                
+
                 <Text
                   fontSize={descFontSize}
                   color="gray.500"

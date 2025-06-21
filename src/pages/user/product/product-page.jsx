@@ -5,7 +5,7 @@ import { useQueryProductsList } from "../../../services/customers/products";
 import { Checkbox, Divider, Empty, Spin } from "antd";
 import useDetailProduct from "../../admin/products/detail/useDetail";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ProductCard } from "../../../components/Home/ProductList";
+import { ProductCard } from "../../../components/Home/main-product-list";
 import { ArrowLeft } from "lucide-react";
 
 const ProductPage = () => {
