@@ -1,7 +1,7 @@
 import { Card } from "antd";
 import { twMerge } from "tailwind-merge";
 import { useQueryCategoryList } from "../../services/admins/categories";
-import { Box, Text, useBreakpointValue } from "@chakra-ui/react"; // Import useBreakpointValue
+import { Box, Text, useBreakpointValue } from "@chakra-ui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
@@ -19,27 +19,73 @@ const CategoryMainDashBoard = () => {
   const navigate = useNavigate();
   const { data, isLoading } = useQueryCategoryList({
     keyword: "",
-    sizeNumber: 20, // Fetch enough data to fill multiple slides if needed
+    sizeNumber: 20,
     pageNumber: 0,
   });
 
-  // Số cột của grid bên trong mỗi SwiperSlide
   const gridCols = useBreakpointValue({
-    base: 2, // grid-cols-2 (2x2 = 4 items per slide)
-    sm: 3, // grid-cols-3 (3x2 = 6 items per slide)
-    md: 4, // grid-cols-4 (4x2 = 8 items per slide)
-    lg: 6, // grid-cols-6 (6x2 = 12 items per slide)
-    xl: 8, // grid-cols-8 (8x2 = 16 items per slide)
+    base: 2,
+    sm: 3,
+    md: 4,
+    lg: 6,
+    xl: 8,
   });
 
-  // Số hàng cố định trong mỗi slide
   const gridRows = 2;
-
-  // Tổng số item hiển thị trên mỗi slide
   const itemsPerSlide = gridCols * gridRows;
-
-  // Dữ liệu skeleton dựa trên số lượng item trên mỗi slide
   const skeletonItems = Array(itemsPerSlide).fill({});
+
+  const swiperProps = {
+    slidesPerView: 1,
+    spaceBetween: 0,
+    modules: [Pagination, Autoplay],
+    className: "category-swiper",
+    pagination: {
+      clickable: true,
+      dynamicBullets: true,
+    },
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    loop: true,
+    style: { paddingBottom: "0px" },
+  };
+
+  const gridClasses = twMerge(
+    "grid gap-0", // Đảm bảo không có gap
+    `grid-cols-2`,
+    gridCols >= 3 ? "sm:grid-cols-3" : "",
+    gridCols >= 4 ? "md:grid-cols-4" : "",
+    gridCols >= 6 ? "lg:grid-cols-6" : "",
+    gridCols >= 8 ? "xl:grid-cols-8" : "",
+    "h-auto",
+    "border-collapse" // Đảm bảo border không bị double
+  );
+
+  const cardBodyStyle = {
+    padding: "12px 8px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+  };
+
+  // Hàm tính toán border cho từng item - tạo grid lines rõ ràng
+  const getBorderStyle = (index, groupLength, gridCols, gridRows) => {
+    const row = Math.floor(index / gridCols);
+    const col = index % gridCols;
+
+    return {
+      border: "1px solid #d1d5db", // Border cho tất cả các cạnh
+      borderTop: row === 0 ? "1px solid #d1d5db" : "0", // Chỉ hàng đầu có border top
+      borderLeft: col === 0 ? "1px solid #d1d5db" : "0", // Chỉ cột đầu có border left
+      marginTop: row === 0 ? "0" : "-1px", // Overlap border để tránh double border
+      marginLeft: col === 0 ? "0" : "-1px", // Overlap border để tránh double border
+    };
+  };
 
   return (
     <Box
@@ -48,8 +94,7 @@ const CategoryMainDashBoard = () => {
       justifyContent={"center"}
       alignItems={"center"}
       gap={4}
-      p={{ base: "1rem", md: "2rem" }} // Responsive padding
-      my={8}
+      p={{ base: "1rem", md: "2rem" }}
       h={"max-content"}
       w={"100%"}
     >
@@ -57,43 +102,18 @@ const CategoryMainDashBoard = () => {
         textTransform="uppercase"
         className="mb-4"
         textColor={"#787877"}
-        textAlign="center" // Center text for all breakpoints
+        textAlign="center"
       >
         Danh mục sản phẩm
       </Text>
-      <div className="w-[95%] sm:w-[90%] md:w-[75%] lg:w-[65%] xl:w-[60%] bg-white mx-auto border border-gray-200 rounded-md overflow-hidden">
-        {" "}
-        {/* Add border, rounded corners, and responsive width */}
+      <div className="w-[95%] sm:w-[90%] md:w-[75%] lg:w-[65%] xl:w-[65%] bg-white mx-auto rounded-lg overflow-hidden shadow-sm">
         {isLoading ? (
-          <Swiper
-            slidesPerView={1} // Luôn là 1 slide hiển thị tại một thời điểm
-            spaceBetween={0} // Không cần spaceBetween giữa các SwiperSlide nếu nội dung là grid
-            modules={[Pagination, Autoplay]}
-            className="category-swiper"
-            pagination={{
-              clickable: true,
-              dynamicBullets: true,
-            }}
-            autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
-            }}
-            loop={true} // Add loop for continuous carousel
-            style={{ paddingBottom: "40px" }} // Add padding for pagination dots
-          >
+          <Swiper {...swiperProps}>
             <SwiperSlide>
               <div
-                className={twMerge(
-                  "grid gap-px overflow-hidden", // Add gap-px for 1px lines, hide overflow
-                  `grid-cols-2`, // Default for base
-                  gridCols >= 3 ? "sm:grid-cols-3" : "", // Conditionally add based on gridCols
-                  gridCols >= 4 ? "md:grid-cols-4" : "",
-                  gridCols >= 6 ? "lg:grid-cols-6" : "",
-                  gridCols >= 8 ? "xl:grid-cols-8" : "",
-                  "h-auto" // Ensure grid can expand vertically
-                )}
+                className={gridClasses}
                 style={{
-                  gridTemplateRows: `repeat(${gridRows}, minmax(0, 1fr))`, // Explicitly define 2 rows
+                  gridTemplateRows: `repeat(${gridRows}, minmax(0, 1fr))`,
                 }}
               >
                 {skeletonItems.map((_, index) => (
@@ -102,29 +122,19 @@ const CategoryMainDashBoard = () => {
                     className={twMerge(
                       "w-full aspect-square flex flex-col items-center justify-center",
                       "min-h-0 !rounded-none",
-                      "border-none" // Remove default card border
+                      "!border-none bg-gray-50"
                     )}
                     style={{
-                      height: "auto", // Allow height to adjust
-                      minHeight: "160px", // Keep a minimum height for consistency
-                      borderRight:
-                        (index + 1) % gridCols !== 0
-                          ? "1px solid #e2e8f0"
-                          : "none", // Vertical line
-                      borderBottom:
-                        index < itemsPerSlide - gridCols
-                          ? "1px solid #e2e8f0"
-                          : "none", // Horizontal line (only for top rows)
+                      height: "auto",
+                      minHeight: "160px",
+                      ...getBorderStyle(
+                        index,
+                        skeletonItems.length,
+                        gridCols,
+                        gridRows
+                      ),
                     }}
-                    bodyStyle={{
-                      padding: "12px 0px", // Adjusted padding
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      width: "100%",
-                      height: "100%", // Ensure body fills card
-                      justifyContent: "center",
-                    }}
+                    bodyStyle={cardBodyStyle}
                   >
                     <Skeleton.Avatar
                       active
@@ -143,43 +153,19 @@ const CategoryMainDashBoard = () => {
             </SwiperSlide>
           </Swiper>
         ) : (
-          <Swiper
-            slidesPerView={1} // Luôn là 1 slide
-            spaceBetween={0} // Không cần spaceBetween giữa các slide
-            pagination={{
-              clickable: true,
-              dynamicBullets: true,
-            }}
-            modules={[Pagination, Autoplay]}
-            autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
-            }}
-            loop={true} // Vòng lặp liên tục
-            className="category-swiper"
-            style={{ paddingBottom: "40px" }} // Padding cho dấu chấm pagination
-          >
+          <Swiper {...swiperProps}>
             {(() => {
               const items = data?.items || [];
               const slides = [];
 
-              // Chia items thành các nhóm cho từng slide
               for (let i = 0; i < items.length; i += itemsPerSlide) {
                 const group = items.slice(i, i + itemsPerSlide);
                 slides.push(
                   <SwiperSlide key={i}>
                     <div
-                      className={twMerge(
-                        "grid gap-px overflow-hidden", // Add gap-px for 1px lines, hide overflow
-                        `grid-cols-2`, // Default for base
-                        gridCols >= 3 ? "sm:grid-cols-3" : "",
-                        gridCols >= 4 ? "md:grid-cols-4" : "",
-                        gridCols >= 6 ? "lg:grid-cols-6" : "",
-                        gridCols >= 8 ? "xl:grid-cols-8" : "",
-                        "h-auto"
-                      )}
+                      className={gridClasses}
                       style={{
-                        gridTemplateRows: `repeat(${gridRows}, minmax(0, 1fr))`, // Explicitly define 2 rows
+                        gridTemplateRows: `repeat(${gridRows}, minmax(0, 1fr))`,
                       }}
                     >
                       {group.map((cat, index) => (
@@ -195,33 +181,23 @@ const CategoryMainDashBoard = () => {
                           hoverable
                           className={twMerge(
                             "w-full aspect-square flex flex-col items-center justify-center",
-                            "hover:shadow-sm transition-all duration-200",
-                            "min-h-0 !rounded-none",
-                            "border-none" // Remove default card border
+                            "hover:shadow-md hover:bg-blue-50 transition-all duration-200",
+                            "min-h-0 !rounded-none cursor-pointer",
+                            "!border-none relative z-10 hover:z-20"
                           )}
                           style={{
-                            height: "auto", // Allow height to adjust
-                            minHeight: "160px", // Keep a minimum height for consistency
-                            borderRight:
-                              (index + 1) % gridCols !== 0
-                                ? "1px solid #e2e8f0"
-                                : "none", // Vertical line
-                            borderBottom:
-                              index < group.length - gridCols
-                                ? "1px solid #e2e8f0"
-                                : "none", // Horizontal line (only for top rows)
+                            height: "auto",
+                            minHeight: "160px",
+                            ...getBorderStyle(
+                              index,
+                              group.length,
+                              gridCols,
+                              gridRows
+                            ),
                           }}
-                          bodyStyle={{
-                            padding: "12px 0px",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            width: "100%",
-                            height: "100%",
-                            justifyContent: "center",
-                          }}
+                          bodyStyle={cardBodyStyle}
                         >
-                          <div className="w-7 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center">
+                          <div className="w-7 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center mb-2">
                             <img
                               src={getLogoUrl(cat.logo)}
                               alt={cat.name}
@@ -233,10 +209,7 @@ const CategoryMainDashBoard = () => {
                               }}
                             />
                           </div>
-                          <h3
-                            className="text-xs sm:text-sm md:text-base font-medium text-gray-900 text-center line-clamp-2"
-                            style={{ marginTop: "5px" }}
-                          >
+                          <h3 className="text-xs sm:text-sm md:text-base font-medium text-gray-900 text-center line-clamp-2 px-1">
                             {cat.name}
                           </h3>
                         </Card>
