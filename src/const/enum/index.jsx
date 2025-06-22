@@ -65,6 +65,20 @@ export const countiesCitiesEnums = [
   },
 ];
 
+
+export const optionsReason = [
+  { value: "not_need", label: "Tôi không còn nhu cầu mua hàng nữa" },
+  { value: "not_on_time", label: "Người bán không xử lý đơn đúng hạn" },
+  { value: "product_problem", label: "Sản phẩm bị lỗi/hỏng hàng" },
+  { value: "found_cheaper", label: "Tôi tìm thấy giá tốt hơn ở nơi khác" },
+  { value: "change_address", label: "Tôi muốn thay đổi địa chỉ nhận hàng" },
+  { value: "ordered_by_mistake", label: "Tôi đặt nhầm sản phẩm/đơn hàng" },
+  { value: "seller_request", label: "Người bán yêu cầu hủy đơn hàng" },
+  { value: "out_of_stock", label: "Người bán hết hàng" },
+  { value: "long_delivery", label: "Thời gian giao hàng quá lâu" },
+  { value: "other", label: "Lý do khác" },
+];
+
 export const isActiveBrands = [
   { value: true, label: "Còn hoạt động" },
   { value: false, label: "Đã đóng cửa" },
