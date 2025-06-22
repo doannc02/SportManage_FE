@@ -17,9 +17,7 @@ import {
   useColorModeValue,
   Skeleton,
   useToast,
-  Stack, // Import Stack for vertical alignment
-  HStack, // Import HStack for horizontal alignment
-  useMediaQuery, // Import useMediaQuery for responsive checks
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { FiBox, FiDollarSign, FiUsers, FiCheckCircle } from "react-icons/fi";
 import { Icon } from "@chakra-ui/icons";
@@ -445,6 +443,8 @@ const LowStockTable = ({
   </TableContainer>
 );
 
+import PropTypes from "prop-types";
+
 const TableContainer = ({ title, children, bgCard, borderColor }) => (
   <Box
     p={{ base: 3, md: 4 }} // Adjust padding for mobile
@@ -459,3 +459,10 @@ const TableContainer = ({ title, children, bgCard, borderColor }) => (
     {children}
   </Box>
 );
+
+TableContainer.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  bgCard: PropTypes.string,
+  borderColor: PropTypes.string,
+};
