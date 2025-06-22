@@ -20,7 +20,7 @@ import CoreAutoComplete from "../atoms/CoreAutoComplete";
 import { useForm } from "react-hook-form";
 import { optionsReason } from "../../const/enum";
 import React, { useEffect } from "react";
-import { formatDate } from "../../helpers/date";
+import { formatOffsetDateTime } from "../../helpers/date";
 import CoreInput from "../atoms/CoreInput";
 
 const CancelOrderDialog = ({
@@ -34,7 +34,7 @@ const CancelOrderDialog = ({
     defaultValues: {
       orderId: "",
       reason: "not_need",
-      date: formatDate(Date.now()),
+      date: formatOffsetDateTime(Date.now()),
       detailReason: "",
     },
   });
@@ -45,7 +45,7 @@ const CancelOrderDialog = ({
       reset({
         orderId: order.id,
         reason: "not_need",
-        date: formatDate(Date.now()),
+        date: formatOffsetDateTime(Date.now()),
         detailReason: "",
       });
     }
