@@ -56,6 +56,7 @@ import { Spin } from "antd";
 import CancelOrderDialog from "../../../../components/orders/cancel-order-dialog-user";
 import { OrderLoadingContent } from "../../../../components/orders/order-loading-content";
 import { useMutation } from "react-query";
+import { addDays } from "../../../../helpers/date";
 
 const SHIPPING_STATES = {
   Pending: {
@@ -238,12 +239,6 @@ const OrderDetailUserPage = () => {
     });
   };
 
-  // Helper to add days to a date
-  const addDays = (dateString, days) => {
-    const date = new Date(dateString);
-    date.setDate(date.getDate() + days);
-    return date;
-  };
   const handleCancelClick = () => {
     if (data?.state === "Processing") {
       toast({

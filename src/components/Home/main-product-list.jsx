@@ -123,7 +123,7 @@ const ProductList = () => {
     <Box py={8} my={6} w={"100%"}>
       {/* Đây là Box container chính, sẽ quyết định width và padding chung */}
       <Box
-        width={{ base: "100%", md: "75%", lg: "66%" }}
+        width={"100%"}
         mx="auto" // Căn giữa
         px={{ base: 4, md: 8 }} // <-- Điều chỉnh padding cho toàn bộ khu vực này. md: 8 (32px) là một giá trị khá phổ biến.
       >

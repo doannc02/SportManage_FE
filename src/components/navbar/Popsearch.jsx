@@ -6,9 +6,6 @@ import {
   PopoverArrow,
   Box,
   useBoolean,
-  InputGroup,
-  Input,
-  InputRightAddon,
 } from "@chakra-ui/react";
 import { BiSearch } from "react-icons/bi";
 import { GrClose } from "react-icons/gr";
@@ -25,7 +22,7 @@ function Popsearch() {
       <PopoverTrigger>
         <Box>{isEditing ? <GrClose /> : <BiSearch />}</Box>
       </PopoverTrigger>
-      <PopoverContent w="100vw">
+      <PopoverContent w="95vw">
         <PopoverArrow />
         <PopoverBody>
           <Search />

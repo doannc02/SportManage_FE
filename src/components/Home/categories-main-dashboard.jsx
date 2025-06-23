@@ -94,19 +94,18 @@ const CategoryMainDashBoard = () => {
       justifyContent={"center"}
       alignItems={"center"}
       gap={4}
-      p={{ base: "1rem", md: "2rem" }}
       h={"max-content"}
       w={"100%"}
     >
       <Text
         textTransform="uppercase"
-        className="mb-4"
+        mt={4}
         textColor={"#787877"}
         textAlign="center"
       >
         Danh mục sản phẩm
       </Text>
-      <div className="w-[95%] sm:w-[90%] md:w-[75%] lg:w-[65%] xl:w-[65%] bg-white mx-auto rounded-lg overflow-hidden shadow-sm">
+      <div className="w-full bg-white mx-auto rounded-lg overflow-hidden shadow-sm">
         {isLoading ? (
           <Swiper {...swiperProps}>
             <SwiperSlide>
