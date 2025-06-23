@@ -158,7 +158,7 @@ export default function ProductSlider() {
   return (
     // Box bao ngoài cùng, bỏ boxShadow và borderRadius cũ, thay bằng border mờ
     <Box
-      w={{ base: "100%", md: "75%", lg: "63%" }} // Điều chỉnh width để khớp với các component khác
+      w={"100%"} // Điều chỉnh width để khớp với các component khác
       mx="auto" // Căn giữa
       py={{ base: 6, md: 10 }}
       px={{ base: 4, md: 6 }}

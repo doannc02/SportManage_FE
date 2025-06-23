@@ -34,7 +34,7 @@ export default function Carousel() {
     <Box mt={{ base: "10px", md: "30px" }} w="100%">
       {/* Box căn giữa toàn bộ phần banner và icon list */}
       <Box
-        w={{ base: "100%", md: "75%", lg: "63%" }} // Đồng bộ width với các phần khác của trang
+        w={"100%"} // Đồng bộ width với các phần khác của trang
         mx="auto" // Căn giữa nội dung
       >
         {/* Box chính cho phần banner và side images */}

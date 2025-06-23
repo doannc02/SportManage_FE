@@ -313,7 +313,7 @@ const ProductSlider = memo(() => {
     return (
       <Box py={4} my={8} w={"100%"}>
         <Box
-          w={{ base: "95%", sm: "90%", md: "75%", lg: "63%" }}
+          w={"100%"}
           bg={"white"}
           mx="auto"
           border="1px solid"
@@ -331,7 +331,7 @@ const ProductSlider = memo(() => {
   return (
     <Box py={4} my={8} w={"100%"}>
       <Box
-        w={{ base: "95%", sm: "90%", md: "75%", lg: "63%" }}
+        w={"100%"}
         bg={"white"}
         mx="auto"
         border="1px solid"
@@ -556,7 +556,7 @@ const ProductSlider = memo(() => {
                       <Box
                         bg="#FFF8E0"
                         color="#D6A50A"
-                        fontSize="xs"
+                        fontSize="11"
                         fontWeight="bold"
                         px={2}
                         py={0.5}

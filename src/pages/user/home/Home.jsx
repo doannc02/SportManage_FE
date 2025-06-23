@@ -36,7 +36,7 @@ export default function Home() {
       <Box
         flexDir={"column"}
         alignItems={"center"}
-        w={{ base: "100%", md: "100%" }}
+        w={{ base: "95%", md: "85%", lg: "75%" }}
       >
         <Suspense fallback={<LoadingFallback />}>
           <Crousel />

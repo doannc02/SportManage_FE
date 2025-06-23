@@ -17,14 +17,19 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { AiFillHome } from "react-icons/ai";
 import { Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-function Navmenu() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = useRef();
-  
+import { BaggageClaim, House, PackageCheck } from "lucide-react";
+
+// Move useDisclosure to a parent component (e.g., Layout) and pass as props to Navmenu
+function Navmenu({ isOpen, onOpen, onClose, btnRef }) {
+  const menuItems = [
+    { label: "Trang chủ", icon: <House strokeWidth={1} />, link:"/" },
+    { label: "Giỏ hàng", icon: <BaggageClaim strokeWidth={1} />, link:"/cartpage" },
+    { label: "Danh sách đơn hàng", icon: <PackageCheck strokeWidth={1} />, link:"/order" },
+  ];
 
   return (
     <>
-      <Box ref={btnRef} onClick={onOpen}>
+      <Box ref={btnRef}  className="cursor-pointer" onClick={onOpen}>
         <RxHamburgerMenu />
       </Box>
       <Drawer
@@ -32,46 +37,63 @@ function Navmenu() {
         placement="left"
         onClose={onClose}
         finalFocusRef={btnRef}
+        size="xs"
       >
         <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>
-            <AiFillHome />
+        <DrawerContent bg="white">
+          <DrawerCloseButton mt={2} />
+          <DrawerHeader borderBottomWidth="1px" display="flex" alignItems="center" gap={2}>
+            <AiFillHome size={28} color="#3182CE" />
+            <Text fontWeight="bold" fontSize="xl" color="gray.700">SportManage</Text>
           </DrawerHeader>
-          <DrawerBody>
-            
-            <Link to="/productpage"><Button>Brands</Button></Link>
-            <Link to="/productpage"><Button>Hair</Button></Link>
-            <Link to="/productpage"><Button>Skin</Button></Link>
-            <Link to="/productpage"><Button>Makeup</Button></Link>
-            <Link to="/productpage"><Button>Bath</Button></Link>
-            <Link to="/productpage"><Button>Fragrance</Button></Link>
-            <Link to="/productpage"><Button>Tools</Button></Link>
-            <Link to="/productpage"><Button>Trending</Button></Link>
-            <Link to="/productpage"><Button>Build</Button></Link>
-            <Link to="/productpage"><Button>Blog</Button></Link>
-
-            
+          <DrawerBody p={0}>
+            <Flex direction="column" gap={2} mt={4}>
+              {menuItems.map((item) => (
+                <Link to={item?.link} key={item.label}>
+                  <Button
+                    variant="ghost"
+                    w="100%"
+                    justifyContent="flex-start"
+                    leftIcon={item?.icon}
+                    fontWeight="medium"
+                    fontSize="md"
+                    color="gray.700"
+                    _hover={{ bg: "blue.50", color: "blue.600" }}
+                  >
+                    {item.label}
+                  </Button>
+                </Link>
+              ))}
+            </Flex>
           </DrawerBody>
-
-          <DrawerFooter bg="#f9f9f9">
+          {/* <DrawerFooter bg="#f9f9f9" borderTopWidth="1px">
             <Flex
-              mb="50px"
               w="100%"
               alignItems="center"
               justifyContent="space-between"
+              py={2}
             >
               <Image
-                w="30px"
-                h="30px"
-                border="1px solid"
-                borderRadius="100%"
-                src=""
+                w="36px"
+                h="36px"
+                border="2px solid #3182CE"
+                borderRadius="full"
+                src="/logo192.png"
+                alt="Logo"
+                bg="white"
               />
-              <Text textDecor="underline">Change Language</Text>
+              <Button
+                variant="link"
+                color="blue.500"
+                fontWeight="semibold"
+                fontSize="md"
+                textDecor="underline"
+                _hover={{ color: "blue.700" }}
+              >
+                Change Language
+              </Button>
             </Flex>
-          </DrawerFooter>
+          </DrawerFooter> */}
         </DrawerContent>
       </Drawer>
     </>

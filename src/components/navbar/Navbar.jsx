@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import TopNav from "./TopNav";
 import Search from "./Search";
 import Acount from "./Acount";
@@ -13,10 +13,12 @@ import OrderPopover from "./order-popover";
 
 function Navbar() {
   const cartRef = useRef();
+  const btnRef = useRef();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { user } = useContext(UserContext);
   const [num, setNum] = useState(0);
   const navigate = useNavigate();
-
   function handleClickLogo() {
     navigate("/");
   }
@@ -52,17 +54,22 @@ function Navbar() {
         bg="white"
       >
         <Flex alignItems="center" gap={2}>
-          <Navmenu />
+          <Navmenu
+            isOpen={isOpen}
+            onClose={onClose}
+            onOpen={onOpen}
+            btnRef={btnRef}
+            key={location.pathname} 
+          />
           <Popsearch />
         </Flex>
         <Flex alignItems="center" gap={4}>
           <Acount />
-          <Box as="span" onClick={handleCartClick} cursor="pointer">
+          {/* <Box as="span" onClick={handleCartClick} cursor="pointer">
             <Cart ref={cartRef} num={num} />
-          </Box>
+          </Box> */}
         </Flex>
       </Flex>
-
       {/* Desktop Navbar */}
       <Box
         display={{ base: "none", lg: "flex" }}

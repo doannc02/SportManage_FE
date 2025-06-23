@@ -72,10 +72,10 @@ const CategoryListAdmin = () => {
     }));
   }, []);
 
-  const onReset = useCallback(() => {
-    methodForm.reset(defaultValues);
-    setQueryPage(_.omitBy(defaultValues, _.isNil));
-  }, [methodForm]);
+  // const onReset = useCallback(() => {
+  //   methodForm.reset(defaultValues);
+  //   setQueryPage(_.omitBy(defaultValues, _.isNil));
+  // }, [methodForm]);
 
   const handleOpenDialog = useCallback((categoryId, name) => {
     setSelectedCategory({ id: categoryId, name });

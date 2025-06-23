@@ -12,7 +12,6 @@ import CoreInput from "../../../../components/atoms/CoreInput";
 import { useDetailCategoryAdmin } from "./useDetailCategory";
 import CoreLoading from "../../../../components/atoms/CoreLoading";
 import { MultiImageUploader } from "../../../../components/atoms/ImageUploader";
-import { BASE_URL } from "../../../../configs/auth";
 import { useWatch } from "react-hook-form";
 
 const CategoryAdmin = () => {
