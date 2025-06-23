@@ -22,7 +22,11 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import _ from "lodash";
 import { toast } from "react-toastify";
-import { useQueryCategoryList } from "../../../../services/admins/categories";
+import {
+  deleteCategory,
+  useQueryCategoryList,
+} from "../../../../services/admins/categories";
+import { BASE_URL } from "../../../../configs/auth";
 
 const defaultValues = {
   pageNumber: 0,
@@ -85,7 +89,7 @@ const CategoryListAdmin = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      // await deleteCategory({ id: selectedCategory.id });
+      await deleteCategory({ id: selectedCategory.id });
       toast.success(`Xoá danh mục "${selectedCategory.name}" thành công!`);
       handleCloseDialog();
       refetch();

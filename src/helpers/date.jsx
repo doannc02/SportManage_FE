@@ -3,7 +3,8 @@ export const formatDate = (dateString) => {
 };
 
 
-export const formatOffsetDateTime = (date) => {
-    const isoString = date.toISOString();
-    return isoString.split('.')[0] + 'Z'; // Format: "YYYY-MM-DDTHH:MM:SSZ"
-  };
+export const formatOffsetDateTime = (dateInput) => {
+  const date = new Date(dateInput); 
+  const isoString = date.toISOString();
+  return isoString.split('.')[0] + 'Z'; // "YYYY-MM-DDTHH:MM:SSZ"
+};

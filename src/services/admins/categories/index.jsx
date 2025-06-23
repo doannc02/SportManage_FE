@@ -73,7 +73,7 @@ export const putCategory = async (input) => {
   return data;
 };
 
-export const deleteProduct = async ({ id }) => {
+export const deleteCategory = async ({ id }) => {
   const { data } = await authApi({
     method: "delete",
     url: `/api/categories/${id}`,

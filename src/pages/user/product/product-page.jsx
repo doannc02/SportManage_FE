@@ -1,18 +1,15 @@
 import { useContext, useEffect, useState } from "react";
-import {
-  Box,
-  Image,
-  Heading,
-  Stack,
-} from "@chakra-ui/react";
+import { Box, Image, Heading, Stack } from "@chakra-ui/react";
 import { UserContext } from "../../../Contexts/UserContext";
 import { useQueryProductsList } from "../../../services/customers/products";
-import { Checkbox, Empty } from "antd";
+import { Checkbox, Divider, Empty, Spin } from "antd";
 import useDetailProduct from "../../admin/products/detail/useDetail";
-import { useLocation } from "react-router-dom";
-import { ProductCard } from "../../../components/Home/ProductList";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ProductCard } from "../../../components/Home/main-product-list";
+import { ArrowLeft } from "lucide-react";
 
- const ProductPage = () => {
+const ProductPage = () => {
+  const navigate = useNavigate();
   const { search } = useContext(UserContext);
   const [selectCategory, setSelectCategory] = useState([]);
   const [{ dataCategory }] = useDetailProduct();
@@ -46,55 +43,97 @@ import { ProductCard } from "../../../components/Home/ProductList";
     categoryIds: selectCategory.length > 0 ? selectCategory : undefined, // Chỉ truyền khi có category được chọn
   });
 
-
-  if (isLoading) {
-    return (
-      <Image
-        m="auto"
-        mt="150px"
-        src="https://media.tenor.com/BtC0jVjzYToAAAAM/loading-chain.gif"
-      />
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <Image
+  //       m="auto"
+  //       mt="150px"
+  //       src="https://media.tenor.com/BtC0jVjzYToAAAAM/loading-chain.gif"
+  //     />
+  //   );
+  // }
 
   return (
-    <div className="flex gap-2">
-      {/* Phần danh mục sản phẩm */}
-      <Box w="20%" display="flex" flexDirection="column" p={4} gap={2}>
-        <Heading as="h3" size="md" mb={4}>
-          Danh mục sản phẩm
-        </Heading>
-        <Stack spacing={3}>
-          {dataCategory?.items?.map((category) => (
-            <Checkbox
-              key={category.id}
-              checked={selectCategory.includes(category.id)}
-              onChange={() => handleCategoryChange(category.id)}
-            >
-              {category.name}
-            </Checkbox>
-          ))}
-        </Stack>
-      </Box>
-
-      {/* Phần danh sách sản phẩm */}
-      {(data?.items ?? []).length !== 0 ? (
-        <Box
-          w="80%"
-          mx="auto"
-          display="grid"
-          gridTemplateColumns={["1fr", "1fr 1fr", "repeat(4, 1fr)"]}
-          p={4}
-          gap={6}
+    <>
+      <Box my={2}>
+        <Heading
+          size="base"
+          gap={2}
+          display="flex"
+          alignItems="center"
+          ps={2}
+          pt={2}
+          onClick={() => navigate("/")}
+          cursor={"pointer"}
         >
-          {data?.items.map((el, index) => (
-            <ProductCard key={el.id ?? index} product={el} />
-          ))}
+          <ArrowLeft />
+          Trở về trang chủ
+        </Heading>
+        <Divider />
+      </Box>
+      <div className="md:flex-row flex flex-col gap-2">
+        {/* Phần danh mục sản phẩm */}
+        <Box
+          w={{ base: "100%", md: "20%" }}
+          display="flex"
+          flexDirection="column"
+          p={4}
+          gap={2}
+        >
+          <Heading
+            as="h3"
+            size="md"
+            mb={4}
+            textAlign={{ base: "center", md: "left" }}
+          >
+            Danh mục sản phẩm
+          </Heading>
+          <Stack spacing={3}>
+            <div className="grid grid-cols-2 md:grid-cols-1">
+              {dataCategory?.items?.map((category) => (
+                <Checkbox
+                  key={category.id}
+                  checked={selectCategory.includes(category.id)}
+                  onChange={() => handleCategoryChange(category.id)}
+                >
+                  {category.name}
+                </Checkbox>
+              ))}
+            </div>
+          </Stack>
         </Box>
-      ) : (
-        <Empty description={<span>Không có sản phẩm nào</span>} />
-      )}
-    </div>
+        <Spin spinning={isLoading}>
+          {/* Phần danh sách sản phẩm */}
+          {(data?.items ?? []).length !== 0 ? (
+            <Box
+              w="80%"
+              mx="auto"
+              display="grid"
+              alignItems={"center"}
+              gridTemplateColumns={["1fr", "1fr 1fr", "repeat(4, 1fr)"]}
+              p={4}
+              gap={6}
+            >
+              {data?.items.map((el, index) => (
+                <ProductCard key={el.id ?? index} product={el} />
+              ))}
+            </Box>
+          ) : (
+            <Box
+              w="80%"
+              minH="100%"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              p={4}
+              gap={6}
+            >
+              <Empty description={<span>Không có sản phẩm nào</span>} />
+            </Box>
+          )}
+        </Spin>
+      </div>
+    </>
   );
 };
 

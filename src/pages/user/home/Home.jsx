@@ -1,12 +1,28 @@
-import { Box, Flex } from "@chakra-ui/react";
-import Crousel from "../../../components/Home/Crousel";
-import Trending from "../../../components/Home/Trending";
-import CardSlide from "../../../components/Home/card-slide";
-import Middle from "../../../components/Home/Middle";
-import { ProductSlider } from "../../../components/Home/MainProductSlide";
-import ProductList from "../../../components/Home/ProductList";
-import Categories from "../../../components/Home/categories-main-dashboard";
-import { mockProducts } from "../../../const/mock-data/mock-products";
+// Home.jsx
+import { Box, Flex, Spinner, Center } from "@chakra-ui/react";
+import React, { Suspense } from "react";
+
+const Crousel = React.lazy(() => import("../../../components/Home/Crousel"));
+const Categories = React.lazy(() =>
+  import("../../../components/Home/categories-main-dashboard")
+);
+const ProductSlider = React.lazy(() =>
+  import("../../../components/Home/top-product-list")
+);
+const ProductList = React.lazy(() =>
+  import("../../../components/Home/main-product-list")
+);
+const Trending = React.lazy(() => import("../../../components/Home/Trending"));
+const CardSlide = React.lazy(() =>
+  import("../../../components/Home/card-slide")
+);
+const Middle = React.lazy(() => import("../../../components/Home/Middle"));
+
+const LoadingFallback = () => (
+  <Center py={10}>
+    <Spinner size="xl" color="blue.500" />
+  </Center>
+);
 
 export default function Home() {
   return (
@@ -17,14 +33,38 @@ export default function Home() {
       bg={"#fafafa"}
       maxW={"100vw"}
     >
-      <Box w={{base:"95%", md:"90%"}}>
-      <Crousel />
-      <Categories />
-      <ProductSlider products={mockProducts} />
-      <ProductList />
-      <Trending />
-      <CardSlide />
-      <Middle />
+      <Box
+        flexDir={"column"}
+        alignItems={"center"}
+        w={{ base: "100%", md: "100%" }}
+      >
+        <Suspense fallback={<LoadingFallback />}>
+          <Crousel />
+        </Suspense>
+
+        <Suspense fallback={<LoadingFallback />}>
+          <Categories />
+        </Suspense>
+
+        <Suspense fallback={<LoadingFallback />}>
+          <ProductSlider />
+        </Suspense>
+
+        <Suspense fallback={<LoadingFallback />}>
+          <ProductList />
+        </Suspense>
+
+        <Suspense fallback={<LoadingFallback />}>
+          <Trending />
+        </Suspense>
+
+        <Suspense fallback={<LoadingFallback />}>
+          <CardSlide />
+        </Suspense>
+
+        <Suspense fallback={<LoadingFallback />}>
+          <Middle />
+        </Suspense>
       </Box>
     </Flex>
   );

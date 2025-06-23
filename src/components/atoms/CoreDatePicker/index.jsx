@@ -1,54 +1,59 @@
 import {
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    Input,
-    Box,
-    InputGroup,
-    InputRightElement,
-    Icon
-} from "@chakra-ui/react"
-import { Controller } from "react-hook-form"
-import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
-import { forwardRef } from "react"
-import { CalendarIcon } from "@chakra-ui/icons"
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
+  Box,
+  InputGroup,
+  InputRightElement,
+  Icon,
+} from "@chakra-ui/react";
+import { Controller } from "react-hook-form";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { forwardRef } from "react";
+import { CalendarIcon } from "@chakra-ui/icons";
 
 const CustomInput = forwardRef(({ value, onClick }, ref) => (
-    <InputGroup>
-        <Input
-            onClick={onClick}
-            ref={ref}
-            value={value}
-            readOnly
-            w="100%"
-            height="50px" // Tăng chiều cao của input
-            color="black"
-            _placeholder={{ color: "black.400" }}
-            borderWidth="2px"
-            _focus={{ borderColor: "black.400", borderWidth: "2px" }}
-            cursor="pointer"
-            paddingRight="40px" // Tạo không gian cho icon
-        />
-        <InputRightElement h="100%" pr="2" pointerEvents="none">
-            <Icon as={CalendarIcon} color="gray.400" boxSize="20px" />
-        </InputRightElement>
-    </InputGroup>
-))
-CustomInput.displayName = "CustomInput"
+  <InputGroup>
+    <Input
+      onClick={onClick}
+      ref={ref}
+      value={value}
+      readOnly
+      w="100%"
+      height="50px" // Tăng chiều cao của input
+      color="black"
+      _placeholder={{ color: "black.400" }}
+      borderWidth="2px"
+      _focus={{ borderColor: "black.400", borderWidth: "2px" }}
+      cursor="pointer"
+      paddingRight="40px" // Tạo không gian cho icon
+    />
+    <InputRightElement h="100%" pr="2" pointerEvents="none">
+      <Icon as={CalendarIcon} color="gray.400" boxSize="20px" />
+    </InputRightElement>
+  </InputGroup>
+));
+CustomInput.displayName = "CustomInput";
 
 const CoreDatePicker = ({ control, name, label, required }) => {
-    return (
-        <Controller
-            control={control}
-            name={name}
-            rules={required ? { required: "Trường này là bắt buộc" } : {}}
-            render={({ field, fieldState }) => (
-                <FormControl isInvalid={!!fieldState.error} isRequired={required} mb={2} w="100%">
-                    <FormLabel>{label}</FormLabel>
-                    <Box w="100%" position="relative">
-                        <style>
-                            {`
+  return (
+    <Controller
+      control={control}
+      name={name}
+      rules={required ? { required: "Trường này là bắt buộc" } : {}}
+      render={({ field, fieldState }) => (
+        <FormControl
+          isInvalid={!!fieldState.error}
+          isRequired={required}
+          mb={2}
+          w="100%"
+        >
+          <FormLabel>{label}</FormLabel>
+          <Box w="100%" position="relative">
+            <style>
+              {`
                             .datepicker-full-width {
                                 width: 100%;
                             }
@@ -125,32 +130,32 @@ const CoreDatePicker = ({ control, name, label, required }) => {
                                 top: 1.5rem !important;
                             }
                             `}
-                        </style>
-                        <DatePicker
-                            selected={field.value}
-                            onChange={field.onChange}
-                            dateFormat="dd/MM/yyyy"
-                            customInput={<CustomInput />}
-                            wrapperClassName="datepicker-full-width"
-                            popperModifiers={{
-                                preventOverflow: {
-                                    enabled: true,
-                                },
-                                flip: {
-                                    enabled: false
-                                }
-                            }}
-                            popperProps={{
-                                strategy: "fixed"
-                            }}
-                            popperPlacement="bottom-end"
-                        />
-                    </Box>
-                    <FormErrorMessage>{fieldState.error?.message}</FormErrorMessage>
-                </FormControl>
-            )}
-        />
-    )
-}
+            </style>
+            <DatePicker
+              selected={field.value}
+              onChange={field.onChange}
+              dateFormat="dd/MM/yyyy"
+              customInput={<CustomInput />}
+              wrapperClassName="datepicker-full-width"
+              popperModifiers={{
+                preventOverflow: {
+                  enabled: true,
+                },
+                flip: {
+                  enabled: false,
+                },
+              }}
+              popperProps={{
+                strategy: "fixed",
+              }}
+              popperPlacement="bottom-end"
+            />
+          </Box>
+          <FormErrorMessage>{fieldState.error?.message}</FormErrorMessage>
+        </FormControl>
+      )}
+    />
+  );
+};
 
-export default CoreDatePicker
+export default CoreDatePicker;

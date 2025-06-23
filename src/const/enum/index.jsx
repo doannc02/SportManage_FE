@@ -26,7 +26,7 @@ import {
   FiLogOut,
 } from "react-icons/fi";
 import { MdOutlineCategory } from "react-icons/md";
-
+export const DEFAULT_COLOR = "#319795"
 export const countiesCitiesEnums = [
   {
     value: "japan",
@@ -63,6 +63,20 @@ export const countiesCitiesEnums = [
       { value: "medan", label: "Medan" },
     ],
   },
+];
+
+
+export const optionsReason = [
+  { value: "not_need", label: "Tôi không còn nhu cầu mua hàng nữa" },
+  { value: "not_on_time", label: "Người bán không xử lý đơn đúng hạn" },
+  { value: "product_problem", label: "Sản phẩm bị lỗi/hỏng hàng" },
+  { value: "found_cheaper", label: "Tôi tìm thấy giá tốt hơn ở nơi khác" },
+  { value: "change_address", label: "Tôi muốn thay đổi địa chỉ nhận hàng" },
+  { value: "ordered_by_mistake", label: "Tôi đặt nhầm sản phẩm/đơn hàng" },
+  { value: "seller_request", label: "Người bán yêu cầu hủy đơn hàng" },
+  { value: "out_of_stock", label: "Người bán hết hàng" },
+  { value: "long_delivery", label: "Thời gian giao hàng quá lâu" },
+  { value: "other", label: "Lý do khác" },
 ];
 
 export const isActiveBrands = [
@@ -180,12 +194,14 @@ export const paymentMethodEnums = [
     icon: FaWallet,
   },
 ];
+
 export const paymentStatusEnums = [
   { value: "Pending", label: "Chờ thanh toán", color: "yellow.600" },
   { value: "Completed", label: "Đã thanh toán", color: "green.600" },
   { value: "Failed", label: "Thanh toán thất bại", color: "red.600" },
   { value: "Refunded", label: "Hoàn tiền", color: "gray.600" },
 ];
+
 export const ORDER_STATES = {
   Pending: {
     label: "Chờ xử lý",
