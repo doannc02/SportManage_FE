@@ -1,112 +1,123 @@
 // src/hooks/usePushNotifications.js
-import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { useEffect } from "react";
+import { useState } from "react";
 
 // CẤU HÌNH FIREBASE CỦA BẠN (Lấy từ Firebase Console > Project settings > Your apps > Web app)
 const firebaseConfig = {
-    apiKey: "AIzaSyAuFJebJP-M986h-lPgvImewYRJ4HI6diQ",
-    authDomain: "push-notifications-2d078.firebaseapp.com",
-    projectId: "push-notifications-2d078",
-    storageBucket: "push-notifications-2d078.firebasestorage.app",
-    messagingSenderId: "577231585474",
-    appId: "1:577231585474:web:6ab941d74dc6c6dccefb5b",
-    // measurementId is not needed for Service Worker and can be omitted
-    // measurementId: "G-P89F12HJD6"
+  apiKey: "AIzaSyAuFJebJP-M986h-lPgvImewYRJ4HI6diQ",
+  authDomain: "push-notifications-2d078.firebaseapp.com",
+  projectId: "push-notifications-2d078",
+  storageBucket: "push-notifications-2d078.firebasestorage.app",
+  messagingSenderId: "577231585474",
+  appId: "1:577231585474:web:6ab941d74dc6c6dccefb5b",
+  // measurementId is not needed for Service Worker and can be omitted
+  // measurementId: "G-P89F12HJD6"
 };
-
 
 // Khởi tạo Firebase App (chỉ một lần)
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
 const usePushNotifications = () => {
-    const [fcmToken, setFcmToken] = useState(null);
-    const [notificationPermission, setNotificationPermission] = useState(Notification.permission);
-    const [lastMessage, setLastMessage] = useState(null);
+  const [fcmToken, setFcmToken] = useState(null);
+  const [notificationPermission, setNotificationPermission] = useState(
+    Notification.permission
+  );
+  const [lastMessage, setLastMessage] = useState(null);
 
-    useEffect(() => {
-        // Đăng ký Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/firebase-messaging-sw.js')
-                .then((registration) => {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                })
-                .catch((error) => {
-                    console.error('Service Worker registration failed:', error);
-                });
-        }
-
-        // Lắng nghe tin nhắn khi ứng dụng đang ở foreground
-        const unsubscribe = onMessage(messaging, (payload) => {
-            console.log('Message received in foreground: ', payload);
-            setLastMessage(payload); // Cập nhật state để hiển thị trên UI
-
-            // Tùy chỉnh hiển thị thông báo khi ở foreground (nếu muốn)
-            const notificationTitle = payload.notification?.title || 'New Notification';
-            const notificationOptions = {
-                body: payload.notification?.body,
-                icon: payload.notification?.icon || '/icon-192x192.png',
-                data: payload.data
-            };
-            new Notification(notificationTitle, notificationOptions);
+  useEffect(() => {
+    // Đăng ký Service Worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/firebase-messaging-sw.js")
+        .then((registration) => {
+          console.log(
+            "Service Worker registered with scope:",
+            registration.scope
+          );
+        })
+        .catch((error) => {
+          console.error("Service Worker registration failed:", error);
         });
+    }
 
-        // Cleanup function cho useEffect
-        return () => {
-            unsubscribe(); // Hủy đăng ký listener khi component unmount
-        };
-    }, []);
+    // Lắng nghe tin nhắn khi ứng dụng đang ở foreground
+    const unsubscribe = onMessage(messaging, (payload) => {
+      console.log("Message received in foreground: ", payload);
+      setLastMessage(payload); // Cập nhật state để hiển thị trên UI
 
-    // Hàm yêu cầu quyền và lấy token
-    const requestForToken = async () => {
-        try {
-            const permission = await Notification.requestPermission();
-            setNotificationPermission(permission);
+      // Tùy chỉnh hiển thị thông báo khi ở foreground (nếu muốn)
+      const notificationTitle =
+        payload.notification?.title || "New Notification";
+      const notificationOptions = {
+        body: payload.notification?.body,
+        icon: payload.notification?.icon || "/icon-192x192.png",
+        data: payload.data,
+      };
+      new Notification(notificationTitle, notificationOptions);
+    });
 
-            if (permission === 'granted') {
-                console.log('Notification permission granted.');
-                const currentToken = await getToken(messaging, { vapidKey: 'YOUR_VAPID_KEY_FROM_FIREBASE' });
-                if (currentToken) {
-                    console.log('FCM Token:', currentToken);
-                    setFcmToken(currentToken);
-                    // Gửi token này về backend của bạn để lưu vào DB
-                    sendTokenToServer(currentToken);
-                } else {
-                    console.log('No FCM registration token available. Request permission to generate one.');
-                }
-            } else {
-                console.warn('Unable to get permission to notify.');
-            }
-        } catch (error) {
-            console.error('Error getting FCM token:', error);
-        }
+    // Cleanup function cho useEffect
+    return () => {
+      unsubscribe(); // Hủy đăng ký listener khi component unmount
     };
+  }, []);
 
-    // Hàm gửi Token về server (Cần triển khai phía backend của bạn)
-    const sendTokenToServer = async (token) => {
-        try {
-            // Thay đổi URL API và headers tùy theo backend của bạn
-            const response = await fetch('/api/users/save-fcm-token', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${yourAuthToken}` // Nếu bạn có xác thực
-                },
-                body: JSON.stringify({ fcmToken: token })
-            });
+  // Hàm yêu cầu quyền và lấy token
+  const requestForToken = async () => {
+    try {
+      const permission = await Notification.requestPermission();
+      setNotificationPermission(permission);
 
-            if (!response.ok) {
-                throw new Error('Failed to save FCM token on server.');
-            }
-            console.log('FCM Token sent to server successfully.');
-        } catch (error) {
-            console.error('Error sending FCM token to server:', error);
+      if (permission === "granted") {
+        console.log("Notification permission granted.");
+        const currentToken = await getToken(messaging, {
+          vapidKey:
+            "BC9n4TpI-crMClddL4P4oH0jl5Xw5IoVM6zgsU2VqDikf-klATnA-udPfKAiqf3iKuYDirqw-yAqrdZW8FSECE8",
+        });
+        if (currentToken) {
+          console.log("FCM Token:", currentToken);
+          setFcmToken(currentToken);
+          // Gửi token này về backend của bạn để lưu vào DB
+          sendTokenToServer(currentToken);
+        } else {
+          console.log(
+            "No FCM registration token available. Request permission to generate one."
+          );
         }
-    };
+      } else {
+        console.warn("Unable to get permission to notify.");
+      }
+    } catch (error) {
+      console.error("Error getting FCM token:", error);
+    }
+  };
 
-    return { fcmToken, notificationPermission, lastMessage, requestForToken };
+  // Hàm gửi Token về server (Cần triển khai phía backend của bạn)
+  const sendTokenToServer = async (token) => {
+    try {
+      // Thay đổi URL API và headers tùy theo backend của bạn
+      const response = await fetch("/api/users/save-fcm-token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // 'Authorization': `Bearer ${yourAuthToken}` // Nếu bạn có xác thực
+        },
+        body: JSON.stringify({ fcmToken: token }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save FCM token on server.");
+      }
+      console.log("FCM Token sent to server successfully.");
+    } catch (error) {
+      console.error("Error sending FCM token to server:", error);
+    }
+  };
+
+  return { fcmToken, notificationPermission, lastMessage, requestForToken };
 };
 
 export default usePushNotifications;
