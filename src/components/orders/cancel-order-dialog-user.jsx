@@ -38,7 +38,7 @@ const CancelOrderDialog = ({
       detailReason: "",
     },
   });
-  const { control, reset, getValues } = methodForm;
+  const { control, reset, handleSubmit } = methodForm;
 
   useEffect(() => {
     if (order) {
@@ -51,10 +51,9 @@ const CancelOrderDialog = ({
     }
   }, [order, reset]);
 
-  const handleConfirm = () => {
-    const formData = getValues();
-    onConfirm(formData); // gửi toàn bộ form lên
-  };
+  const handleConfirm = handleSubmit(async (data) => {
+    onConfirm(data);
+  });
 
   if (!order) return null;
 
