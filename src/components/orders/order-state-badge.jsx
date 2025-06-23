@@ -87,7 +87,8 @@ const OrderStatusBadge = ({
       isAdmin &&
       !availableStatuses.includes("Canceled") &&
       status !== "Canceled" &&
-      status !== "Refunded"
+      status !== "Refunded" &&
+      status === "RequestCancel"
     ) {
       availableStatuses = [...availableStatuses, "Canceled"];
     }

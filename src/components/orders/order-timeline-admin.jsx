@@ -100,6 +100,9 @@ const OrderTimelineAdmin = () => {
         case "Canceled":
           timestamp = data?.canceledDate;
           break;
+        case "RequestCancel":
+          timestamp = data?.requestCancelDate;
+          break;
         default:
           break;
       }
@@ -168,9 +171,9 @@ const OrderTimelineAdmin = () => {
             }))}
           />
         </Box>
-        {(data?.state === "Pending" || data?.state === "Confirmed") && (
+        {data?.state === "RequestCancel" && (
           <Box>
-            <Button onClick={onClickCancel}>Hủy đơn hàng</Button>
+            <Button onClick={onClickCancel}>Xác nhận hủy đơn hàng</Button>
             <Text fontStyle="italic" fontSize="sm" mt={2}>
               Trong trường hợp khách hàng yêu cầu hủy
             </Text>

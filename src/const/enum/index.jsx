@@ -26,7 +26,7 @@ import {
   FiLogOut,
 } from "react-icons/fi";
 import { MdOutlineCategory } from "react-icons/md";
-export const DEFAULT_COLOR = "#319795"
+export const DEFAULT_COLOR = "#319795";
 export const countiesCitiesEnums = [
   {
     value: "japan",
@@ -64,7 +64,6 @@ export const countiesCitiesEnums = [
     ],
   },
 ];
-
 
 export const optionsReason = [
   { value: "not_need", label: "Tôi không còn nhu cầu mua hàng nữa" },
@@ -245,6 +244,13 @@ export const ORDER_STATES = {
     bgColor: "red.50",
     borderColor: "red.200",
   },
+  RequestCancel: {
+    label: "Yêu cầu hủy",
+    colorScheme: "red",
+    icon: XCircle,
+    bgColor: "red.50",
+    borderColor: "red.200",
+  },
 };
 
 export const TimelineStatusEnum = [
@@ -298,6 +304,15 @@ export const TimelineStatusEnum = [
     title: "Đã hủy",
     description: "Bạn đã hủy đơn hàng này",
     admin_description: "Đơn hàng đã bị hủy bởi khách hàng",
+    timestamp: null,
+    completed: false,
+    disabled: false,
+  },
+  {
+    status: "RequestCancel",
+    title: "Yêu cầu hủy",
+    description: "Bạn đã gửi yêu cầu hủy đơn hàng này",
+    admin_description: "Đơn hàng đang chờ xử lý yêu cầu hủy",
     timestamp: null,
     completed: false,
     disabled: false,
