@@ -1,14 +1,12 @@
 import { TableCell, TableRow } from '@mui/material'
-import CoreLoading from '../../CoreLoading'
 import PropTypes from 'prop-types'
+import { Skeleton } from '@chakra-ui/react'
 
 export const TableRowLoading = ({ colSpan }) => {
     return (
         <TableRow>
             <TableCell colSpan={colSpan} variant="body">
-                <div className="flex justify-center min-h-[60px]">
-                    <CoreLoading />
-                </div>
+                <Skeleton height={{base:"50px", md:"80px"}} />
             </TableCell>
         </TableRow>)
 }

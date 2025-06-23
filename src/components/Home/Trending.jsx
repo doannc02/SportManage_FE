@@ -1,5 +1,4 @@
-import { Box, Text, SimpleGrid, Image, Button, Center } from "@chakra-ui/react";
-import React from "react";
+import { Box, Text, SimpleGrid, Image, Button } from "@chakra-ui/react";
 
 import { Link } from "react-router-dom";
 
@@ -7,7 +6,7 @@ const Trending = () => {
   return (
     // Box bao ngoài cùng, bỏ boxShadow và borderRadius cũ, thay bằng border mờ
     <Box
-      w={{ base: "100%", md: "75%", lg: "63%" }} // Điều chỉnh width để khớp với Carousel
+      w={"100%"} // Điều chỉnh width để khớp với Carousel
       mx="auto" // Căn giữa
       py={10}
       px={{ base: 4, md: 8 }}

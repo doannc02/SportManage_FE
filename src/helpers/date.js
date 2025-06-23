@@ -8,3 +8,12 @@ export const formatOffsetDateTime = (dateInput) => {
   const isoString = date.toISOString();
   return isoString.split('.')[0] + 'Z'; // "YYYY-MM-DDTHH:MM:SSZ"
 };
+
+
+
+  // Dùng để tính toán ngày đặt hàng và thời gian dự kiến nhận hàng
+export  const addDays = (dateString, days) => {
+    const date = new Date(dateString);
+    date.setDate(date.getDate() + days);
+    return date;
+  };
