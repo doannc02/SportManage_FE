@@ -12,6 +12,7 @@ function App() {
   }, [token]);
 
   const { 
+    fcmToken,
     notificationPermission, 
     requestForToken,
   } = usePushNotifications();
@@ -21,12 +22,13 @@ function App() {
     console.log('User has token:', isUserAllowed());
   }, [notificationPermission, isUserAllowed]);
 
+  console.log('App component rendered', notificationPermission);
   return (
     <>
       <AllRouter />
       
       {/* Hiển thị button kích hoạt thông báo cho user có token */}
-      {isUserAllowed() && notificationPermission !== 'granted' && (
+      {!!fcmToken && (
         <div style={{
           position: 'fixed',
           bottom: '20px',

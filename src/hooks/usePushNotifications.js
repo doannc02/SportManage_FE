@@ -1,9 +1,11 @@
 // src/hooks/usePushNotifications.js
-import { initializeApp } from "firebase/app";
+import { getApp, initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { useEffect } from "react";
 import { useState } from "react";
 import { authApi } from "../configs/auth";
+import { getAppTokenFcmServiceWorker, setAppTokenFcmServiceWorker } from "../configs/token";
+import { get } from "lodash";
 
 // CẤU HÌNH FIREBASE CỦA BẠN (Lấy từ Firebase Console > Project settings > Your apps > Web app)
 const firebaseConfig = {
@@ -83,6 +85,7 @@ const usePushNotifications = () => {
         if (currentToken) {
           console.log("FCM Token:", currentToken);
           setFcmToken(currentToken);
+          setAppTokenFcmServiceWorker(currentToken); 
           sendTokenToServer(currentToken);
         } else {
           console.log(
@@ -99,6 +102,10 @@ const usePushNotifications = () => {
 
   const sendTokenToServer = async (token) => {
     try {
+      if (!token) {
+        token = getAppTokenFcmServiceWorker()
+        return;
+      }
       const response = await authApi( {
         url: "/api/users/save-fcm-token", 
         method: "POST",
