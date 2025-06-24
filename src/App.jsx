@@ -28,7 +28,7 @@ function App() {
       <AllRouter />
       
       {/* Hiển thị button kích hoạt thông báo cho user có token */}
-      {!!fcmToken && (
+      { (
         <div style={{
           position: 'fixed',
           bottom: '20px',
