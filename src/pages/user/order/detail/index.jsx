@@ -97,13 +97,11 @@ const OrderDetailUserPage = () => {
   const [statusTimeline, setStatusTimeline] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [openCancelDialog, setOpenCancelDialog] = useState(false);
-  const [cancelRequest, setCancelRequest] = useState(false);
-
   const bgColor = useColorModeValue("gray.50", "gray.900");
   const cardBg = useColorModeValue("white", "gray.800");
 
   const { data, isLoading, refetch } = useQueryOrderDetail({ id: id });
-
+  const isCancelRequest = data?.state === "RequestCancel" ? true : false;
   const currentStatus = ORDER_STATES[data?.state];
   const currentShippingStatus = SHIPPING_STATES[data?.shippingStatus];
   const currentPaymentMethod = paymentMethodEnums.find(
@@ -135,6 +133,18 @@ const OrderDetailUserPage = () => {
       }
       return;
     }
+    if (currentStatus === "RequestCancel") {
+      const canceledRequestStep = items.find(
+        (step) => step.status === "RequestCancel"
+      );
+      if (canceledRequestStep) {
+        canceledRequestStep.completed = isCompleted;
+        setStatusTimeline([canceledRequestStep]);
+      } else {
+        setStatusTimeline([]);
+      }
+      return;
+    }
 
     if (currentStatus !== "Canceled") {
       items = items.filter((obj) => obj?.status !== "Canceled");
@@ -158,6 +168,9 @@ const OrderDetailUserPage = () => {
           break;
         case "Canceled":
           timestamp = data?.canceledDate;
+          break;
+        case "RequestCancel":
+          timestamp = data?.requestCancelDate;
           break;
         default:
           break;
@@ -227,7 +240,6 @@ const OrderDetailUserPage = () => {
   const handleConfirmCancel = async (payload) => {
     await sendCancelRequest(payload);
     setOpenCancelDialog(false);
-    setCancelRequest(true);
   };
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString("vi-VN", {
@@ -265,6 +277,7 @@ const OrderDetailUserPage = () => {
   useEffect(() => {
     getTimeline();
   }, [data?.state]);
+  
   if (isLoading) {
     return <OrderLoadingContent />;
   }
@@ -312,7 +325,7 @@ const OrderDetailUserPage = () => {
                     <>
                       <Button
                         leftIcon={<MdCancel size={16} />}
-                        disabled={cancelRequest}
+                        disabled={isCancelRequest}
                         variant="ghost"
                         bg={"red.50"}
                         color={"red.500"}
@@ -320,7 +333,7 @@ const OrderDetailUserPage = () => {
                         isLoading={isRefreshing}
                         loadingText="Đang làm mới"
                       >
-                        {cancelRequest
+                        {isCancelRequest
                           ? "Yêu cầu hủy đã được gửi đi"
                           : "Yêu cầu huỷ đơn hàng"}
                       </Button>

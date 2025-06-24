@@ -16,7 +16,6 @@ import {
   AlertIcon,
 } from "@chakra-ui/react";
 import OrderStatusBadge from "./order-state-badge";
-import { ORDER_STATES } from "../../const/enum";
 import PropTypes from "prop-types";
 
 const StatusChangeDialog = ({
@@ -29,8 +28,6 @@ const StatusChangeDialog = ({
 }) => {
   if (!order) return null;
 
-  const currentStatusInfo = ORDER_STATES[order.state] || { label: order.state };
-  const newStatusInfo = ORDER_STATES[newStatus] || { label: newStatus };
 
   // Kiểm tra xem có phải là thay đổi hợp lệ không
   const isValidStatusChange = order.state !== newStatus;
