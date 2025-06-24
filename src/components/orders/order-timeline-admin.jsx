@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import StatusChangeDialog from "./state-change-dialog";
 import { useMutation } from "react-query";
 import { putOrderState } from "../../services/admins/orders";
+import RejectCancelDialogAdmin from "./reject-cancel-dialog-admin";
 
 // Timeline component
 const OrderTimelineAdmin = () => {
@@ -18,11 +19,15 @@ const OrderTimelineAdmin = () => {
 
   const [statusTimeline, setStatusTimeline] = useState([]);
   const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const [isOpenRejectDialog, setIsOpenRejectDialog] = useState(false);
   const [newStatus, setNewStatus] = useState("");
   const { data, refetch: refechOrder } = useQueryOrderDetail({ id: id });
 
   const { mutate: updateStatusMutation } = useMutation({
-    mutationFn: (data) => putOrderState(data),
+    mutationFn: (data) => {
+      putOrderState(data);
+      console.log("data in mutate", data);
+    },
     onError: (error) => {
       toast({
         title: "Cập nhật thất bại",
@@ -35,7 +40,7 @@ const OrderTimelineAdmin = () => {
     onSuccess: () => {
       refechOrder();
       toast({
-        title: `Cập nhật sang trạng thái ${newStatus} thành công`,
+        title: `Cập nhật  trạng thái  thành công`,
         description: "Trạng thái đơn hàng đã được cập nhật",
         status: "success",
         duration: 3000,
@@ -44,49 +49,48 @@ const OrderTimelineAdmin = () => {
     },
   });
   const getDisabled = (index, currentIndex, step) => {
-    if (index <= currentIndex || step.status === "Delivered") {
+    const currentStatus = data?.state;
+
+    if (["Canceled", "RequestCancel"].includes(currentStatus)) {
       return true;
     }
-    if (data?.state === "Processing") {
-      if (step.status === "Shipped") {
-        return false;
-      }
+
+    if (step.status === "Delivered") {
+      return true;
+    }
+
+    if (currentStatus === "Processing") {
+      if (step.status === "Shipped") return false;
+      return true;
+    }
+
+    if (currentStatus === "Confirmed" && step.status === "Processing") {
       return false;
     }
-    if (step.status === "Shipped") {
+
+    if (currentStatus === "Pending" && step.status === "Confirmed") {
+      return false;
+    }
+
+    if (index <= currentIndex) {
       return true;
     }
-    return false;
+
+    return true;
   };
+
   const getTimeline = () => {
-    let items = [];
-    let currentStatus = data?.state;
-    let isCompleted = true;
-    for (const statusDraff of TimelineStatusEnum) {
-      items.push({
-        ...statusDraff,
-      });
-    }
-    if (currentStatus === "Canceled") {
-      const canceledStep = items.find((step) => step.status === "Canceled");
-      if (canceledStep) {
-        canceledStep.completed = isCompleted;
-        canceledStep.disabled = true;
-        setStatusTimeline([canceledStep]);
-      } else {
-        setStatusTimeline([]);
-      }
-      return;
-    }
-    if (currentStatus !== "Canceled") {
-      items = items.filter((obj) => obj?.status !== "Canceled");
-    }
-    // Gán lại biến timestamp vào từng bước trong TimelineStatusEnum
-    items = items.map((step) => {
+    const currentStatus = data?.state;
+
+    // Bước 1: Tạo danh sách đầy đủ có gắn timestamp
+    let fullItems = TimelineStatusEnum.map((step) => {
       let timestamp = null;
       switch (step.status) {
         case "Pending":
           timestamp = data?.orderDate;
+          break;
+        case "Confirmed":
+          timestamp = data?.confirmedDate;
           break;
         case "Processing":
           timestamp = data?.preparingDate;
@@ -97,29 +101,42 @@ const OrderTimelineAdmin = () => {
         case "Delivered":
           timestamp = data?.deliveredDate;
           break;
-        case "Canceled":
-          timestamp = data?.canceledDate;
-          break;
         case "RequestCancel":
           timestamp = data?.requestCancelDate;
           break;
-        default:
+        case "Canceled":
+          timestamp = data?.canceledDate;
           break;
       }
       return { ...step, timestamp };
     });
-    // Tìm vị trí (index) của trạng thái hiện tại
-    const currentIndex = items.findIndex(
+
+    // Bước 2: Tùy trạng thái, lọc ra các bước cần hiển thị
+    let filteredItems = [...fullItems];
+    if (currentStatus === "Canceled" || currentStatus === "RequestCancel") {
+      filteredItems = fullItems.filter(
+        (step) => !["Shipped", "Delivered"].includes(step.status)
+      );
+    } else {
+      filteredItems = fullItems.filter(
+        (step) => !["RequestCancel", "Canceled"].includes(step.status)
+      );
+    }
+
+    // ✅ Bước 3: Tìm lại currentIndex sau khi đã filter
+    const currentIndex = filteredItems.findIndex(
       (step) => step.status === currentStatus
     );
     setCurrent(currentIndex);
-    // Tạo danh sách các bước timeline, đánh dấu completed = true nếu nằm trước hoặc tại trạng thái hiện tại
-    const updatedSteps = items.map((step, index) => ({
+
+    // Bước 4: Đánh dấu completed và disabled
+    const updated = filteredItems.map((step, index) => ({
       ...step,
       completed: index <= currentIndex,
       disabled: getDisabled(index, currentIndex, step),
     }));
-    setStatusTimeline(updatedSteps);
+
+    setStatusTimeline(updated);
   };
 
   const onChange = (value) => {
@@ -132,6 +149,7 @@ const OrderTimelineAdmin = () => {
     setIsOpenDialog(true);
     setNewStatus("Canceled");
   };
+
   const onConfirmStatusChange = async () => {
     await updateStatusMutation({
       orderId: data.id,
@@ -140,7 +158,13 @@ const OrderTimelineAdmin = () => {
     setIsOpenDialog(false);
     setNewStatus("");
   };
-
+  const onConfirmRejectCancel = async (payload) => {
+    await updateStatusMutation({
+      ...payload,
+      newStatus: "ReasonReject",
+    });
+    setIsOpenRejectDialog(false);
+  };
   useEffect(() => {
     getTimeline();
   }, [data?.state]);
@@ -151,7 +175,11 @@ const OrderTimelineAdmin = () => {
           <Steps
             responsive
             current={current}
-            status={data?.state === "Canceled" ? "error" : "process"}
+            status={
+              data?.state === "Canceled" || data?.state === "RequestCancel"
+                ? "error"
+                : "process"
+            }
             onChange={onChange}
             items={statusTimeline.map((step) => ({
               title: step?.title,
@@ -173,13 +201,28 @@ const OrderTimelineAdmin = () => {
         </Box>
         {data?.state === "RequestCancel" && (
           <Box>
-            <Button onClick={onClickCancel}>Xác nhận hủy đơn hàng</Button>
+            <Flex gap={2}>
+              <Button
+                color="danger"
+                variant="filled"
+                onClick={() => setIsOpenRejectDialog(true)}
+              >
+                Từ chối hủy
+              </Button>
+              <Button onClick={onClickCancel}>Xác nhận hủy </Button>
+            </Flex>
             <Text fontStyle="italic" fontSize="sm" mt={2}>
               Trong trường hợp khách hàng yêu cầu hủy
             </Text>
           </Box>
         )}
       </VStack>
+      <RejectCancelDialogAdmin
+        isOpen={isOpenRejectDialog}
+        onClose={() => setIsOpenRejectDialog(false)}
+        onConfirm={onConfirmRejectCancel}
+        order={data}
+      />
       <StatusChangeDialog
         isOpen={isOpenDialog}
         onClose={() => setIsOpenDialog(false)}

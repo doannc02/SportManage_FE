@@ -7,7 +7,6 @@ import {
   VStack,
   HStack,
   Text,
-  Button,
   Badge,
   Flex,
   Divider,
@@ -32,8 +31,6 @@ import {
   Clock,
   Tag,
   Copy,
-  Star,
-  MessageCircle,
   AlertCircle,
   QrCode,
 } from "lucide-react";

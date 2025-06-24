@@ -77,6 +77,16 @@ export const optionsReason = [
   { value: "Lý do khác", label: "Lý do khác" },
 ];
 
+export const optionsRejectReason = [
+  { value: "already_shipped", label: "Đơn hàng đã được gửi đi" },
+  { value: "processing", label: "Đơn hàng đang được xử lý, không thể hủy" },
+  {
+    value: "customized_product",
+    label: "Sản phẩm đã được cá nhân hóa/đặt riêng, không thể hủy",
+  },
+  { value: "other", label: "Lý do khác" },
+];
+
 export const isActiveBrands = [
   { value: true, label: "Còn hoạt động" },
   { value: false, label: "Đã đóng cửa" },
@@ -222,6 +232,20 @@ export const ORDER_STATES = {
     bgColor: "cyan.50",
     borderColor: "cyan.200",
   },
+  RequestCancel: {
+    label: "Yêu cầu hủy",
+    colorScheme: "red",
+    icon: XCircle,
+    bgColor: "red.50",
+    borderColor: "red.200",
+  },
+  Canceled: {
+    label: "Đã hủy",
+    colorScheme: "red",
+    icon: XCircle,
+    bgColor: "red.50",
+    borderColor: "red.200",
+  },
   Shipped: {
     label: "Đang giao",
     colorScheme: "purple",
@@ -235,20 +259,6 @@ export const ORDER_STATES = {
     icon: CheckCircle,
     bgColor: "green.50",
     borderColor: "green.200",
-  },
-  Canceled: {
-    label: "Đã hủy",
-    colorScheme: "red",
-    icon: XCircle,
-    bgColor: "red.50",
-    borderColor: "red.200",
-  },
-  RequestCancel: {
-    label: "Yêu cầu hủy",
-    colorScheme: "red",
-    icon: XCircle,
-    bgColor: "red.50",
-    borderColor: "red.200",
   },
 };
 
@@ -298,20 +308,20 @@ export const TimelineStatusEnum = [
     completed: false,
     disabled: false,
   },
-  {
-    status: "Canceled",
-    title: "Đã hủy",
-    description: "Bạn đã hủy đơn hàng này",
-    admin_description: "Đơn hàng đã bị hủy bởi khách hàng",
+   {
+    status: "RequestCancel",
+    title: "Yêu cầu hủy",
+    description: "Bạn đã gửi yêu cầu hủy đơn hàng này",
+    admin_description: "Đơn hàng đang chờ xử lý yêu cầu hủy",
     timestamp: null,
     completed: false,
     disabled: false,
   },
   {
-    status: "RequestCancel",
-    title: "Yêu cầu hủy",
-    description: "Bạn đã gửi yêu cầu hủy đơn hàng này",
-    admin_description: "Đơn hàng đang chờ xử lý yêu cầu hủy",
+    status: "Canceled",
+    title: "Đã hủy",
+    description: "Bạn đã hủy đơn hàng này",
+    admin_description: "Đơn hàng đã bị hủy bởi khách hàng",
     timestamp: null,
     completed: false,
     disabled: false,
