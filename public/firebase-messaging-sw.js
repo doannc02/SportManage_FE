@@ -1,12 +1,13 @@
-// public/firebase-messaging-sw.js
+// firebase-messaging-sw.js
+// Đây là Service Worker của Firebase Cloud Messaging
 
-// Import the 'compat' versions of Firebase SDKs using importScripts
-// These are necessary for Service Workers to load Firebase libraries directly.
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js');
+// Import scripts (quan trọng: sử dụng đường dẫn CDN của Firebase)
+// Thay đổi phiên bản Firebase nếu bạn đang dùng phiên bản khác
+importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js');
 
-// Your web app's Firebase configuration
-// This configuration should match the one in your React app's usePushNotifications.js
+// Cấu hình Firebase App bên trong Service Worker
+// Sử dụng cùng một cấu hình với ứng dụng client của bạn
 const firebaseConfig = {
     apiKey: "AIzaSyAuFJebJP-M986h-lPgvImewYRJ4HI6diQ",
     authDomain: "push-notifications-2d078.firebaseapp.com",
@@ -14,67 +15,62 @@ const firebaseConfig = {
     storageBucket: "push-notifications-2d078.firebasestorage.app",
     messagingSenderId: "577231585474",
     appId: "1:577231585474:web:6ab941d74dc6c6dccefb5b",
-    // measurementId is not needed for Service Worker and can be omitted
-    // measurementId: "G-P89F12HJD6"
 };
 
-// Initialize Firebase App in the Service Worker context
-// Access functions directly from the global 'firebase' object provided by importScripts
-const app = firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging(); // Correctly initialize messaging object
+// Khởi tạo Firebase
+firebase.initializeApp(firebaseConfig);
 
-// --- Background Message Handling ---
-// Lắng nghe tin nhắn từ Firebase khi ứng dụng đang ở background/closed
+// Lấy đối tượng Messaging
+const messaging = firebase.messaging();
+
 messaging.onBackgroundMessage((payload) => {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
 
-    const notificationTitle = payload.notification?.title || 'New Notification';
+    // Tùy chỉnh thông báo hiển thị cho người dùng
+    const notificationTitle = payload.notification.title || 'New Background Message';
     const notificationOptions = {
-        body: payload.notification?.body,
-        icon: payload.notification?.icon || '/icon-192x192.png', // Đảm bảo bạn có icon này trong thư mục public/
-        data: payload.data, // Dữ liệu tùy chỉnh từ backend
-        actions: [ // Ví dụ thêm action buttons (tùy chọn)
-            { action: 'open_order', title: 'Xem đơn hàng' },
-            { action: 'dismiss', title: 'Bỏ qua' }
-        ]
+        body: payload.notification.body,
+        icon: payload.notification.icon || '/icon-192x192.png', 
+        data: payload.data 
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// --- Notification Click Handling ---
-// Lắng nghe sự kiện click vào thông báo
+// Bạn cũng có thể thêm các listener khác cho Service Worker tại đây, ví dụ:
+// self.addEventListener('install', (event) => {
+//     console.log('Service Worker installed!');
+// });
+
+// self.addEventListener('activate', (event) => {
+//     console.log('Service Worker activated!');
+// });
+
+// self.addEventListener('fetch', (event) => {
+//     // Điều này không bắt buộc cho Firebase Messaging nhưng có thể dùng để cache tài nguyên
+// });
+
+// Bắt sự kiện người dùng nhấp vào thông báo
 self.addEventListener('notificationclick', (event) => {
-    const clickedNotification = event.notification;
-    const action = event.action;
+    event.notification.close(); // Đóng thông báo sau khi nhấp
 
-    console.log('[Service Worker] Notification click received:', clickedNotification, 'Action:', action);
-
-    clickedNotification.close(); // Đóng thông báo
-
-    if (action === 'open_order' && clickedNotification.data && clickedNotification.data.orderId) {
-        const orderId = clickedNotification.data.orderId;
-        const targetUrl = `/orders/${orderId}`; // Đường dẫn trang chi tiết đơn hàng của bạn
-
-        event.waitUntil(
-            clients.matchAll({ type: 'window', includeUncontrolled: true })
-                .then((clientList) => {
-                    for (const client of clientList) {
-                        if (client.url.includes(targetUrl) && 'focus' in client) {
-                            return client.focus();
-                        }
-                    }
-                    return clients.openWindow(targetUrl); // Mở tab mới nếu chưa có
-                })
-        );
-    } else if (action === 'dismiss') {
-        // Không làm gì thêm, chỉ đóng thông báo
-    } else {
-        // Xử lý click mặc định (ví dụ: mở trang chính của ứng dụng)
-        event.waitUntil(
-            clients.openWindow('/')
-        );
-    }
+    // Mở một cửa sổ mới hoặc chuyển đến tab hiện có
+    event.waitUntil(clients.matchAll({
+        type: 'window',
+        includeUncontrolled: true
+    }).then((clientList) => {
+        if (clientList.length > 0) {
+            let client = clientList[0];
+            for (let i = 0; i < clientList.length; i++) {
+                if (clientList[i].url.includes(event.notification.data.urlToOpen)) { 
+                    client = clientList[i];
+                    break;
+                }
+            }
+            return client.focus();
+        } else {
+            // Mở một tab mới nếu không có tab nào đang mở
+            return clients.openWindow(event.notification.data.urlToOpen || '/');
+        }
+    }));
 });
-
-// Bạn có thể thêm các sự kiện Service Worker khác như 'install', 'activate', 'fetch' nếu cần.

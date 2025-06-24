@@ -66,16 +66,15 @@ export const countiesCitiesEnums = [
 ];
 
 export const optionsReason = [
-  { value: "not_need", label: "Tôi không còn nhu cầu mua hàng nữa" },
-  { value: "not_on_time", label: "Người bán không xử lý đơn đúng hạn" },
-  { value: "product_problem", label: "Sản phẩm bị lỗi/hỏng hàng" },
-  { value: "found_cheaper", label: "Tôi tìm thấy giá tốt hơn ở nơi khác" },
-  { value: "change_address", label: "Tôi muốn thay đổi địa chỉ nhận hàng" },
-  { value: "ordered_by_mistake", label: "Tôi đặt nhầm sản phẩm/đơn hàng" },
-  { value: "seller_request", label: "Người bán yêu cầu hủy đơn hàng" },
-  { value: "out_of_stock", label: "Người bán hết hàng" },
-  { value: "long_delivery", label: "Thời gian giao hàng quá lâu" },
-  { value: "other", label: "Lý do khác" },
+  { value: "Tôi không còn nhu cầu mua hàng nữa", label: "Tôi không còn nhu cầu mua hàng nữa" },
+  { value: "Người bán không xử lý đơn đúng hạn", label: "Người bán không xử lý đơn đúng hạn" },
+  { value: "Sản phẩm bị lỗi/hỏng hàng", label: "Sản phẩm bị lỗi/hỏng hàng" },
+  { value: "Tôi tìm thấy giá tốt hơn ở nơi khác", label: "Tôi tìm thấy giá tốt hơn ở nơi khác" },
+  { value: "Tôi muốn thay đổi địa chỉ nhận hàng", label: "Tôi muốn thay đổi địa chỉ nhận hàng" },
+  { value: "ordered_by_mTôi đặt nhầm sản phẩm/đơn hàngistake", label: "Tôi đặt nhầm sản phẩm/đơn hàng" },
+  { value: "Người bán yêu cầu hủy đơn hàng", label: "Người bán yêu cầu hủy đơn hàng" },
+  { value: "Thời gian giao hàng quá lâu", label: "Thời gian giao hàng quá lâu" },
+  { value: "Lý do khác", label: "Lý do khác" },
 ];
 
 export const isActiveBrands = [

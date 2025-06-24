@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { useEffect } from "react";
 import { useState } from "react";
+import { authApi } from "../configs/auth";
 
 // CẤU HÌNH FIREBASE CỦA BẠN (Lấy từ Firebase Console > Project settings > Your apps > Web app)
 const firebaseConfig = {
@@ -26,6 +27,8 @@ const usePushNotifications = () => {
     Notification.permission
   );
   const [lastMessage, setLastMessage] = useState(null);
+
+  console.log("Firebase App initialized:", fcmToken, notificationPermission,Notification, lastMessage);
 
   useEffect(() => {
     // Đăng ký Service Worker
@@ -80,7 +83,6 @@ const usePushNotifications = () => {
         if (currentToken) {
           console.log("FCM Token:", currentToken);
           setFcmToken(currentToken);
-          // Gửi token này về backend của bạn để lưu vào DB
           sendTokenToServer(currentToken);
         } else {
           console.log(
@@ -95,20 +97,15 @@ const usePushNotifications = () => {
     }
   };
 
-  // Hàm gửi Token về server (Cần triển khai phía backend của bạn)
   const sendTokenToServer = async (token) => {
     try {
-      // Thay đổi URL API và headers tùy theo backend của bạn
-      const response = await fetch("/api/users/save-fcm-token", {
+      const response = await authApi( {
+        url: "/api/users/save-fcm-token", 
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // 'Authorization': `Bearer ${yourAuthToken}` // Nếu bạn có xác thực
-        },
-        body: JSON.stringify({ fcmToken: token }),
+        data: JSON.stringify({ fcmToken: token }),
       });
 
-      if (!response.ok) {
+      if (!response) {
         throw new Error("Failed to save FCM token on server.");
       }
       console.log("FCM Token sent to server successfully.");
