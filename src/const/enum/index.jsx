@@ -1,12 +1,19 @@
 import {
   AlertCircle,
+  Bandage,
   Box,
+  ChartGantt,
   CheckCircle,
   Clock,
   Home,
+  LayoutDashboard,
   MapPin,
   Package,
+  PackageSearch,
+  TextSearch,
   Truck,
+  UserCog,
+  Users,
   XCircle,
 } from "lucide-react";
 import {
@@ -17,15 +24,10 @@ import {
 } from "react-icons/fa";
 import {
   FiHome,
-  FiUsers,
-  FiBox,
-  FiSettings,
-  FiBarChart2,
   FiList,
   FiGift,
   FiLogOut,
 } from "react-icons/fi";
-import { MdOutlineCategory } from "react-icons/md";
 export const DEFAULT_COLOR = "#319795";
 export const countiesCitiesEnums = [
   {
@@ -345,30 +347,30 @@ export const LIST_ROLES = ["ADMIN", "SHIPPER", "CUSTOMER", "GUEST"];
 export const menuAdminItems = [
   {
     title: "Dashboard",
-    icon: <></>,
+    icon: <LayoutDashboard />,
     path: "/admin",
   },
-  {
-    title: "Quản lý chung",
-    icon: <FiList />,
-    path: "/generals",
-    submenu: [
-      {
-        title: "Danh mục sản phẩm",
-        path: "/generals/categoryProduct",
-        icon: <MdOutlineCategory />,
-      },
-      { title: "Nhà cung cấp", path: "/generals/supplier" },
-      { title: "Thương hiệu", path: "/generals/brand" },
-    ],
-  },
+  // {
+  //   title: "Quản lý chung",
+  //   icon: <FiList />,
+  //   path: "/generals",
+  //   submenu: [
+  //     {
+  //       title: "Danh mục sản phẩm",
+  //       path: "/generals/categoryProduct",
+  //       icon: <MdOutlineCategory />,
+  //     },
+  //     { title: "Nhà cung cấp", path: "/generals/supplier" },
+  //     { title: "Thương hiệu", path: "/generals/brand" },
+  //   ],
+  // },
   {
     title: "Quản lý người dùng",
-    icon: <FiUsers />,
+    icon: <UserCog />,
     path: "/users",
     submenu: [
       { title: "Danh sách người dùng", path: "/users/list" },
-      { title: "Thêm người dùng mới", path: "/users/new" },
+      // { title: "Thêm người dùng mới", path: "/users/new" },
       {
         title: "Phân quyền",
         path: "/users/permissions",
@@ -378,17 +380,17 @@ export const menuAdminItems = [
   },
   {
     title: "Thương hiệu",
-    icon: <FiBox />,
+    icon: <Bandage />,
     path: "/brands/list",
   },
   {
     title: "Nhà cung cấp",
-    icon: <FiBox />,
+    icon: <Users />,
     path: "/suppliers/list",
   },
   {
     title: "Danh mục sản phẩm",
-    icon: <FiBox />,
+    icon: <TextSearch />,
     path: "/categories/list",
   },
   {
@@ -398,28 +400,28 @@ export const menuAdminItems = [
   },
   {
     title: "Quản lý đơn hàng",
-    icon: <FiList />,
+    icon: <PackageSearch />,
     path: "/order-admin/list",
   },
   {
     title: "Sản phẩm",
-    icon: <FiBox />,
+    icon: <ChartGantt />,
     path: "/products/list",
   },
-  {
-    title: "Báo cáo",
-    icon: <FiBarChart2 />,
-    path: "/reports",
-    submenu: [
-      { title: "Doanh thu", path: "/reports/revenue" },
-      { title: "Khách hàng", path: "/reports/customers" },
-    ],
-  },
-  {
-    title: "Cài đặt",
-    icon: <FiSettings />,
-    path: "/settings",
-  },
+  // {
+  //   title: "Báo cáo",
+  //   icon: <FiBarChart2 />,
+  //   path: "/reports",
+  //   submenu: [
+  //     { title: "Doanh thu", path: "/reports/revenue" },
+  //     { title: "Khách hàng", path: "/reports/customers" },
+  //   ],
+  // },
+  // {
+  //   title: "Cài đặt",
+  //   icon: <FiSettings />,
+  //   path: "/settings",
+  // },
   {
     title: "Đăng xuất",
     icon: <FiLogOut />,

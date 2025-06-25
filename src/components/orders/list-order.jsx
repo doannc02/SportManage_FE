@@ -41,36 +41,38 @@ const ListOrder = ({
     },
   ] = useListOrders({ role: userRole });
 
-  const [isSmallerThanMd] = useMediaQuery("(max-width: 768px)"); // True if screen is md or smaller (tablet/mobile)
-  const [isSmallerThanSm] = useMediaQuery("(max-width: 480px)"); // True if screen is sm or smaller (mobile)
+  // const [isSmallerThanMd] = useMediaQuery("(max-width: 768px)");
+  // const [isSmallerThanSm] = useMediaQuery("(max-width: 480px)");
 
-  // Memoize responsive columns to avoid unnecessary re-renders
-  const responsiveColumns = useMemo(() => {
-    // Define which columns to show/hide based on screen size
-    // Adjust these 'accessorKey' values to match your actual column definitions
-    if (isSmallerThanSm) {
-      // For very small screens (e.g., mobile portrait), show only essential info
-      return columns.filter(
-        (col) =>
-          col.accessorKey === "code" || // Mã đơn hàng
-          col.accessorKey === "totalAmount" || // Tổng tiền
-          col.accessorKey === "state" || // Trạng thái
-          col.accessorKey === "actions" // Các hành động (xem chi tiết, đổi trạng thái)
-      );
-    } else if (isSmallerThanMd) {
-      // For medium screens (e.g., tablets), show a bit more
-      return columns.filter(
-        (col) =>
-          col.accessorKey === "code" ||
-          col.accessorKey === "customerName" || // Tên khách hàng (nếu có)
-          col.accessorKey === "totalAmount" ||
-          col.accessorKey === "createdAt" || // Ngày tạo
-          col.accessorKey === "state" ||
-          col.accessorKey === "actions"
-      );
-    }
-    return columns; // Full columns for larger screens
-  }, [columns, isSmallerThanMd, isSmallerThanSm]);
+  // // Memoize responsive columns to avoid unnecessary re-renders
+  // const responsiveColumns = useMemo(() => {
+  //   if (!columns || columns.length === 0) return [];
+
+  //   // Ensure columns have accessorKey defined and filter only visible columns
+  //   const hasColumn = (key) => columns.some((col) => col.accessorKey === key);
+
+  //   if (isSmallerThanSm) {
+  //     // Only include columns that actually exist
+  //     return columns.filter(
+  //       (col) =>
+  //         (col.accessorKey === "code" && hasColumn("code")) ||
+  //         (col.accessorKey === "totalAmount" && hasColumn("totalAmount")) ||
+  //         (col.accessorKey === "state" && hasColumn("state")) ||
+  //         (col.accessorKey === "actions" && hasColumn("actions"))
+  //     );
+  //   } else if (isSmallerThanMd) {
+  //     return columns.filter(
+  //       (col) =>
+  //         (col.accessorKey === "code" && hasColumn("code")) ||
+  //         (col.accessorKey === "customerName" && hasColumn("customerName")) ||
+  //         (col.accessorKey === "totalAmount" && hasColumn("totalAmount")) ||
+  //         (col.accessorKey === "createdAt" && hasColumn("createdAt")) ||
+  //         (col.accessorKey === "state" && hasColumn("state")) ||
+  //         (col.accessorKey === "actions" && hasColumn("actions"))
+  //     );
+  //   }
+  //   return columns;
+  // }, [columns, isSmallerThanMd, isSmallerThanSm]);
 
   return (
     <Container maxW={{ base: "100%", md: "100%", lg: "100%" }}>
@@ -170,7 +172,7 @@ const ListOrder = ({
         <Box>
           <CoreTable
             onChangePage={onChangePage}
-            columns={responsiveColumns}
+            columns={columns}
             paginationHidden={dataTable.length < 1}
             data={dataTable}
             onChangePageSize={onChangePageSize}

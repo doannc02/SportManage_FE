@@ -117,7 +117,7 @@ const SupplierListAdmin = () => {
     country:
       countiesCitiesEnums.find((i) => i.value === item?.country)?.label ||
       item?.countryId,
-
+    description: "",
     action: (
       <Button
         variant="outlined"
