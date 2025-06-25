@@ -1,12 +1,19 @@
 import {
   AlertCircle,
+  Bandage,
   Box,
+  ChartGantt,
   CheckCircle,
   Clock,
   Home,
+  LayoutDashboard,
   MapPin,
   Package,
+  PackageSearch,
+  TextSearch,
   Truck,
+  UserCog,
+  Users,
   XCircle,
 } from "lucide-react";
 import {
@@ -17,15 +24,10 @@ import {
 } from "react-icons/fa";
 import {
   FiHome,
-  FiUsers,
-  FiBox,
-  FiSettings,
-  FiBarChart2,
   FiList,
   FiGift,
   FiLogOut,
 } from "react-icons/fi";
-import { MdOutlineCategory } from "react-icons/md";
 export const DEFAULT_COLOR = "#319795";
 export const countiesCitiesEnums = [
   {
@@ -66,15 +68,24 @@ export const countiesCitiesEnums = [
 ];
 
 export const optionsReason = [
-  { value: "not_need", label: "Tôi không còn nhu cầu mua hàng nữa" },
-  { value: "not_on_time", label: "Người bán không xử lý đơn đúng hạn" },
-  { value: "product_problem", label: "Sản phẩm bị lỗi/hỏng hàng" },
-  { value: "found_cheaper", label: "Tôi tìm thấy giá tốt hơn ở nơi khác" },
-  { value: "change_address", label: "Tôi muốn thay đổi địa chỉ nhận hàng" },
-  { value: "ordered_by_mistake", label: "Tôi đặt nhầm sản phẩm/đơn hàng" },
-  { value: "seller_request", label: "Người bán yêu cầu hủy đơn hàng" },
-  { value: "out_of_stock", label: "Người bán hết hàng" },
-  { value: "long_delivery", label: "Thời gian giao hàng quá lâu" },
+  { value: "Tôi không còn nhu cầu mua hàng nữa", label: "Tôi không còn nhu cầu mua hàng nữa" },
+  { value: "Người bán không xử lý đơn đúng hạn", label: "Người bán không xử lý đơn đúng hạn" },
+  { value: "Sản phẩm bị lỗi/hỏng hàng", label: "Sản phẩm bị lỗi/hỏng hàng" },
+  { value: "Tôi tìm thấy giá tốt hơn ở nơi khác", label: "Tôi tìm thấy giá tốt hơn ở nơi khác" },
+  { value: "Tôi muốn thay đổi địa chỉ nhận hàng", label: "Tôi muốn thay đổi địa chỉ nhận hàng" },
+  { value: "ordered_by_mTôi đặt nhầm sản phẩm/đơn hàngistake", label: "Tôi đặt nhầm sản phẩm/đơn hàng" },
+  { value: "Người bán yêu cầu hủy đơn hàng", label: "Người bán yêu cầu hủy đơn hàng" },
+  { value: "Thời gian giao hàng quá lâu", label: "Thời gian giao hàng quá lâu" },
+  { value: "Lý do khác", label: "Lý do khác" },
+];
+
+export const optionsRejectReason = [
+  { value: "already_shipped", label: "Đơn hàng đã được gửi đi" },
+  { value: "processing", label: "Đơn hàng đang được xử lý, không thể hủy" },
+  {
+    value: "customized_product",
+    label: "Sản phẩm đã được cá nhân hóa/đặt riêng, không thể hủy",
+  },
   { value: "other", label: "Lý do khác" },
 ];
 
@@ -223,6 +234,20 @@ export const ORDER_STATES = {
     bgColor: "cyan.50",
     borderColor: "cyan.200",
   },
+  RequestCancel: {
+    label: "Yêu cầu hủy",
+    colorScheme: "red",
+    icon: XCircle,
+    bgColor: "red.50",
+    borderColor: "red.200",
+  },
+  Canceled: {
+    label: "Đã hủy",
+    colorScheme: "red",
+    icon: XCircle,
+    bgColor: "red.50",
+    borderColor: "red.200",
+  },
   Shipped: {
     label: "Đang giao",
     colorScheme: "purple",
@@ -236,20 +261,6 @@ export const ORDER_STATES = {
     icon: CheckCircle,
     bgColor: "green.50",
     borderColor: "green.200",
-  },
-  Canceled: {
-    label: "Đã hủy",
-    colorScheme: "red",
-    icon: XCircle,
-    bgColor: "red.50",
-    borderColor: "red.200",
-  },
-  RequestCancel: {
-    label: "Yêu cầu hủy",
-    colorScheme: "red",
-    icon: XCircle,
-    bgColor: "red.50",
-    borderColor: "red.200",
   },
 };
 
@@ -299,20 +310,20 @@ export const TimelineStatusEnum = [
     completed: false,
     disabled: false,
   },
-  {
-    status: "Canceled",
-    title: "Đã hủy",
-    description: "Bạn đã hủy đơn hàng này",
-    admin_description: "Đơn hàng đã bị hủy bởi khách hàng",
+   {
+    status: "RequestCancel",
+    title: "Yêu cầu hủy",
+    description: "Bạn đã gửi yêu cầu hủy đơn hàng này",
+    admin_description: "Đơn hàng đang chờ xử lý yêu cầu hủy",
     timestamp: null,
     completed: false,
     disabled: false,
   },
   {
-    status: "RequestCancel",
-    title: "Yêu cầu hủy",
-    description: "Bạn đã gửi yêu cầu hủy đơn hàng này",
-    admin_description: "Đơn hàng đang chờ xử lý yêu cầu hủy",
+    status: "Canceled",
+    title: "Đã hủy",
+    description: "Bạn đã hủy đơn hàng này",
+    admin_description: "Đơn hàng đã bị hủy bởi khách hàng",
     timestamp: null,
     completed: false,
     disabled: false,
@@ -336,30 +347,30 @@ export const LIST_ROLES = ["ADMIN", "SHIPPER", "CUSTOMER", "GUEST"];
 export const menuAdminItems = [
   {
     title: "Dashboard",
-    icon: <></>,
+    icon: <LayoutDashboard />,
     path: "/admin",
   },
-  {
-    title: "Quản lý chung",
-    icon: <FiList />,
-    path: "/generals",
-    submenu: [
-      {
-        title: "Danh mục sản phẩm",
-        path: "/generals/categoryProduct",
-        icon: <MdOutlineCategory />,
-      },
-      { title: "Nhà cung cấp", path: "/generals/supplier" },
-      { title: "Thương hiệu", path: "/generals/brand" },
-    ],
-  },
+  // {
+  //   title: "Quản lý chung",
+  //   icon: <FiList />,
+  //   path: "/generals",
+  //   submenu: [
+  //     {
+  //       title: "Danh mục sản phẩm",
+  //       path: "/generals/categoryProduct",
+  //       icon: <MdOutlineCategory />,
+  //     },
+  //     { title: "Nhà cung cấp", path: "/generals/supplier" },
+  //     { title: "Thương hiệu", path: "/generals/brand" },
+  //   ],
+  // },
   {
     title: "Quản lý người dùng",
-    icon: <FiUsers />,
+    icon: <UserCog />,
     path: "/users",
     submenu: [
       { title: "Danh sách người dùng", path: "/users/list" },
-      { title: "Thêm người dùng mới", path: "/users/new" },
+      // { title: "Thêm người dùng mới", path: "/users/new" },
       {
         title: "Phân quyền",
         path: "/users/permissions",
@@ -369,17 +380,17 @@ export const menuAdminItems = [
   },
   {
     title: "Thương hiệu",
-    icon: <FiBox />,
+    icon: <Bandage />,
     path: "/brands/list",
   },
   {
     title: "Nhà cung cấp",
-    icon: <FiBox />,
+    icon: <Users />,
     path: "/suppliers/list",
   },
   {
     title: "Danh mục sản phẩm",
-    icon: <FiBox />,
+    icon: <TextSearch />,
     path: "/categories/list",
   },
   {
@@ -389,28 +400,28 @@ export const menuAdminItems = [
   },
   {
     title: "Quản lý đơn hàng",
-    icon: <FiList />,
+    icon: <PackageSearch />,
     path: "/order-admin/list",
   },
   {
     title: "Sản phẩm",
-    icon: <FiBox />,
+    icon: <ChartGantt />,
     path: "/products/list",
   },
-  {
-    title: "Báo cáo",
-    icon: <FiBarChart2 />,
-    path: "/reports",
-    submenu: [
-      { title: "Doanh thu", path: "/reports/revenue" },
-      { title: "Khách hàng", path: "/reports/customers" },
-    ],
-  },
-  {
-    title: "Cài đặt",
-    icon: <FiSettings />,
-    path: "/settings",
-  },
+  // {
+  //   title: "Báo cáo",
+  //   icon: <FiBarChart2 />,
+  //   path: "/reports",
+  //   submenu: [
+  //     { title: "Doanh thu", path: "/reports/revenue" },
+  //     { title: "Khách hàng", path: "/reports/customers" },
+  //   ],
+  // },
+  // {
+  //   title: "Cài đặt",
+  //   icon: <FiSettings />,
+  //   path: "/settings",
+  // },
   {
     title: "Đăng xuất",
     icon: <FiLogOut />,

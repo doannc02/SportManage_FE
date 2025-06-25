@@ -3,9 +3,12 @@ import { lazy, Suspense } from 'react'; // Import lazy và Suspense
 
 import { getAppToken } from '../configs/token';
 import ProtectedRoute from './ProtectedRoute';
-import DashboardLayout from '../layouts/admin/DashBoardLayout';
-import UserLayout from '../layouts/user';
-import NotFoundPage from '../layouts/404_NotFound';
+
+// Layout
+const DashboardLayout = lazy(() => import('../layouts/admin/DashBoardLayout'));
+const UserLayout = lazy(() => import('../layouts/user'));
+const NotFoundPage = lazy(() => import('../layouts/404_NotFound'));
+const SuspenseLoading = lazy(() => import('../layouts/suspense-loading'));
 
 // Public Routes
 const Login = lazy(() => import('./Login'));
@@ -49,7 +52,7 @@ export default function AllRouter() {
   const isAdmin = tokenApp?.roles?.includes('Admin');
 
   return (
-    <Suspense fallback={<div>Loading...</div>}> {/* Fallback chung cho tất cả các route */}
+    <Suspense fallback={<SuspenseLoading/>}> {/* Fallback chung cho tất cả các route */}
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />

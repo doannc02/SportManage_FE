@@ -230,7 +230,6 @@ const useListOrders = ({ role = "user" }) => {
       id: item.id,
       customerName: item.customerName || "",
       description: item.notes || "- không có ghi chú -",
-      totalAmount: item?.total,
       discountAmount: item.discountAmount ?? "-",
       orderDate: item.orderDate
         ? new Date(item.orderDate).toLocaleString()

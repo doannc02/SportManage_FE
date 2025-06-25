@@ -83,7 +83,8 @@ export const putOrderState = async (
         newStatus,
         reason,
         shipperId,
-        imageConfirmed
+        imageConfirmed,
+        detailReason
     }
 ) => {
     const { data } = await authApi({
@@ -95,7 +96,8 @@ export const putOrderState = async (
             newStatus,
             reason,
             shipperId,
-            imageConfirmed
+            imageConfirmed,
+            detailReason
         }
     })
     return data
