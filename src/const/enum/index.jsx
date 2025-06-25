@@ -22,12 +22,7 @@ import {
   FaUserShield,
   FaWallet,
 } from "react-icons/fa";
-import {
-  FiHome,
-  FiList,
-  FiGift,
-  FiLogOut,
-} from "react-icons/fi";
+import { FiHome, FiList, FiGift, FiLogOut } from "react-icons/fi";
 export const DEFAULT_COLOR = "#319795";
 export const countiesCitiesEnums = [
   {
@@ -68,14 +63,35 @@ export const countiesCitiesEnums = [
 ];
 
 export const optionsReason = [
-  { value: "Tôi không còn nhu cầu mua hàng nữa", label: "Tôi không còn nhu cầu mua hàng nữa" },
-  { value: "Người bán không xử lý đơn đúng hạn", label: "Người bán không xử lý đơn đúng hạn" },
+  {
+    value: "Tôi không còn nhu cầu mua hàng nữa",
+    label: "Tôi không còn nhu cầu mua hàng nữa",
+  },
+  {
+    value: "Người bán không xử lý đơn đúng hạn",
+    label: "Người bán không xử lý đơn đúng hạn",
+  },
   { value: "Sản phẩm bị lỗi/hỏng hàng", label: "Sản phẩm bị lỗi/hỏng hàng" },
-  { value: "Tôi tìm thấy giá tốt hơn ở nơi khác", label: "Tôi tìm thấy giá tốt hơn ở nơi khác" },
-  { value: "Tôi muốn thay đổi địa chỉ nhận hàng", label: "Tôi muốn thay đổi địa chỉ nhận hàng" },
-  { value: "ordered_by_mTôi đặt nhầm sản phẩm/đơn hàngistake", label: "Tôi đặt nhầm sản phẩm/đơn hàng" },
-  { value: "Người bán yêu cầu hủy đơn hàng", label: "Người bán yêu cầu hủy đơn hàng" },
-  { value: "Thời gian giao hàng quá lâu", label: "Thời gian giao hàng quá lâu" },
+  {
+    value: "Tôi tìm thấy giá tốt hơn ở nơi khác",
+    label: "Tôi tìm thấy giá tốt hơn ở nơi khác",
+  },
+  {
+    value: "Tôi muốn thay đổi địa chỉ nhận hàng",
+    label: "Tôi muốn thay đổi địa chỉ nhận hàng",
+  },
+  {
+    value: "ordered_by_mTôi đặt nhầm sản phẩm/đơn hàngistake",
+    label: "Tôi đặt nhầm sản phẩm/đơn hàng",
+  },
+  {
+    value: "Người bán yêu cầu hủy đơn hàng",
+    label: "Người bán yêu cầu hủy đơn hàng",
+  },
+  {
+    value: "Thời gian giao hàng quá lâu",
+    label: "Thời gian giao hàng quá lâu",
+  },
   { value: "Lý do khác", label: "Lý do khác" },
 ];
 
@@ -310,7 +326,7 @@ export const TimelineStatusEnum = [
     completed: false,
     disabled: false,
   },
-   {
+  {
     status: "RequestCancel",
     title: "Yêu cầu hủy",
     description: "Bạn đã gửi yêu cầu hủy đơn hàng này",
