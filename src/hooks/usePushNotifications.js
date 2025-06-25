@@ -1,11 +1,10 @@
 // src/hooks/usePushNotifications.js
-import { getApp, initializeApp } from "firebase/app";
+import {  initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { useEffect } from "react";
 import { useState } from "react";
 import { authApi } from "../configs/auth";
 import { getAppTokenFcmServiceWorker, setAppTokenFcmServiceWorker } from "../configs/token";
-import { get } from "lodash";
 
 // CẤU HÌNH FIREBASE CỦA BẠN (Lấy từ Firebase Console > Project settings > Your apps > Web app)
 const firebaseConfig = {
