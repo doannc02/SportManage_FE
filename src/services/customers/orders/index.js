@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { authApi } from "../../../configs/auth";
+import { defaultOption } from "../../../configs/reactQuery";
 
 export const createOrderUser = async ({
   notes,
@@ -75,7 +76,7 @@ export const useQueryOrderDetail = ({ id }, options) => {
         id,
       }),
     {
-      // ...defaultOption,
+      ...defaultOption,
       ...options,
     }
   );
