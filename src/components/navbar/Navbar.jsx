@@ -1,5 +1,4 @@
 import { Box, Flex, Text, useDisclosure } from "@chakra-ui/react";
-import TopNav from "./TopNav";
 import Search from "./Search";
 import Acount from "./Acount";
 import Cart from "./Cart";
@@ -27,7 +26,8 @@ function Navbar() {
     e.preventDefault();
     navigate("/cartpage");
   }
-
+  console.log('user', user);
+  
   useEffect(() => {
     setNum(user.totalCartItems);
   }, [user.totalCartItems]);
@@ -60,6 +60,7 @@ function Navbar() {
             onOpen={onOpen}
             btnRef={btnRef}
             key={location.pathname} 
+            countItems={user?.totalCartItems}
           />
           <Popsearch />
         </Flex>

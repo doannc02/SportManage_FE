@@ -1,35 +1,47 @@
 import {
   Drawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  useDisclosure,
   Box,
   Flex,
-  Image,
   Text,
 } from "@chakra-ui/react";
-import { useRef } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { AiFillHome } from "react-icons/ai";
 import { Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { BaggageClaim, House, PackageCheck } from "lucide-react";
+import { Badge } from "antd";
+import { useLocation } from "react-router-dom";
+import { DEFAULT_COLOR } from "../../const/enum";
 
 // Move useDisclosure to a parent component (e.g., Layout) and pass as props to Navmenu
-function Navmenu({ isOpen, onOpen, onClose, btnRef }) {
+function Navmenu({ isOpen, onOpen, onClose, btnRef, countItems }) {
   const menuItems = [
-    { label: "Trang chủ", icon: <House strokeWidth={1} />, link:"/" },
-    { label: "Giỏ hàng", icon: <BaggageClaim strokeWidth={1} />, link:"/cartpage" },
-    { label: "Danh sách đơn hàng", icon: <PackageCheck strokeWidth={1} />, link:"/order" },
+    { label: "Trang chủ", icon: <House strokeWidth={1} />, link: "/" },
+    {
+      label: "Giỏ hàng",
+      icon: (
+        <Badge count={countItems}>
+          <BaggageClaim strokeWidth={1} />
+        </Badge>
+      ),
+      link: "/cartpage",
+    },
+    {
+      label: "Danh sách đơn hàng",
+      icon: <PackageCheck strokeWidth={1} />,
+      link: "/order",
+    },
   ];
+
+  const location = useLocation();
 
   return (
     <>
-      <Box ref={btnRef}  className="cursor-pointer" onClick={onOpen}>
+      <Box ref={btnRef} className="cursor-pointer" onClick={onOpen}>
         <RxHamburgerMenu />
       </Box>
       <Drawer
@@ -42,9 +54,15 @@ function Navmenu({ isOpen, onOpen, onClose, btnRef }) {
         <DrawerOverlay />
         <DrawerContent bg="white">
           <DrawerCloseButton mt={2} />
-          <DrawerHeader borderBottomWidth="1px" display="flex" alignItems="center" gap={2}>
-            <AiFillHome size={28} color="#3182CE" />
-            <Text fontWeight="bold" fontSize="xl" color="gray.700">SportManage</Text>
+          <DrawerHeader
+            borderBottomWidth="1px"
+            display="flex"
+            alignItems="center"
+            gap={2}
+          >
+            <Text fontWeight="bold" fontSize="xl" color="gray.700">
+              Badminton Store
+            </Text>
           </DrawerHeader>
           <DrawerBody p={0}>
             <Flex direction="column" gap={2} mt={4}>
@@ -57,8 +75,15 @@ function Navmenu({ isOpen, onOpen, onClose, btnRef }) {
                     leftIcon={item?.icon}
                     fontWeight="medium"
                     fontSize="md"
-                    color="gray.700"
-                    _hover={{ bg: "blue.50", color: "blue.600" }}
+                    color={
+                      location.pathname === item.link ? DEFAULT_COLOR : "gray.700"
+                    }
+                    bg={
+                      location.pathname === item.link
+                        ? "green.50"
+                        : "transparent"
+                    }
+                    _hover={{ bg: "green.50", color: DEFAULT_COLOR  }}
                   >
                     {item.label}
                   </Button>
@@ -66,34 +91,6 @@ function Navmenu({ isOpen, onOpen, onClose, btnRef }) {
               ))}
             </Flex>
           </DrawerBody>
-          {/* <DrawerFooter bg="#f9f9f9" borderTopWidth="1px">
-            <Flex
-              w="100%"
-              alignItems="center"
-              justifyContent="space-between"
-              py={2}
-            >
-              <Image
-                w="36px"
-                h="36px"
-                border="2px solid #3182CE"
-                borderRadius="full"
-                src="/logo192.png"
-                alt="Logo"
-                bg="white"
-              />
-              <Button
-                variant="link"
-                color="blue.500"
-                fontWeight="semibold"
-                fontSize="md"
-                textDecor="underline"
-                _hover={{ color: "blue.700" }}
-              >
-                Change Language
-              </Button>
-            </Flex>
-          </DrawerFooter> */}
         </DrawerContent>
       </Drawer>
     </>

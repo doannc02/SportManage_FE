@@ -19,30 +19,35 @@ const OrderTimelineAdmin = () => {
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const [isOpenRejectDialog, setIsOpenRejectDialog] = useState(false);
   const [newStatus, setNewStatus] = useState("");
-  const { data, refetch: refechOrder, isLoading:loadingDetail } = useQueryOrderDetail({ id: id });
+  const {
+    data,
+    refetch: refechOrder,
+    isLoading: loadingDetail,
+  } = useQueryOrderDetail({ id: id });
 
-  const { mutate: updateStatusMutation, isLoading:loadingStatus } = useMutation({
-    mutationFn: (data) => putOrderState(data),
-    onError: (error) => {
-      toast({
-        title: "Cập nhật thất bại",
-        description: error.message || "Có lỗi xảy ra khi cập nhật trạng thái",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    },
-    onSuccess: () => {
-      refechOrder();
-      toast({
-        title: `Cập nhật sang trạng thái ${newStatus} thành công`,
-        description: "Trạng thái đơn hàng đã được cập nhật",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    },
-  });
+  const { mutate: updateStatusMutation, isLoading: loadingStatus } =
+    useMutation({
+      mutationFn: (data) => putOrderState(data),
+      onError: (error) => {
+        toast({
+          title: "Cập nhật thất bại",
+          description: error.message || "Có lỗi xảy ra khi cập nhật trạng thái",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      },
+      onSuccess: () => {
+        refechOrder();
+        toast({
+          title: `Cập nhật sang trạng thái ${newStatus} thành công`,
+          description: "Trạng thái đơn hàng đã được cập nhật",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      },
+    });
   const getDisabled = (index, currentIndex, step) => {
     const currentStatus = data?.state;
 
@@ -50,15 +55,17 @@ const OrderTimelineAdmin = () => {
       return true;
     }
 
-    if (step.status === "Delivered") {
-      return true;
-    }
+    // if (step.status === "Delivered") {
+    //   return true;
+    // }
 
     if (currentStatus === "Processing") {
       if (step.status === "Shipped") return false;
       return true;
     }
-
+    if (currentStatus === "Shipped" && step.status === "Delivered") {
+      return false;
+    }
     if (currentStatus === "Confirmed" && step.status === "Processing") {
       return false;
     }

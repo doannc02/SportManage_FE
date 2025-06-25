@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { Box, Image, Heading, Stack } from "@chakra-ui/react";
+import { Box, Heading, Skeleton, Stack } from "@chakra-ui/react";
 import { UserContext } from "../../../Contexts/UserContext";
 import { useQueryProductsList } from "../../../services/customers/products";
-import { Checkbox, Divider, Empty, Spin } from "antd";
+import { Checkbox, Divider, Empty } from "antd";
 import useDetailProduct from "../../admin/products/detail/useDetail";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProductCard } from "../../../components/Home/main-product-list";
@@ -40,18 +40,10 @@ const ProductPage = () => {
     pageNumber: 0,
     pageSize: 20,
     keyword: search || undefined, // Truyền undefined nếu search rỗng
-    categoryIds: selectCategory.length > 0 ? selectCategory : undefined, // Chỉ truyền khi có category được chọn
+    categoryIds: selectCategory.length > 0 ? selectCategory : undefined,
   });
 
-  // if (isLoading) {
-  //   return (
-  //     <Image
-  //       m="auto"
-  //       mt="150px"
-  //       src="https://media.tenor.com/BtC0jVjzYToAAAAM/loading-chain.gif"
-  //     />
-  //   );
-  // }
+
 
   return (
     <>
@@ -102,36 +94,41 @@ const ProductPage = () => {
             </div>
           </Stack>
         </Box>
-        <Spin spinning={isLoading}>
-          {/* Phần danh sách sản phẩm */}
-          {(data?.items ?? []).length !== 0 ? (
-            <Box
-              w="80%"
-              mx="auto"
-              display="grid"
-              alignItems={"center"}
-              gridTemplateColumns={["1fr", "1fr 1fr", "repeat(4, 1fr)"]}
-              p={4}
-              gap={6}
-            >
-              {data?.items.map((el, index) => (
-                <ProductCard key={el.id ?? index} product={el} />
-              ))}
-            </Box>
+        {/* Phần danh sách sản phẩm */}
+        <Box
+          w="80%"
+          mx="auto"
+          display="grid"
+          alignItems={"center"}
+          gridTemplateColumns={["1fr", "1fr 1fr", "repeat(5, 1fr)"]}
+          p={4}
+          gap={6}
+        >
+          {isLoading ? (
+            Array.from({ length: data?.items?.length || 10 }).map((_, idx) => (
+              <Skeleton key={idx} height={{ base: "250px", md: "280px" }} />
+            ))
+          ) : (data?.items ?? []).length !== 0 ? (
+            data.items.map((el, index) => (
+              <ProductCard key={el.id ?? index} product={el} />
+            ))
           ) : (
             <Box
-              w="80%"
-              minH="100%"
+              w="100%"
+              minH="400px"
               display="flex"
               alignItems="center"
               justifyContent="center"
               p={4}
-              gap={6}
+              gridColumn="1 / -1"
             >
-              <Empty description={<span>Không có sản phẩm nào</span>} />
+              <Empty
+                className="flex flex-col items-center justify-center w-full h-full"
+                description={<span>Không có sản phẩm nào</span>}
+              />
             </Box>
           )}
-        </Spin>
+        </Box>
       </div>
     </>
   );
