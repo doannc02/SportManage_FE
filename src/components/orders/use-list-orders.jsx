@@ -229,8 +229,8 @@ const useListOrders = ({ role = "user" }) => {
     return (data?.items ?? []).map((item) => ({
       id: item.id,
       customerName: item.customerName || "",
-      description: item.notes || "- không có ghi chú -",
-      discountAmount: item.discountAmount ?? "-",
+      description: item?.notes || "- không có ghi chú -",
+      discountAmount: item?.discountAmount ?? "-",
       orderDate: item.orderDate
         ? new Date(item.orderDate).toLocaleString()
         : "-",
