@@ -1,7 +1,6 @@
 import { Box, Flex, Text, useToast, VStack } from "@chakra-ui/react";
-import { Button, Steps } from "antd";
-import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { Button, Spin, Steps } from "antd";
+import React, { useEffect, useState } from "react";
 import { useQueryOrderDetail } from "../../services/customers/orders";
 import { useParams } from "react-router-dom";
 import { TimelineStatusEnum } from "../../const/enum";
@@ -10,7 +9,6 @@ import StatusChangeDialog from "./state-change-dialog";
 import { useMutation } from "react-query";
 import { putOrderState } from "../../services/admins/orders";
 import RejectCancelDialogAdmin from "./reject-cancel-dialog-admin";
-
 // Timeline component
 const OrderTimelineAdmin = () => {
   const { id } = useParams();
@@ -21,13 +19,10 @@ const OrderTimelineAdmin = () => {
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const [isOpenRejectDialog, setIsOpenRejectDialog] = useState(false);
   const [newStatus, setNewStatus] = useState("");
-  const { data, refetch: refechOrder } = useQueryOrderDetail({ id: id });
+  const { data, refetch: refechOrder, isLoading:loadingDetail } = useQueryOrderDetail({ id: id });
 
-  const { mutate: updateStatusMutation } = useMutation({
-    mutationFn: (data) => {
-      putOrderState(data);
-      console.log("data in mutate", data);
-    },
+  const { mutate: updateStatusMutation, isLoading:loadingStatus } = useMutation({
+    mutationFn: (data) => putOrderState(data),
     onError: (error) => {
       toast({
         title: "Cập nhật thất bại",
@@ -40,7 +35,7 @@ const OrderTimelineAdmin = () => {
     onSuccess: () => {
       refechOrder();
       toast({
-        title: `Cập nhật  trạng thái  thành công`,
+        title: `Cập nhật sang trạng thái ${newStatus} thành công`,
         description: "Trạng thái đơn hàng đã được cập nhật",
         status: "success",
         duration: 3000,
@@ -82,7 +77,6 @@ const OrderTimelineAdmin = () => {
   const getTimeline = () => {
     const currentStatus = data?.state;
 
-    // Bước 1: Tạo danh sách đầy đủ có gắn timestamp
     let fullItems = TimelineStatusEnum.map((step) => {
       let timestamp = null;
       switch (step.status) {
@@ -111,7 +105,6 @@ const OrderTimelineAdmin = () => {
       return { ...step, timestamp };
     });
 
-    // Bước 2: Tùy trạng thái, lọc ra các bước cần hiển thị
     let filteredItems = [...fullItems];
     if (currentStatus === "Canceled" || currentStatus === "RequestCancel") {
       filteredItems = fullItems.filter(
@@ -123,13 +116,11 @@ const OrderTimelineAdmin = () => {
       );
     }
 
-    // ✅ Bước 3: Tìm lại currentIndex sau khi đã filter
     const currentIndex = filteredItems.findIndex(
       (step) => step.status === currentStatus
     );
     setCurrent(currentIndex);
 
-    // Bước 4: Đánh dấu completed và disabled
     const updated = filteredItems.map((step, index) => ({
       ...step,
       completed: index <= currentIndex,
@@ -149,7 +140,6 @@ const OrderTimelineAdmin = () => {
     setIsOpenDialog(true);
     setNewStatus("Canceled");
   };
-
   const onConfirmStatusChange = async () => {
     await updateStatusMutation({
       orderId: data.id,
@@ -168,18 +158,15 @@ const OrderTimelineAdmin = () => {
   useEffect(() => {
     getTimeline();
   }, [data?.state]);
+
   return (
-    <>
+    <Spin spinning={loadingDetail}>
       <VStack align="stretch" spacing={6}>
         <Box mb={4}>
           <Steps
             responsive
             current={current}
-            status={
-              data?.state === "Canceled" || data?.state === "RequestCancel"
-                ? "error"
-                : "process"
-            }
+            status={data?.state === "Canceled" ? "error" : "process"}
             onChange={onChange}
             items={statusTimeline.map((step) => ({
               title: step?.title,
@@ -229,20 +216,10 @@ const OrderTimelineAdmin = () => {
         onConfirm={onConfirmStatusChange}
         order={data}
         newStatus={newStatus}
+        isLoading={loadingStatus}
       />
-    </>
+    </Spin>
   );
 };
-OrderTimelineAdmin.propTypes = {
-  timeline: PropTypes.arrayOf(
-    PropTypes.shape({
-      status: PropTypes.string.isRequired,
-      completed: PropTypes.bool,
-      title: PropTypes.string,
-      description: PropTypes.string,
-      timestamp: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    })
-  ),
-};
 
-export default OrderTimelineAdmin;
+export default React.memo(OrderTimelineAdmin);
