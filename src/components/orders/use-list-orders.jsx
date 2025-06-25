@@ -160,6 +160,7 @@ const useListOrders = ({ role = "user" }) => {
     const baseColumns = [
       { header: "Mã đơn hàng", fieldName: "id" },
       { header: "Tên khách hàng", fieldName: "customerName" },
+      { header: "Tổng tiền", fieldName: "totalAmount" },
       { header: "Giảm giá", fieldName: "discountAmount" },
       { header: "Ngày đặt hàng", fieldName: "orderDate" },
       { header: "Tên người nhận", fieldName: "receiveName" },
@@ -229,6 +230,7 @@ const useListOrders = ({ role = "user" }) => {
       id: item.id,
       customerName: item.customerName || "",
       description: item.notes || "- không có ghi chú -",
+      totalAmount: item?.total,
       discountAmount: item.discountAmount ?? "-",
       orderDate: item.orderDate
         ? new Date(item.orderDate).toLocaleString()
