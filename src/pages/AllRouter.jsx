@@ -34,6 +34,7 @@ const CategoryAdmin = lazy(() => import('./admin/categories/detail'));
 const AddMultipleCategories = lazy(() => import('./admin/categories/add-multiple'));
 const ListOrderAdmin = lazy(() => import('./admin/orders/list'));
 const OrderDetailAdminPage = lazy(() => import('./admin/orders/detail'));
+const InvoiceAdminPage = lazy(() => import('./admin/orders/detail/invoice-admin-page'));
 const BrandsDetailAdmin = lazy(() => import('./admin/brands/detail'));
 const SuppliersDetailAdmin = lazy(() => import('./admin/suppliers/detail'));
 
@@ -102,6 +103,7 @@ export default function AllRouter() {
             <Route path="/order-admin" element={<DashboardLayout title='Order Manager' />}>
               <Route path='list' element={<ListOrderAdmin />} />
               <Route path='detail/:id' element={<OrderDetailAdminPage />} />
+              <Route path='detail/:id/invoice' element={<InvoiceAdminPage />} />
             </Route>
 
             <Route path="/users" element={<DashboardLayout title='User Manager' />}>

@@ -112,50 +112,18 @@ const OrderDetailUserPage = () => {
   );
   const finalAmount =
     data?.subTotal - (data?.discountAmount ? data?.discountAmount : 0);
+
   const getTimeline = () => {
-    let items = [];
-    let currentStatus = data?.state;
-    let isCompleted = true;
+    const currentStatus = data?.state;
 
-    for (const statusDraff of TimelineStatusEnum) {
-      items.push({
-        ...statusDraff,
-      });
-    }
-
-    if (currentStatus === "Canceled") {
-      const canceledStep = items.find((step) => step.status === "Canceled");
-      if (canceledStep) {
-        canceledStep.completed = isCompleted;
-        setStatusTimeline([canceledStep]);
-      } else {
-        setStatusTimeline([]);
-      }
-      return;
-    }
-    if (currentStatus === "RequestCancel") {
-      const canceledRequestStep = items.find(
-        (step) => step.status === "RequestCancel"
-      );
-      if (canceledRequestStep) {
-        canceledRequestStep.completed = isCompleted;
-        setStatusTimeline([canceledRequestStep]);
-      } else {
-        setStatusTimeline([]);
-      }
-      return;
-    }
-
-    if (currentStatus !== "Canceled") {
-      items = items.filter((obj) => obj?.status !== "Canceled");
-    }
-
-    // Gán lại biến timestamp vào từng bước trong TimelineStatusEnum
-    items = items.map((step) => {
+    let fullItems = TimelineStatusEnum.map((step) => {
       let timestamp = null;
       switch (step.status) {
         case "Pending":
           timestamp = data?.orderDate;
+          break;
+        case "Confirmed":
+          timestamp = data?.confirmedDate;
           break;
         case "Processing":
           timestamp = data?.preparingDate;
@@ -166,30 +134,37 @@ const OrderDetailUserPage = () => {
         case "Delivered":
           timestamp = data?.deliveredDate;
           break;
-        case "Canceled":
-          timestamp = data?.canceledDate;
-          break;
         case "RequestCancel":
           timestamp = data?.requestCancelDate;
           break;
-        default:
+        case "Canceled":
+          timestamp = data?.canceledDate;
           break;
       }
       return { ...step, timestamp };
     });
 
-    // Tìm vị trí (index) của trạng thái hiện tại
-    const currentIndex = items.findIndex(
+    let filteredItems = [...fullItems];
+    if (currentStatus === "Canceled" || currentStatus === "RequestCancel") {
+      filteredItems = fullItems.filter(
+        (step) => !["Shipped", "Delivered"].includes(step.status)
+      );
+    } else {
+      filteredItems = fullItems.filter(
+        (step) => !["RequestCancel", "Canceled"].includes(step.status)
+      );
+    }
+
+    const currentIndex = filteredItems.findIndex(
       (step) => step.status === currentStatus
     );
 
-    // Tạo danh sách các bước timeline, đánh dấu completed = true nếu nằm trước hoặc tại trạng thái hiện tại
-    const updatedSteps = items.map((step, index) => ({
+    const updated = filteredItems.map((step, index) => ({
       ...step,
       completed: index <= currentIndex,
     }));
 
-    setStatusTimeline(updatedSteps);
+    setStatusTimeline(updated);
   };
 
   const handleCopyOrderId = async () => {

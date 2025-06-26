@@ -34,8 +34,9 @@ import {
   MessageCircle,
   AlertCircle,
   QrCode,
+  BookmarkCheck,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQueryOrderDetail } from "../../../../services/customers/orders";
 import {
   ORDER_STATES,
@@ -45,11 +46,10 @@ import {
 import OrderItemUser from "../../../../components/orders/order-items-user";
 import OrderTimelineAdmin from "../../../../components/orders/order-timeline-admin";
 import LoadingOrderPageAdmin from "../../../../components/orders/loading-order-page-admin";
-
 const OrderDetailAdminPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const toast = useToast();
-
 
   const cardBg = useColorModeValue("white", "gray.800");
 
@@ -95,7 +95,6 @@ const OrderDetailAdminPage = () => {
     return date;
   };
 
-
   return (
     <>
       {isLoading ? (
@@ -105,13 +104,25 @@ const OrderDetailAdminPage = () => {
           {/* Header */}
           <Box bg={cardBg} borderBottom="1px" borderColor="gray.200">
             <Container maxW="9xl" py={4}>
-              <HStack spacing={4}>
-                <Box>
-                  <HStack align="flex-start" spacing={3}>
+              <HStack>
+                <Box w={"full"}>
+                  <HStack display={"flex"} justifyContent={"space-between"}>
                     <Heading size="lg" color="gray.900">
                       Thông tin giao hàng
                     </Heading>
+                    {data?.payment?.status === "Completed" && (
+                      <Button
+                        leftIcon={<BookmarkCheck size={16} />}
+                        variant="outline"
+                        onClick={() =>
+                          navigate(`/order-admin/detail/${id}/invoice`)
+                        }
+                      >
+                        Xem hóa đơn
+                      </Button>
+                    )}
                   </HStack>
+
                   <HStack align="flex-start" spacing={3}></HStack>
 
                   <HStack align="flex-start" spacing={3} mt={3}>
@@ -158,7 +169,7 @@ const OrderDetailAdminPage = () => {
 
           <Container maxW="9xl" py={8}>
             <VStack align="stretch">
-              { /* Order Status */ }
+              {/* Order Status */}
               <Card>
                 <CardHeader>
                   <Flex justify="space-between" align="center">
@@ -171,7 +182,9 @@ const OrderDetailAdminPage = () => {
                       borderRadius="full"
                     >
                       <HStack spacing={2}>
-                        {currentStatus?.icon && <currentStatus.icon size={16} />}
+                        {currentStatus?.icon && (
+                          <currentStatus.icon size={16} />
+                        )}
                         <Text fontWeight="medium">{currentStatus?.label}</Text>
                       </HStack>
                     </Badge>
