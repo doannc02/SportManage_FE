@@ -158,7 +158,7 @@ const OrderTimelineAdmin = () => {
   const onConfirmRejectCancel = async (payload) => {
     await updateStatusMutation({
       ...payload,
-      newStatus: "ReasonReject",
+      newStatus: "RejectCancel",
     });
     setIsOpenRejectDialog(false);
   };
