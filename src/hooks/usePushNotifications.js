@@ -5,15 +5,16 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { authApi } from "../configs/auth";
 import { getAppTokenFcmServiceWorker, setAppTokenFcmServiceWorker } from "../configs/token";
+import { VITE_API_KEY_FIREBASE, VITE_APP_ID, VITE_AUTH_DOMAIN, VITE_MESSAGING_SENDER_ID, VITE_PROJECT_ID, VITE_STORAGE_BUCKET } from "../configs/env";
 
 // CẤU HÌNH FIREBASE CỦA BẠN (Lấy từ Firebase Console > Project settings > Your apps > Web app)
 const firebaseConfig = {
-  apiKey: "AIzaSyAuFJebJP-M986h-lPgvImewYRJ4HI6diQ",
-  authDomain: "push-notifications-2d078.firebaseapp.com",
-  projectId: "push-notifications-2d078",
-  storageBucket: "push-notifications-2d078.firebasestorage.app",
-  messagingSenderId: "577231585474",
-  appId: "1:577231585474:web:6ab941d74dc6c6dccefb5b",
+  apiKey: VITE_API_KEY_FIREBASE,
+  authDomain: VITE_AUTH_DOMAIN,
+  projectId: VITE_PROJECT_ID,
+  storageBucket: VITE_STORAGE_BUCKET,
+  messagingSenderId: VITE_MESSAGING_SENDER_ID,
+  appId: VITE_APP_ID,
   // measurementId is not needed for Service Worker and can be omitted
   // measurementId: "G-P89F12HJD6"
 };

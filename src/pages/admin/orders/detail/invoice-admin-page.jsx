@@ -21,6 +21,7 @@ const InvoiceAdminPage = () => {
   );
   const navigate = useNavigate();
   const cardBg = useColorModeValue("white", "gray.800");
+  
   const handlePrintPDF = () => {
     const printContents = document.getElementById("print-area")?.innerHTML;
 
@@ -36,6 +37,17 @@ const InvoiceAdminPage = () => {
 
     window.location.reload();
   };
+  // Hàm tạo mã hóa đơn ngẫu nhiên gồm 10 chữ số
+  const generateInvoiceCode = () => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let code = "";
+    for (let i = 0; i < 10; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+  };
+  const invoiceCode = generateInvoiceCode();
+
   return (
     <Box
       display={"flex"}
@@ -166,10 +178,10 @@ const InvoiceAdminPage = () => {
                 </div>
                 <div>
                   <p className="text-[14px] leading-[21px] mb-[8px] text-[#43495A] text-right">
-                    {formatDate(data?.orderDate)}
+                    {formatDate(new Date())}
                   </p>
                   <p className="text-[14px] leading-[21px] mb-[8px] text-[#43495A] text-right">
-                    0458f94b-3b83-4c07
+                    {invoiceCode}
                   </p>
                   <p className="text-[14px] leading-[21px] mb-[8px] text-[#43495A] text-right">
                     {data?.subTotal.toLocaleString()} VNĐ

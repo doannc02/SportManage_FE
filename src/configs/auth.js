@@ -1,10 +1,10 @@
 import axios from "axios"
 import { requestAuth } from "./axios"
+import { VITE_API_BASE_URL, VITE_BASE_ADDRESS_URL } from "./env";
 
-//export const BASE_URL = "https://localhost:7174"
-export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+export const BASE_URL = VITE_API_BASE_URL;
 
-export const BASE_ADDRESS_URL = "https://esgoo.net"
+export const BASE_ADDRESS_URL = VITE_BASE_ADDRESS_URL
 
 
 export const authApi = (options) => {
