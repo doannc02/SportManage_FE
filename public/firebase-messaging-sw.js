@@ -1,20 +1,23 @@
 // firebase-messaging-sw.js
 // Đây là Service Worker của Firebase Cloud Messaging
 
-// Import scripts (quan trọng: sử dụng đường dẫn CDN của Firebase)
-// Thay đổi phiên bản Firebase nếu bạn đang dùng phiên bản khác
+import { VITE_API_KEY_FIREBASE, VITE_APP_ID, VITE_AUTH_DOMAIN, VITE_MESSAGING_SENDER_ID, VITE_PROJECT_ID, VITE_STORAGE_BUCKET } from "../src/configs/env";
+
+
+
 importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js');
 
-// Cấu hình Firebase App bên trong Service Worker
-// Sử dụng cùng một cấu hình với ứng dụng client của bạn
+
+
+
 const firebaseConfig = {
-    apiKey: "AIzaSyAuFJebJP-M986h-lPgvImewYRJ4HI6diQ",
-    authDomain: "push-notifications-2d078.firebaseapp.com",
-    projectId: "push-notifications-2d078",
-    storageBucket: "push-notifications-2d078.firebasestorage.app",
-    messagingSenderId: "577231585474",
-    appId: "1:577231585474:web:6ab941d74dc6c6dccefb5b",
+  apiKey: VITE_API_KEY_FIREBASE,
+  authDomain: VITE_AUTH_DOMAIN,
+  projectId: VITE_PROJECT_ID,
+  storageBucket: VITE_STORAGE_BUCKET,
+  messagingSenderId: VITE_MESSAGING_SENDER_ID,
+  appId: VITE_APP_ID,
 };
 
 // Khởi tạo Firebase
@@ -33,7 +36,6 @@ messaging.onBackgroundMessage((payload) => {
     console.log('[firebase-messaging-sw.js] Received background message:', payload);
 
     try {
-        // Kiểm tra xem payload có chứa đối tượng notification hay không
         if (payload.notification) {
             const notificationTitle = payload.notification.title || 'Thông báo mới (Không có tiêu đề)';
             const notificationBody = payload.notification.body || 'Nội dung trống.';
@@ -57,18 +59,13 @@ messaging.onBackgroundMessage((payload) => {
                 })
                 .catch(error => {
                     console.error('[firebase-messaging-sw.js] Error showing notification:', error);
-                    // Ghi log thêm chi tiết lỗi nếu có
                     if (error.name === 'TypeError') {
                         console.error('Possible cause: Icon path might be incorrect or missing.');
                     }
                 });
         } else {
             console.warn('[firebase-messaging-sw.js] Received background message without "notification" object in payload. Data:', payload.data);
-            // Nếu bạn muốn hiển thị thông báo từ dữ liệu tùy chỉnh, bạn cần tự xây dựng `notificationTitle` và `notificationOptions` từ `payload.data` ở đây.
-            // Ví dụ:
-            // const customTitle = payload.data.title || 'Thông báo từ dữ liệu';
-            // const customBody = payload.data.message || 'Nội dung từ dữ liệu.';
-            // self.registration.showNotification(customTitle, { body: customBody });
+
         }
     } catch (error) {
         console.error('[firebase-messaging-sw.js] Error processing background message payload:', error);

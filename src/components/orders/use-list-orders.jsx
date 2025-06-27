@@ -63,7 +63,6 @@ const useListOrders = ({ role = "user" }) => {
       setQueryPage((prev) => ({
         ...prev,
         keyWord: kw,
-        pageNumber: 0,
       }));
     }, 2000);
 
@@ -86,16 +85,16 @@ const useListOrders = ({ role = "user" }) => {
     setQueryPage((prev) => ({
       ...prev,
       pageSize: val.pageSize,
-      pageNumber: val.pageNumber,
+      pageNumber: val.pageNumber - 1,
     }));
   };
 
-  const onChangePage = (val) => {
-    setQueryPage((prev) => ({
-      ...prev,
-      pageNumber: val,
-    }));
-  };
+    const onChangePage = (event,val) => {
+        setQueryPage((prev) => ({
+            ...prev,
+            pageNumber: val - 1,
+        }));
+    };
 
   const onReset = () => {
     methodForm.reset(defaultValues);

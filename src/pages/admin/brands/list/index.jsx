@@ -57,14 +57,14 @@ const BrandListAdmin = () => {
     setQueryPage((prev) => ({
       ...prev,
       pageSize: val.pageSize,
-      pageNumber: val.pageNumber,
+      pageNumber: val.pageNumber - 1,
     }));
   }, []);
 
-  const onChangePage = useCallback((val) => {
+  const onChangePage = useCallback((event,val) => {
     setQueryPage((prev) => ({
       ...prev,
-      pageNumber: val,
+      pageNumber: val - 1,
     }));
   }, []);
 

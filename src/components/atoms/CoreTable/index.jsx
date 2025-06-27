@@ -135,6 +135,7 @@ const CoreTable = ({
   stickyHeader = false,
   tableHead,
   onChangePageSize,
+  onChangePage,
   onRowClick,
 }) => {
   const dataColumn = isShowColumnStt
@@ -251,9 +252,7 @@ return (
                     size={size ?? 20}
                     page={page ?? 1}
                     totalPages={totalPages ?? 1}
-                    onChangePagination={(val) =>
-                        onChangePageSize && onChangePageSize(val)
-                    }
+                    onChangePagination={onChangePage}
                 />
             </div>
         )}
@@ -278,6 +277,7 @@ CoreTable.propTypes = {
   tableHead: PropTypes.node,
   onChangePageSize: PropTypes.func,
   onRowClick: PropTypes.func,
+  onChangePage: PropTypes.func,
 };
 
 ExpandableRow.propTypes = {

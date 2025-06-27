@@ -81,7 +81,7 @@ const ListOrder = ({
           bg="white"
           boxShadow="md"
           borderRadius="lg"
-          p={{ base: 4, md: 6 }} // Adjust padding
+          p={{ base: 4, md: 6 }} 
           mb={8}
           textAlign="center"
         >
@@ -97,8 +97,8 @@ const ListOrder = ({
             {subtitle}
           </Text>
           <Text
-            fontSize={{ base: "sm", md: "md" }} // Adjust font size
-            mt={4} // Added margin-top for better spacing
+            fontSize={{ base: "sm", md: "md" }} 
+            mt={4} 
             gap={2}
             display="flex"
             cursor={"pointer"}
@@ -117,12 +117,10 @@ const ListOrder = ({
         bg="white"
         boxShadow="sm"
         borderRadius="lg"
-        // Adjusted padding for better fit on all screens
         px={{ base: 4, md: 8, lg: 10 }}
         py={{ base: 6, md: 8 }}
         mb={6}
       >
-        {/* Filter section: Stack vertically on small screens, horizontally on medium and up */}
         <Flex
           mb={4}
           gap={4}

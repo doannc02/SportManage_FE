@@ -32,7 +32,7 @@ const useListVouchers = () => {
             setQueryPage((prev) => ({
                 ...prev,
                 keyword: kw,
-                pageNumber: 0,
+                // pageNumber: 0,
             }));
         }, 2000);
 
@@ -47,14 +47,14 @@ const useListVouchers = () => {
         setQueryPage((prev) => ({
             ...prev,
             pageSize: val.pageSize,
-            pageNumber: val.pageNumber,
+            pageNumber: val.pageNumber - 1,
         }));
     };
 
-    const onChangePage = (val) => {
+    const onChangePage = (event,val) => {
         setQueryPage((prev) => ({
             ...prev,
-            pageNumber: val,
+            pageNumber: val - 1,
         }));
     };
 

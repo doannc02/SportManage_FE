@@ -81,7 +81,7 @@ export const optionsReason = [
     label: "Tôi muốn thay đổi địa chỉ nhận hàng",
   },
   {
-    value: "ordered_by_mTôi đặt nhầm sản phẩm/đơn hàngistake",
+    value: "Tôi đặt nhầm sản phẩm/đơn hàng",
     label: "Tôi đặt nhầm sản phẩm/đơn hàng",
   },
   {

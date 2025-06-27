@@ -1,61 +1,58 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft'
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
-import {
-  Box,
-  Pagination,
-  PaginationItem,
-  Typography,
-} from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import CoreInput from '../CoreInput'
-import { toastError } from '../../../helpers/toast'
-import { Select } from '@chakra-ui/react'
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import { Box, Pagination, PaginationItem, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import CoreInput from "../CoreInput";
+import { toastError } from "../../../helpers/toast";
+import { Select } from "@chakra-ui/react";
 // import PropTypes from 'prop-types'
 
 const CoreTablePagination = (props) => {
-  const { page, size, totalPages, onChangePagination } = props
-  const [rowPerPages, setRowPerPages] = useState(size ?? 10)
-  const [currentPage, setCurrentPage] = useState(Number(page + 1) ?? 1)
+  const { page, size, totalPages, onChangePagination } = props;
+  const [rowPerPages, setRowPerPages] = useState(size ?? 10);
+  const [currentPage, setCurrentPage] = useState(() =>
+    typeof page === "number" ? page + 1 : 1
+  );
 
-  const pageSizeOptions = [10, 20, 50, 100]
+  const pageSizeOptions = [10, 20, 50, 100];
 
-  console.log(page, size, totalPages, currentPage, rowPerPages, 'logzzz')
 
   const { control, getValues, setValue } = useForm({
     defaultValues: {
       jump_to_page: Number(page + 1) ?? null,
     },
-  })
+  });
 
   useEffect(() => {
-    setValue('jump_to_page', currentPage)
-  }, [currentPage])
+    setValue("jump_to_page", currentPage);
+  }, [currentPage]);
 
   useEffect(() => {
-    setCurrentPage(page ? page + 1 : 1)
-  }, [page])
+    setCurrentPage(page ? page + 1 : 1);
+  }, [page]);
 
   useEffect(() => {
     if (size) {
-      setRowPerPages(size)
+      setRowPerPages(size);
     }
-  }, [size])
+  }, [size]);
 
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        width: "100%",
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "center",
+        justifyContent: "space-between",
         flex: 1,
         gap: 2,
         marginTop: 2.5,
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant='body2'>Trang số</Typography>
         <Select
           value={rowPerPages}
@@ -75,18 +72,19 @@ const CoreTablePagination = (props) => {
             </option>
           ))}
         </Select>
-      </Box>
-      <Box>
+      </Box> */}
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Pagination
-          color='primary'
-          onChange={(e, value) => {
-            setCurrentPage(value)
-            onChangePagination({
-              size: rowPerPages,
-              page: value - 1,
-            })
-          }}
-          siblingCount={1}
+          color="primary"
+          onChange={onChangePagination}
+          // siblingCount={1}
           page={currentPage ?? 1}
           count={totalPages}
           showFirstButton
@@ -100,11 +98,11 @@ const CoreTablePagination = (props) => {
                 }}
                 {...item}
               />
-            )
+            );
           }}
         />
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography sx={{ paddingRight: 2 }} variant='body2'>
           Nhảy tới trang
         </Typography>
@@ -137,9 +135,9 @@ const CoreTablePagination = (props) => {
             },
           }}
         />
-      </Box>
+      </Box> */}
     </Box>
-  )
-}
+  );
+};
 
-export default React.memo(CoreTablePagination)
+export default React.memo(CoreTablePagination);

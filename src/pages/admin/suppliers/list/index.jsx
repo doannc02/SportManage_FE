@@ -49,7 +49,7 @@ const SupplierListAdmin = () => {
       setQueryPage((prev) => ({
         ...prev,
         keyword: kw,
-        pageNumber: 0,
+        // pageNumber: 0,
       }));
     }, 800);
     debounceFn(keyword);
@@ -60,21 +60,21 @@ const SupplierListAdmin = () => {
     setQueryPage((prev) => ({
       ...prev,
       pageSize: val.pageSize,
-      pageNumber: val.pageNumber,
+      pageNumber: val.pageNumber - 1,
     }));
   }, []);
 
-  const onChangePage = useCallback((val) => {
+  const onChangePage = useCallback((event,val) => {
     setQueryPage((prev) => ({
       ...prev,
-      pageNumber: val,
+      pageNumber: val - 1,
     }));
   }, []);
 
-  const onReset = useCallback(() => {
-    methodForm.reset(defaultValues);
-    setQueryPage(_.omitBy(defaultValues, _.isNil));
-  }, [methodForm]);
+  // const onReset = useCallback(() => {
+  //   methodForm.reset(defaultValues);
+  //   setQueryPage(_.omitBy(defaultValues, _.isNil));
+  // }, [methodForm]);
 
   const handleOpenDialog = useCallback((id, name) => {
     setSelectedSupplier({ id, name });

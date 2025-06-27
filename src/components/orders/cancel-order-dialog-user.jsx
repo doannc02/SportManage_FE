@@ -33,7 +33,7 @@ const CancelOrderDialog = ({
   const methodForm = useForm({
     defaultValues: {
       orderId: "",
-      reason: "not_need",
+      reason: "",
       date: formatOffsetDateTime(Date.now()),
       detailReason: "",
     },
@@ -44,7 +44,7 @@ const CancelOrderDialog = ({
     if (order) {
       reset({
         orderId: order.id,
-        reason: "not_need",
+        reason: "",
         date: formatOffsetDateTime(Date.now()),
         detailReason: "",
       });
@@ -107,9 +107,11 @@ const CancelOrderDialog = ({
             {/* Lý do hủy */}
             <CoreAutoComplete
               control={control}
+              required
               name="reason"
               label="Lý do hủy"
               options={optionsReason}
+              rules={{ required: "Vui lòng chọn lý do hủy đơn hàng" }}
               placeholder="Chọn lý do hủy đơn hàng"
             />
             <CoreInput
