@@ -3,14 +3,13 @@ import { useForm } from "react-hook-form"
 import { deleteProduct, useQueryProductsList } from "../../../../services/customers/products";
 import _ from "lodash";
 import { Button, Tooltip } from "@mui/material";
-import { BASE_URL } from "../../../../configs/auth";
 import { Box } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const defaultValues = {
     pageNumber: 0,
-    pageSize: 20,
+    pageSize: 7,
     keyword: "",
 };
 
@@ -30,7 +29,6 @@ const useListProduct = () => {
             setQueryPage((prev) => ({
                 ...prev,
                 keyword: kw,
-                pageNumber: 0,
             }));
         }, 2000);
 
@@ -45,14 +43,14 @@ const useListProduct = () => {
         setQueryPage((prev) => ({
             ...prev,
             pageSize: val.pageSize,
-            pageNumber: val.pageNumber,
+            pageNumber: val.pageNumber - 1,
         }));
     };
 
-    const onChangePage = (val) => {
+    const onChangePage = (event,val) => {
         setQueryPage((prev) => ({
             ...prev,
-            pageNumber: val,
+            pageNumber: val - 1,
         }));
     };
 
@@ -97,7 +95,8 @@ const useListProduct = () => {
     ], []);
 
     const { data, isLoading, refetch } = useQueryProductsList({ ...queryPage });
-
+    console.log(queryPage);
+    
     const dataTable = (data?.items ?? []).map((item) => ({
         id: item.id,
         image: (item?.images && item.images.length > 0)
