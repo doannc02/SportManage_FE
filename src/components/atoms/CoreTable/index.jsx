@@ -136,6 +136,7 @@ const CoreTable = ({
   tableHead,
   onChangePageSize,
   onChangePage,
+  onChangeJumpToPage,
   onRowClick,
 }) => {
   const dataColumn = isShowColumnStt
@@ -253,6 +254,8 @@ return (
                     page={page ?? 1}
                     totalPages={totalPages ?? 1}
                     onChangePagination={onChangePage}
+                    onChangePageSize={onChangePageSize}
+                    onChangeJumpToPage={onChangeJumpToPage}
                 />
             </div>
         )}
@@ -278,6 +281,7 @@ CoreTable.propTypes = {
   onChangePageSize: PropTypes.func,
   onRowClick: PropTypes.func,
   onChangePage: PropTypes.func,
+  onChangeJumpToPage: PropTypes.func,
 };
 
 ExpandableRow.propTypes = {

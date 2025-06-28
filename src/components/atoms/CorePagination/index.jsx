@@ -10,7 +10,7 @@ import { Select } from "@chakra-ui/react";
 // import PropTypes from 'prop-types'
 
 const CoreTablePagination = (props) => {
-  const { page, size, totalPages, onChangePagination } = props;
+  const { page, size, totalPages, onChangePagination, onChangePageSize, onChangeJumpToPage } = props;
   const [rowPerPages, setRowPerPages] = useState(size ?? 10);
   const [currentPage, setCurrentPage] = useState(() =>
     typeof page === "number" ? page + 1 : 1
@@ -52,15 +52,11 @@ const CoreTablePagination = (props) => {
         marginTop: 2.5,
       }}
     >
-      {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Typography variant='body2'>Trang số</Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant='body2'>Số trang</Typography>
         <Select
           value={rowPerPages}
-          onChange={(e) => {
-            const selectedSize = parseInt(e.target.value, 10)
-            setRowPerPages(selectedSize)
-            onChangePagination({ page: 0, size: selectedSize })
-          }}
+          onChange={onChangePageSize}
           width="90px"
           height="35px"
           fontSize="sm"
@@ -72,14 +68,14 @@ const CoreTablePagination = (props) => {
             </option>
           ))}
         </Select>
-      </Box> */}
+      </Box>
       <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+        // sx={{
+        //   width: "100%",
+        //   display: "flex",
+        //   alignItems: "center",
+        //   justifyContent: "center",
+        // }}
       >
         <Pagination
           color="primary"
@@ -102,7 +98,7 @@ const CoreTablePagination = (props) => {
           }}
         />
       </Box>
-      {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography sx={{ paddingRight: 2 }} variant='body2'>
           Nhảy tới trang
         </Typography>
@@ -115,11 +111,8 @@ const CoreTablePagination = (props) => {
             if (ev.key === 'Enter') {
               const toPage = getValues('jump_to_page')
               if (toPage <= totalPages && toPage > 0) {
-                onChangePagination({
-                  size: rowPerPages,
-                  page: toPage - 1,
-                })
-                setCurrentPage(toPage)
+                onChangeJumpToPage(toPage - 1)
+                setCurrentPage(toPage)                
               } else {
                 toastError('Trang không tồn tại')
               }
@@ -135,7 +128,7 @@ const CoreTablePagination = (props) => {
             },
           }}
         />
-      </Box> */}
+      </Box>
     </Box>
   );
 };

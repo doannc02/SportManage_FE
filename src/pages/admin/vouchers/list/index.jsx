@@ -20,6 +20,7 @@ const VoucherListAdmin = () => {
         handleConfirmDelete,
         onChangePage,
         onChangePageSize,
+        onChangeJumpToPage,
         navigate
     }] = useListVouchers();
 
@@ -46,6 +47,7 @@ const VoucherListAdmin = () => {
 
             <GridItem colSpan={12} mt={4}>
                 <CoreTable
+                onChangeJumpToPage={onChangeJumpToPage}
                     onChangePage={onChangePage}
                     columns={columns}
                     paginationHidden={dataTable.length < 1}

@@ -109,8 +109,8 @@ const UserListAdmin = () => {
   const onChangePageSize = useCallback((val) => {
     setQueryPage((prev) => ({
       ...prev,
-      pageSize: val.pageSize,
-      pageNumber: val.pageNumber - 1,
+      pageSize: val.target.value,
+      pageNumber: 0,
     }));
   }, []);
 
@@ -121,6 +121,12 @@ const UserListAdmin = () => {
     }));
   }, []);
 
+  const onChangeJumpToPage = (val) => {
+    setQueryPage((prev) => ({
+      ...prev,
+      pageNumber: val,
+    }));
+  };
   const handleOpenDialog = useCallback((userId, name) => {
     setSelectedUser({ id: userId, name });
     setOpenDialog(true);
@@ -241,6 +247,7 @@ const UserListAdmin = () => {
       </GridItem>
       <GridItem colSpan={12} mt={4}>
         <CoreTable
+        onChangeJumpToPage={onChangeJumpToPage}
           onChangePage={onChangePage}
           columns={columns}
           paginationHidden={dataTable.length < 1}

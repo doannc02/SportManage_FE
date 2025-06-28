@@ -84,18 +84,24 @@ const useListOrders = ({ role = "user" }) => {
   const onChangePageSize = (val) => {
     setQueryPage((prev) => ({
       ...prev,
-      pageSize: val.pageSize,
-      pageNumber: val.pageNumber - 1,
+      pageSize: val.target.value,
+      pageNumber: 0,
     }));
   };
 
-    const onChangePage = (event,val) => {
-        setQueryPage((prev) => ({
-            ...prev,
-            pageNumber: val - 1,
-        }));
-    };
+  const onChangePage = (event, val) => {
+    setQueryPage((prev) => ({
+      ...prev,
+      pageNumber: val - 1,
+    }));
+  };
 
+  const onChangeJumpToPage = (val) => {
+    setQueryPage((prev) => ({
+      ...prev,
+      pageNumber: val,
+    }));
+  };
   const onReset = () => {
     methodForm.reset(defaultValues);
     setQueryPage(_.omitBy(defaultValues, _.isNil));
@@ -270,6 +276,7 @@ const useListOrders = ({ role = "user" }) => {
       navigate,
       onChangePage,
       onChangePageSize,
+      onChangeJumpToPage,
       onReset,
       setQueryPage,
       // Dialog actions

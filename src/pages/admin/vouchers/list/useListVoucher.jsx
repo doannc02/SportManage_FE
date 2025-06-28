@@ -46,8 +46,8 @@ const useListVouchers = () => {
     const onChangePageSize = (val) => {
         setQueryPage((prev) => ({
             ...prev,
-            pageSize: val.pageSize,
-            pageNumber: val.pageNumber - 1,
+      pageSize: val.target.value,
+      pageNumber: 0,
         }));
     };
 
@@ -55,6 +55,12 @@ const useListVouchers = () => {
         setQueryPage((prev) => ({
             ...prev,
             pageNumber: val - 1,
+        }));
+    };
+    const onChangeJumpToPage = (val) => {
+        setQueryPage((prev) => ({
+        ...prev,
+        pageNumber: val,
         }));
     };
 
@@ -155,6 +161,7 @@ const useListVouchers = () => {
         handleOpenDialog,
         onChangePage,
         onChangePageSize,
+        onChangeJumpToPage,
         onReset,
     }];
 };
