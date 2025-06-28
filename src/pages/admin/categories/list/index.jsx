@@ -59,17 +59,24 @@ const CategoryListAdmin = () => {
   const onChangePageSize = useCallback((val) => {
     setQueryPage((prev) => ({
       ...prev,
-      pageSize: val.pageSize,
-      pageNumber: val.pageNumber - 1,
+      pageSize: val.target.value,
+      pageNumber: 0,
     }));
   }, []);
 
-  const onChangePage = useCallback((event,val) => {
+  const onChangePage = useCallback((event, val) => {
     setQueryPage((prev) => ({
       ...prev,
       pageNumber: val - 1,
     }));
   }, []);
+
+  const onChangeJumpToPage = (val) => {
+    setQueryPage((prev) => ({
+      ...prev,
+      pageNumber: val,
+    }));
+  };
 
   // const onReset = useCallback(() => {
   //   methodForm.reset(defaultValues);
@@ -113,12 +120,7 @@ const CategoryListAdmin = () => {
   const dataTable = (data?.items ?? []).map((item) => ({
     ...item,
     logo: item?.logo ? (
-      <Avatar
-        src={`${item.logo}`}
-        size="xl"
-        borderRadius="md"
-        bg="gray.100"
-      />
+      <Avatar src={`${item.logo}`} size="xl" borderRadius="md" bg="gray.100" />
     ) : null,
     description: "",
     createdAt: new Date(item.createdAt).toLocaleString(),
@@ -157,6 +159,7 @@ const CategoryListAdmin = () => {
 
       <GridItem colSpan={12} mt={4}>
         <CoreTable
+          onChangeJumpToPage={onChangeJumpToPage}
           onChangePage={onChangePage}
           columns={columns}
           paginationHidden={dataTable.length < 1}

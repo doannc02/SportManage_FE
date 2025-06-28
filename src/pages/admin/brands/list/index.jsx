@@ -56,8 +56,8 @@ const BrandListAdmin = () => {
   const onChangePageSize = useCallback((val) => {
     setQueryPage((prev) => ({
       ...prev,
-      pageSize: val.pageSize,
-      pageNumber: val.pageNumber - 1,
+      pageSize: val.target.value,
+      pageNumber: 0,
     }));
   }, []);
 
@@ -68,6 +68,12 @@ const BrandListAdmin = () => {
     }));
   }, []);
 
+    const onChangeJumpToPage = (val) => {
+    setQueryPage((prev) => ({
+      ...prev,
+      pageNumber: val,
+    }));
+  };
   const handleOpenDialog = useCallback((brandId, name) => {
     setSelectedBrand({ id: brandId, name });
     setOpenDialog(true);
@@ -158,6 +164,7 @@ const BrandListAdmin = () => {
 
       <GridItem colSpan={12} mt={4}>
         <CoreTable
+          onChangeJumpToPage={onChangeJumpToPage}
           onChangePage={onChangePage}
           columns={columns}
           paginationHidden={dataTable.length < 1}

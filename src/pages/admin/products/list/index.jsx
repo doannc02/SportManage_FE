@@ -36,6 +36,7 @@ const ProductListAdmin = () => {
       handleConfirmDelete,
       onChangePage,
       onChangePageSize,
+      onChangeJumpToPage,
       navigate,
     },
   ] = useListProduct();
@@ -66,6 +67,7 @@ const ProductListAdmin = () => {
 
       <GridItem colSpan={12} mt={4}>
         <CoreTable
+        onChangeJumpToPage={onChangeJumpToPage}
           onChangePage={onChangePage}
           columns={columns}
           paginationHidden={dataTable.length < 1}

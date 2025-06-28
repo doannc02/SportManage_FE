@@ -59,8 +59,8 @@ const SupplierListAdmin = () => {
   const onChangePageSize = useCallback((val) => {
     setQueryPage((prev) => ({
       ...prev,
-      pageSize: val.pageSize,
-      pageNumber: val.pageNumber - 1,
+      pageSize: val.target.value,
+      pageNumber: 0,
     }));
   }, []);
 
@@ -71,6 +71,12 @@ const SupplierListAdmin = () => {
     }));
   }, []);
 
+    const onChangeJumpToPage = (val) => {
+    setQueryPage((prev) => ({
+      ...prev,
+      pageNumber: val,
+    }));
+  };
   // const onReset = useCallback(() => {
   //   methodForm.reset(defaultValues);
   //   setQueryPage(_.omitBy(defaultValues, _.isNil));
@@ -153,6 +159,7 @@ const SupplierListAdmin = () => {
 
       <GridItem colSpan={12} mt={4}>
         <CoreTable
+          onChangeJumpToPage={onChangeJumpToPage}
           onChangePage={onChangePage}
           columns={columns}
           paginationHidden={dataTable.length < 1}

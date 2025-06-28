@@ -32,6 +32,7 @@ const ListOrder = ({
     {
       onChangePage,
       onChangePageSize,
+      onChangeJumpToPage,
       navigate,
       onReset,
       // Dialog actions
@@ -81,7 +82,7 @@ const ListOrder = ({
           bg="white"
           boxShadow="md"
           borderRadius="lg"
-          p={{ base: 4, md: 6 }} 
+          p={{ base: 4, md: 6 }}
           mb={8}
           textAlign="center"
         >
@@ -97,8 +98,8 @@ const ListOrder = ({
             {subtitle}
           </Text>
           <Text
-            fontSize={{ base: "sm", md: "md" }} 
-            mt={4} 
+            fontSize={{ base: "sm", md: "md" }}
+            mt={4}
             gap={2}
             display="flex"
             cursor={"pointer"}
@@ -169,6 +170,7 @@ const ListOrder = ({
         {/* CoreTable will display responsively based on the columns passed */}
         <Box>
           <CoreTable
+            onChangeJumpToPage={onChangeJumpToPage}
             onChangePage={onChangePage}
             columns={columns}
             paginationHidden={dataTable.length < 1}
