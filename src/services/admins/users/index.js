@@ -131,3 +131,21 @@ export const updateUserRoles = async ({
     })
     return data
 };
+
+
+export const getCustomerCurrent = async () => {
+    const { data } = await authApi({
+        method: 'get',
+        url: `/api/customers/current`,
+    })
+    return data
+}
+
+export const useQueryCustomerCurrent = (
+    options
+) => {
+    return useQuery(['/api/customers/current'], () => getCustomerCurrent(), {
+        // ...defaultOption,
+        ...options,
+    })
+}

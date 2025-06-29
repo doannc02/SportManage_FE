@@ -46,6 +46,7 @@ const UserOrderList = lazy(() => import('./user/order/list'));
 const OrderDetailUserPage = lazy(() => import('./user/order/detail'));
 const ProductDetails = lazy(() => import('./user/product/detail'));
 const ProductPage = lazy(() => import('./user/product/product-page'));
+const CustomerProfile = lazy(() => import('./user/customer-profile'));
 
 
 export default function AllRouter() {
@@ -128,6 +129,7 @@ export default function AllRouter() {
             <Route path="order" element={<UserOrderList />} />
             <Route path="cartpage" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
             <Route path="creditcardform" element={<ProtectedRoute><CreditCardForm /></ProtectedRoute>} />
+            <Route path="customer-profile" element={<ProtectedRoute><CustomerProfile /></ProtectedRoute>} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         )}

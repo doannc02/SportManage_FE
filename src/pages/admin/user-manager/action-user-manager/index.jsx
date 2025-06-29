@@ -186,6 +186,7 @@ const UserDetailAdmin = () => {
                                 name='userName'
                                 label='Tên người dùng'
                                 placeholder='Nhập tên người dùng'
+                                disabled={id ? true : false}
                                 required
                                 rules={{ required: "Trường này là bắt buộc!" }}
                             />
@@ -198,6 +199,7 @@ const UserDetailAdmin = () => {
                                     label='Email'
                                     placeholder='Nhập email'
                                     required
+                                    disabled={id ? true : false}
                                     type="email"
                                     rules={{
                                         required: "Trường này là bắt buộc!",
@@ -216,6 +218,7 @@ const UserDetailAdmin = () => {
                                     label='Số điện thoại'
                                     placeholder='Nhập số điện thoại'
                                     required
+                                    disabled={id ? true : false}
                                     rules={{ required: "Trường này là bắt buộc!" }}
                                 />
                             </GridItem>
@@ -230,6 +233,7 @@ const UserDetailAdmin = () => {
                                     control={control}
                                     valuePath="value"
                                     required
+                                    disabled={id ? true : false}
                                     rules={{ required: "Trường này là bắt buộc!" }}
                                     name='gender'
                                     label='Giới tính'
@@ -244,6 +248,7 @@ const UserDetailAdmin = () => {
                                     label='Tuổi'
                                     placeholder='Nhập tuổi'
                                     type="number"
+                                    disabled={id ? true : false}
                                     rules={{
                                         required: "Trường này là bắt buộc!",
                                         min: {
@@ -264,6 +269,7 @@ const UserDetailAdmin = () => {
                                     name='password'
                                     label='Mật khẩu'
                                     placeholder='Nhập mật khẩu'
+                                    disabled={id ? true : false}
                                     type="password"
                                     rules={{
                                         required: !id ? "Trường này là bắt buộc!" : false
@@ -278,6 +284,7 @@ const UserDetailAdmin = () => {
                                     label='Địa chỉ nhà'
                                     placeholder='Nhập địa chỉ nhà'
                                     required
+                                    disabled={id ? true : false}
                                     rules={{ required: "Trường này là bắt buộc!" }}
                                 />
                             </GridItem>
