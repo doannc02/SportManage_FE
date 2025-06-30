@@ -6,6 +6,7 @@ import ShippingAddressModal from "../../../components/shared/dialog/dialog-add-s
 import CustomerAddressForm from "../../../components/customer/customer-profile/customer-address-form";
 import { ConfigProvider, Tabs } from "antd";
 import useCustomerProfile from "./use-customer-profile";
+import { FormProvider } from "react-hook-form";
 
 function CustomerProfile() {
   const [
@@ -15,7 +16,7 @@ function CustomerProfile() {
       isOpenShippingModal,
       columnShippingAddresses,
       shippingAddressFields,
-      control,
+      methodForm,
     },
     {
       navigate,
@@ -34,7 +35,6 @@ function CustomerProfile() {
       label: "",
       children: (
         <CustomerInformationForm
-          control={control}
           isLoadingSubmit={isLoadingSubmit}
         />
       ),
@@ -88,33 +88,40 @@ function CustomerProfile() {
           Trở về trang chủ
         </Text>
       </Box>
-      <form onSubmit={onSubmit}>
-        <ConfigProvider
-          theme={{
-            token: {
-              colorPrimary: DEFAULT_COLOR,
-            },
-          }}
-        >
-          <Tabs defaultActiveKey="1" items={itemsTabs} />
-        </ConfigProvider>
+      <FormProvider {...methodForm}>
+        <form onSubmit={onSubmit}>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: DEFAULT_COLOR,
+              },
+            }}
+          >
+            <Tabs defaultActiveKey="1" items={itemsTabs} />
+          </ConfigProvider>
 
-        <GridItem colSpan={12} mt={6}>
-          <Box display="flex" justifyContent="center">
-            <Button
-              isLoading={isLoadingSubmit}
-              colorScheme="teal"
-              size="lg"
-              type="submit"
+          <GridItem colSpan={12} mt={6}>
+            <Box display="flex" justifyContent="center">
+              <Button
+                isLoading={isLoadingSubmit}
+                colorScheme="teal"
+                size="lg"
+                type="submit"
+              >
+                Cập nhật thông tin
+              </Button>
+            </Box>
+            <Text
+              mt={2}
+              textAlign={"center"}
+              fontStyle="italic"
+              color="orange.500"
             >
-              Cập nhật thông tin
-            </Button>
-          </Box>
-          <Text mt={2} textAlign={"center"} fontStyle="italic" color="orange.500">
-           (*) Vui lòng điền đẩy đủ thông tin trước khi gửi
-          </Text>
-        </GridItem>
-      </form>
+              (*) Vui lòng điền đẩy đủ thông tin trước khi gửi
+            </Text>
+          </GridItem>
+        </form>
+      </FormProvider>
 
       {/* Modal for adding shipping address */}
       <ShippingAddressModal
@@ -138,8 +145,6 @@ function CustomerProfile() {
   );
 }
 export default CustomerProfile;
-
-
 
 // const CustomerProfile = () => {
 //   return (

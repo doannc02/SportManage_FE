@@ -1,10 +1,23 @@
-import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  Grid,
+  GridItem,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import CoreInput from "../../atoms/CoreInput";
 import CoreAutoComplete from "../../atoms/CoreAutoComplete";
 import PropTypes from "prop-types";
+import { MultiImageUploader } from "../../atoms/ImageUploader";
+import { useFormContext } from "react-hook-form";
+const CustomerInformationForm = () => {
+  // const { control, avatarValue } = props;
+  const { control, watch, setValue, getValues } = useFormContext();
+  const avatarValue = watch("avatarUrl");
 
-const CustomerInformationForm = (props) => {
-  const { control } = props;
   return (
     <>
       <Box
@@ -20,6 +33,47 @@ const CustomerInformationForm = (props) => {
       <Grid templateColumns="repeat(12, 1fr)" gap={4} mb={6}>
         <>
           {" "}
+          <GridItem colSpan={[12, 12]}>
+            <Stack spacing={4}>
+              <Text fontSize="sm" fontWeight="500">
+                Ảnh đại diện
+              </Text>
+
+              {avatarValue ? (
+                <Flex direction="column" gap={3}>
+                  <Flex align="center" gap={3}>
+                    <Avatar
+                      src={`${avatarValue}`}
+                      size="xl"
+                      borderRadius="md"
+                      bg="gray.100"
+                    />
+                    <Stack spacing={2}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setValue("avatarUrl", "")}
+                      >
+                        Xóa ảnh đại diện
+                      </Button>
+                    </Stack>
+                  </Flex>
+                </Flex>
+              ) : (
+                <Box>
+                  <MultiImageUploader
+                    name="avatarUrl"
+                    label=""
+                    height="45px"
+                    hideLabel
+                    defaultValue={getValues(`avatarUrl`)}
+                    onChange={(urls) => setValue(`avatarUrl`, urls[0])}
+                    maxFiles={1}
+                  />
+                </Box>
+              )}
+            </Stack>
+          </GridItem>
           <GridItem colSpan={[6, 6, 4]}>
             <CoreInput
               readOnly

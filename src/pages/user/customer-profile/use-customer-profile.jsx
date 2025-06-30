@@ -1,5 +1,5 @@
 import { Radio, useDisclosure, useToast } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
+import { startTransition, useEffect, useMemo, useState } from "react";
 import {
   saveUser,
   useQueryCustomerCurrent,
@@ -21,7 +21,18 @@ const useCustomerProfile = () => {
 
   // State to track the default address ID
   const [defaultAddressId, setDefaultAddressId] = useState("");
-  const { data: detailData, refetch } = useQueryCustomerCurrent();
+  const [shouldFetch, setShouldFetch] = useState(false);
+
+  useEffect(() => {
+    startTransition(() => {
+      setShouldFetch(true);
+    });
+  }, []);
+
+
+  const { data: detailData, refetch } = useQueryCustomerCurrent({
+    enabled: shouldFetch, // <-- ngăn query chạy trong lần render đầu
+  });
 
   const { mutate, isLoading: isLoadingSubmit } = useMutation(saveUser, {
     onError: (err) =>
@@ -72,32 +83,31 @@ const useCustomerProfile = () => {
     []
   );
 
-// Main form submission
-const onSubmit = handleSubmit((input) => {
+  // Main form submission
+  const onSubmit = handleSubmit((input) => {
     const updatedShippingAddresses =
-        input.shippingAddresses?.map((addr) => ({
-            ...addr,
-            isDefault: addr.id === defaultAddressId,
-        })) || [];
+      input.shippingAddresses?.map((addr) => ({
+        ...addr,
+        isDefault: addr.id === defaultAddressId,
+      })) || [];
 
     // Kiểm tra ConfirmPassWord trong input thay vì methodForm.getValues
     if (!input.ConfirmPassWord || input.ConfirmPassWord.trim() === "") {
-        toast({
-            title: "Có lỗi xảy ra",
-            description: "Vui lòng xác nhận mật khẩu trước khi gửi form",
-            status: "error",
-        });
-        return; // Prevent form submission if ConfirmPassWord is empty
+      toast({
+        title: "Có lỗi xảy ra",
+        description: "Vui lòng xác nhận mật khẩu trước khi gửi form",
+        status: "error",
+      });
+      return; // Prevent form submission if ConfirmPassWord is empty
     }
 
     const formData = {
-        ...input,
-        shippingAddresses: updatedShippingAddresses,
+      ...input,
+      shippingAddresses: updatedShippingAddresses,
     };
 
     mutate({ input: formData, method: "put" });
-});
-
+  });
 
   const setAddressAsDefault = (addressId) => {
     setDefaultAddressId(addressId);
@@ -162,6 +172,7 @@ const onSubmit = handleSubmit((input) => {
       columnShippingAddresses,
       shippingAddressFields,
       control,
+      methodForm
     },
     {
       navigate,
