@@ -16,6 +16,8 @@ import { saveUser } from "../services/admins/users";
 import CoreInput from "../components/atoms/CoreInput";
 import { useForm, Controller } from "react-hook-form";
 import CoreAutoComplete from "../components/atoms/CoreAutoComplete";
+import { DEFAULT_COLOR } from "../const/enum";
+import { upperCase } from "lodash";
 
 const genderOptions = [
   { label: "Male", value: "Male" },
@@ -31,7 +33,7 @@ const defaultValues = {
   age: "",
   phone: "",
   address: "",
-}
+};
 export default function Register() {
   const toast = useToast();
   const navigate = useNavigate();
@@ -43,7 +45,7 @@ export default function Register() {
     formState: { isSubmitting },
     reset,
   } = useForm({
-    defaultValues
+    defaultValues,
   });
 
   const { mutate, isLoading } = useMutation(saveUser, {
@@ -57,7 +59,6 @@ export default function Register() {
       });
       reset(defaultValues);
       navigate("/login");
-
     },
     onError: (error) => {
       toast({
@@ -89,14 +90,18 @@ export default function Register() {
     >
       <Stack spacing={5} mx={"auto"} maxW={"lg"} w="100%">
         <Box
-          rounded={"lg"}
+          rounded={"2xl"}
           bg={useColorModeValue("white", "gray.700")}
           boxShadow={"lg"}
           p={8}
         >
           <Stack spacing={4}>
-            <Heading fontSize="2xl" textAlign="center" mb={2}>
-              Register Account
+            <Heading
+              fontWeight={350}
+              fontSize={{ base: "xl", md: "3xl" }}
+              fontFamily={"mono"}
+            >
+              Đăng ký tài khoản mới
             </Heading>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing={5}>
@@ -114,10 +119,10 @@ export default function Register() {
                   placeholder="Enter your email"
                   type="email"
                   rules={{
-                    required: "Email is required",
+                    required: "Trường này là bắt buộc",
                     pattern: {
                       value: /^\S+@\S+$/i,
-                      message: "Invalid email address",
+                      message: "Nhập email hợp lệ",
                     },
                   }}
                 />
@@ -127,15 +132,15 @@ export default function Register() {
                   label="Password"
                   placeholder="Enter your password"
                   type="password"
-                  rules={{ required: "Password is required" }}
+                  rules={{ required: "Trường này là bắt buộc" }}
                 />
                 <CoreAutoComplete
                   control={control}
                   name="gender"
-                  label="Gender"
+                  label="Giới tính"
                   options={genderOptions}
-                  placeholder="Select gender"
-                  rules={{ required: "Gender is required" }}
+                  placeholder="Chọn giới tính"
+                  rules={{ required: "Trường này là bắt buộc" }}
                 />
                 <CoreInput
                   control={control}
@@ -148,8 +153,8 @@ export default function Register() {
                     min: { value: 0, message: "Age must be at least 0" },
                     max: {
                       value: 100,
-                      message: "Tuổi không hợp lệ"
-                    }
+                      message: "Tuổi không hợp lệ",
+                    },
                   }}
                 />
                 <CoreInput
@@ -157,41 +162,45 @@ export default function Register() {
                   name="phone"
                   label="Phone"
                   placeholder="Enter your phone number"
-                  rules={{ required: "Phone is required" }}
+                  rules={{ required: "Trường này là bắt buộc" }}
                 />
                 <CoreInput
                   control={control}
                   name="address"
-                  label="Address"
+                  label="Địa chỉ"
                   placeholder="Enter your address"
-                  rules={{ required: "Address is required" }}
+                  rules={{ required: "Trường này là bắt buộc" }}
                 />
                 <Button
                   type="submit"
-                  fontWeight="600"
-                  bgColor="black"
-                  color="white"
-                  borderRadius="0"
-                  _hover={{ bg: "cyan.500" }}
+                  rounded={"xl"}
+                  bgColor={"#a2dbda"}
+                  fontSize={"md"}
+                  color={DEFAULT_COLOR}
+                  variant={"outline"}
+                  size={"lg"}
                   isLoading={isLoading || isSubmitting}
-                  loadingText="Registering..."
+                  loadingText="Đang đăng ký..."
                   mt={2}
                 >
-                  SIGN UP
+                  ĐĂNG KÝ
                 </Button>
               </Stack>
             </form>
             <Stack pt={6}>
               <Text align={"center"}>
-                Already a user?{" "}
+                Đã có tài khoản?{" "}
                 <Link to="/login">
-                  <Text as="span" color={"blue.400"}>Login</Text>
+                  <Text
+                    as="span"
+                    color={"blue.400"}
+                    _hover={{
+                      textDecoration: "underline",
+                    }}
+                  >
+                    Đăng nhập tại đây
+                  </Text>
                 </Link>
-              </Text>
-              <Text align={"center"} fontSize="sm" color="gray.500">
-                By proceeding, you are confirming that you agree to our{" "}
-                <strong>Terms and Conditions</strong> and{" "}
-                <strong>Privacy Policy</strong>
               </Text>
             </Stack>
           </Stack>

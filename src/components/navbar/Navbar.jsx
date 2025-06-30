@@ -6,9 +6,16 @@ import Navmenu from "./Navmenu";
 import Popsearch from "./Popsearch";
 // import { Link } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
-import { useContext, useEffect, useRef, useState } from "react";
+import {
+  startTransition,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import OrderPopover from "./order-popover";
+import CustomerPopover from "./customer-popver";
 
 function Navbar() {
   const cartRef = useRef();
@@ -26,8 +33,12 @@ function Navbar() {
     e.preventDefault();
     navigate("/cartpage");
   }
-  console.log('user', user);
-  
+
+  const navigateCustomerProfile = () => {
+    startTransition(() => {
+      navigate("/customer-profile");
+    });
+  };
   useEffect(() => {
     setNum(user.totalCartItems);
   }, [user.totalCartItems]);
@@ -59,7 +70,7 @@ function Navbar() {
             onClose={onClose}
             onOpen={onOpen}
             btnRef={btnRef}
-            key={location.pathname} 
+            key={location.pathname}
             countItems={user?.totalCartItems}
           />
           <Popsearch />
@@ -106,6 +117,13 @@ function Navbar() {
           <Search />
         </Box>
         <Flex alignItems="center" gap={6}>
+          <Box
+            as="span"
+            onClick={navigateCustomerProfile}
+            cursor="pointer"
+          >
+            <CustomerPopover />
+          </Box>
           <Box as="span" onClick={handleCartClick} cursor="pointer">
             <Cart ref={cartRef} num={num} />
           </Box>

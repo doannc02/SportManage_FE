@@ -6,6 +6,7 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  Image,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,45 +17,48 @@ import { postLogin } from "../services/auth/login";
 import { setAppToken } from "../configs/token";
 import { UserContext } from "../Contexts/UserContext";
 import { toastError, toastSuccess } from "../helpers/toast";
+import { Images } from "../asserts/images";
+import { DEFAULT_COLOR } from "../const/enum";
+
 // import jwt from "jsonwebtoken";
 export default function Login() {
-
   const { setUser } = useContext(UserContext);
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(false);
   const { control, handleSubmit } = useForm({
-    username: '',
-    password: ''
-  })
-
+    username: "",
+    password: "",
+  });
 
   const onSubmit = handleSubmit(async (data) => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const res = await postLogin(data.username, data.password)
+      const res = await postLogin(data.username, data.password);
+      console.log(res, 'res');
+      
       if (res.accessToken) {
-        setAppToken(res)
+        setAppToken(res);
         setUser({
           status: true,
           username: res.username,
           roles: res?.roles ?? [],
           totalCartItems: res?.totalCartItems,
-        })
-        toastSuccess("Đăng nhập thành công!")
-        if (res.roles.includes('Admin')) {
-          window.location.replace("/admin")
-          return
+        });
+        toastSuccess("Đăng nhập thành công!");
+        if (res.roles.includes("Admin")) {
+          window.location.replace("/admin");
+          return;
         }
-        window.location.replace("/")
+        window.location.replace("/");
       }
     } catch (error) {
-      console.error("Đăng nhập lỗi:", error)
-      toastError("Đăng nhập thất bại!")
+      console.error("Đăng nhập lỗi:", error);
+      toastError("Đăng nhập thất bại!");
       // Hiển thị lỗi cho người dùng nếu cần
       //alert("Lỗi đăng nhập. Vui lòng thử lại sau.")
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  })
+  });
 
   // const logingin = async () => {
   //   setLoading(true);
@@ -83,33 +87,65 @@ export default function Login() {
   // };
 
   return (
-    <form onSubmit={onSubmit} >
+    <form onSubmit={onSubmit}>
       <Flex
         minH={"100vh"}
         align={"center"}
         justify={"center"}
         bg={useColorModeValue("gray.50", "gray.800")}
+        direction={{ base: "column", md: "row" }}
+        px={4}
       >
-        <Stack spacing={5} mx={"auto"} maxW={"lg"} w="100%">
+        <Stack
+          spacing={5}
+          mx={"auto"}
+          maxW={"lg"}
+          w={{ base: "100%", md: "50%" }}
+          flex={1}
+          justify="center"
+          order={{ base: 1, md: 2 }}
+        >
           <Stack align={"center"}>
-            <Heading fontWeight={350} fontSize={"4xl"}>
-              WELCOME!
+            <Image src={Images.logo} w={150} h={150} />
+            <Heading
+              fontWeight={350}
+              fontSize={{ base: "xl", md: "3xl" }}
+              fontFamily={"mono"}
+            >
+              WELCOME TO BADMINTON STORE
             </Heading>
           </Stack>
           <Box
-            rounded={"lg"}
+            rounded={"2xl"}
             bg={useColorModeValue("white", "gray.700")}
             boxShadow={"lg"}
-            p={8}
+            px={8}
+            py={10}
+            mx={3}
           >
             <Stack spacing={4}>
-
-              <CoreInput label='username' required variant='outlined' rules={{
-                required: "Trường này không được để trống!"
-              }} control={control} name='username' />
-              <CoreInput sx={{ marginTop: '30px' }} variant='outlined' rules={{
-                required: "Trường này không được để trống!",
-              }} required label='password' type='password' control={control} name='password' />
+              <CoreInput
+                label="User Name"
+                required
+                variant="outlined"
+                rules={{
+                  required: "Trường này không được để trống!",
+                }}
+                control={control}
+                name="username"
+              />
+              <CoreInput
+                sx={{ marginTop: "30px" }}
+                variant="outlined"
+                rules={{
+                  required: "Trường này không được để trống!",
+                }}
+                required
+                label="Password"
+                type="password"
+                control={control}
+                name="password"
+              />
 
               <Stack spacing={10}>
                 <Stack
@@ -118,26 +154,38 @@ export default function Login() {
                   justify={"space-between"}
                 >
                   <Link to="/register">
-                    <Text color={"blue.400"}> New Customer?</Text>
+                    <Text
+                      color={"blue.400"}
+                      _hover={{
+                        textDecoration: "underline",
+                      }}
+                    >
+                      Đăng ký tài khoản mới
+                    </Text>
                   </Link>
-                  <Link to="/ForgotPass" >
-                    <Text color={"blue.400"}>Forgot Password?</Text>
+                  <Link to="/ForgotPass">
+                    <Text
+                      color={"blue.400"}
+                      _hover={{
+                        textDecoration: "underline",
+                      }}
+                    >
+                      Quên mật khẩu
+                    </Text>
                   </Link>
                 </Stack>
                 <Button
-                  type="submmit"
-                  //onClick={handleLogin}
-                  fontWeight="600"
-                  bgColor="black"
-                  color="white"
-                  borderRadius="0"
-                  _hover={{
-                    bg: "cyan.500",
-                  }}
+                  type="submit"
                   isLoading={isLoading}
-                  loadingText="Loging in..."
+                  loadingText="Đang đăng nhập..."
+                  rounded={"xl"}
+                  bgColor={"#a2dbda"}
+                  fontSize={"md"}
+                  color={DEFAULT_COLOR}
+                  variant={"outline"}
+                  size={"lg"}
                 >
-                  LOGIN
+                  ĐĂNG NHẬP
                 </Button>
               </Stack>
             </Stack>

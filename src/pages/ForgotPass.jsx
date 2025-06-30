@@ -7,12 +7,14 @@ import {
   Heading,
   Input,
   Stack,
+  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
+import { DEFAULT_COLOR } from "../const/enum";
 
 export default function ForgotPass() {
   const [otp, setOtp] = useState("");
@@ -76,24 +78,37 @@ export default function ForgotPass() {
         >
           <Stack spacing={4}>
             <FormControl id="otp">
-              <FormLabel>Please Enter Your Email id :-</FormLabel>
+              <FormLabel>Vui lòng nhập email của bạn</FormLabel>
               <Input type="text" onChange={(e) => setOtp(e.target.value)} />
             </FormControl>
             <Stack spacing={10}>
               <Button
                 onClick={handleLogin}
-                fontWeight="500"
-                bgColor="black"
-                color="white"
-                borderRadius="0"
-                _hover={{
-                  bg: "cyan.500",
-                }}
+                rounded={"xl"}
+                bgColor={"#a2dbda"}
+                fontSize={"md"}
+                color={DEFAULT_COLOR}
+                variant={"outline"}
+                size={"lg"}
                 isLoading={loading}
                 loadingText="Verifying..."
               >
-                Enter
+                Submit
               </Button>
+              <Text align={"center"}>
+                Sau khi gửi hoàn tất,{" "}
+                <Link to="/login">
+                  <Text
+                    as="span"
+                    color={"blue.400"}
+                    _hover={{
+                      textDecoration: "underline",
+                    }}
+                  >
+                    đăng nhập tại đây
+                  </Text>
+                </Link>
+              </Text>
             </Stack>
           </Stack>
         </Box>

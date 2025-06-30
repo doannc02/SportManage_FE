@@ -8,6 +8,8 @@ import {
   Box,
   Flex,
   Text,
+  Stack,
+  Image,
 } from "@chakra-ui/react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Button } from "@chakra-ui/react";
@@ -16,6 +18,7 @@ import { BaggageClaim, House, PackageCheck } from "lucide-react";
 import { Badge } from "antd";
 import { useLocation } from "react-router-dom";
 import { DEFAULT_COLOR } from "../../const/enum";
+import { Images } from "../../asserts/images";
 
 // Move useDisclosure to a parent component (e.g., Layout) and pass as props to Navmenu
 function Navmenu({ isOpen, onOpen, onClose, btnRef, countItems }) {
@@ -58,11 +61,10 @@ function Navmenu({ isOpen, onOpen, onClose, btnRef, countItems }) {
             borderBottomWidth="1px"
             display="flex"
             alignItems="center"
+            justifyContent={"center"}
             gap={2}
           >
-            <Text fontWeight="bold" fontSize="xl" color="gray.700">
-              Badminton Store
-            </Text>
+            <Image src={Images.logo} className="h-20 w-20" />
           </DrawerHeader>
           <DrawerBody p={0}>
             <Flex direction="column" gap={2} mt={4}>
