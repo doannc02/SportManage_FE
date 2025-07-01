@@ -1,5 +1,11 @@
 import { Radio, useDisclosure, useToast } from "@chakra-ui/react";
-import { startTransition, useEffect, useMemo, useState } from "react";
+import {
+  startTransition,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   saveUser,
   useQueryCustomerCurrent,
@@ -21,7 +27,21 @@ const useCustomerProfile = () => {
 
   // State to track the default address ID
   const [defaultAddressId, setDefaultAddressId] = useState("");
+
   const [shouldFetch, setShouldFetch] = useState(false);
+
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleOpenDialog = useCallback(() => {
+    setOpenDialog(true);
+  }, []);
+
+  const handleCloseDialog = useCallback(() => {
+    setOpenDialog(false);
+  }, []);
+  const { data: detailData, refetch: refetchDetail } = useQueryCustomerCurrent({
+    enabled: shouldFetch, // <-- ngăn query chạy trong lần render đầu
+  });
 
   useEffect(() => {
     startTransition(() => {
@@ -29,16 +49,11 @@ const useCustomerProfile = () => {
     });
   }, []);
 
-
-  const { data: detailData, refetch } = useQueryCustomerCurrent({
-    enabled: shouldFetch, // <-- ngăn query chạy trong lần render đầu
-  });
-
   const { mutate, isLoading: isLoadingSubmit } = useMutation(saveUser, {
     onError: (err) =>
       toast({ title: "Lỗi", description: err.message, status: "error" }),
     onSuccess: () => {
-      refetch();
+      refetchDetail();
       toast({
         title: "Thành công",
         description: "Chỉnh sửa thành công!",
@@ -107,6 +122,7 @@ const useCustomerProfile = () => {
     };
 
     mutate({ input: formData, method: "put" });
+    handleCloseDialog();
   });
 
   const setAddressAsDefault = (addressId) => {
@@ -172,7 +188,9 @@ const useCustomerProfile = () => {
       columnShippingAddresses,
       shippingAddressFields,
       control,
-      methodForm
+      methodForm,
+      detailData,
+      openDialog,
     },
     {
       navigate,
@@ -182,6 +200,9 @@ const useCustomerProfile = () => {
       onSubmit,
       setValue,
       setDefaultAddressId,
+      refetchDetail,
+      handleOpenDialog,
+      handleCloseDialog
     },
   ];
 };

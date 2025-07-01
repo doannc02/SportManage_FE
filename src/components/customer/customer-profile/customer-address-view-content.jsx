@@ -1,14 +1,18 @@
-import { Box, Button, GridItem, Text } from "@chakra-ui/react";
+import { Box, GridItem, Text } from "@chakra-ui/react";
 import CoreTable from "../../atoms/CoreTable";
 import PropTypes from "prop-types";
+import React from "react";
 
-const CustomerAddressForm = (props) => {
-  
-    const {onOpenShippingModal, shippingAddressFields, columnShippingAddresses, dataTableShippingAddresses} = props
+const CustomerAddressViewContent = (props) => {
+  const {
+    shippingAddressFields,
+    columnShippingAddresses,
+    dataTableShippingAddresses,
+  } = props;
   return (
     <>
       {/* Shipping addresses section */}
-      <GridItem colSpan={12} mt={6}>
+      <GridItem colSpan={12} mt={2}>
         <Box
           display="flex"
           justifyContent="space-between"
@@ -18,9 +22,6 @@ const CustomerAddressForm = (props) => {
           <Text fontSize="lg" fontWeight="bold">
             Địa chỉ giao hàng
           </Text>
-          <Button colorScheme="blue" onClick={onOpenShippingModal}>
-            + Thêm địa chỉ giao hàng
-          </Button>
         </Box>
 
         {shippingAddressFields.length > 0 ? (
@@ -35,17 +36,12 @@ const CustomerAddressForm = (props) => {
           </Box>
         )}
       </GridItem>
-
-
-      
     </>
   );
 };
-CustomerAddressForm.propTypes = {
-  onOpenShippingModal: PropTypes.func.isRequired,
+CustomerAddressViewContent.propTypes = {
   shippingAddressFields: PropTypes.array.isRequired,
   columnShippingAddresses: PropTypes.array.isRequired,
   dataTableShippingAddresses: PropTypes.array.isRequired,
 };
-
-export default CustomerAddressForm;
+export default React.memo(CustomerAddressViewContent);

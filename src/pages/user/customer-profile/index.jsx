@@ -1,12 +1,16 @@
-import { Box, Button, GridItem, Text, VStack, Flex } from "@chakra-ui/react";
+import { Box, Button, Text, Flex } from "@chakra-ui/react";
 import { DEFAULT_COLOR } from "../../../const/enum";
-import { ArrowLeft, MapPinCheck, User } from "lucide-react";
+import { ArrowLeft, MapPinCheck, SquarePen, User } from "lucide-react";
 import CustomerInformationForm from "../../../components/customer/customer-profile/customer-information-form";
 import ShippingAddressModal from "../../../components/shared/dialog/dialog-add-shipping-address";
 import CustomerAddressForm from "../../../components/customer/customer-profile/customer-address-form";
 import { ConfigProvider, Tabs } from "antd";
 import useCustomerProfile from "./use-customer-profile";
 import { FormProvider } from "react-hook-form";
+import CustomerOverviewDialog from "../../../components/customer/customer-profile/customer-overview-dialog";
+import CustomerInformationViewContent from "../../../components/customer/customer-profile/customer-information-view-content";
+import CustomerAddressViewContent from "../../../components/customer/customer-profile/customer-address-view-content";
+import { useMemo } from "react";
 
 function CustomerProfile() {
   const [
@@ -17,6 +21,7 @@ function CustomerProfile() {
       columnShippingAddresses,
       shippingAddressFields,
       methodForm,
+      openDialog,
     },
     {
       navigate,
@@ -26,11 +31,11 @@ function CustomerProfile() {
       onSubmit,
       setValue,
       setDefaultAddressId,
+      handleOpenDialog,
+      handleCloseDialog,
     },
   ] = useCustomerProfile();
 
-  // Đổi cách sử dụng `itemsTabs` để linh hoạt hơn trong render
-  // Các icon có thể được truyền trực tiếp vào Tabs component của Ant Design
   const itemsTabs = [
     {
       key: "1",
@@ -40,11 +45,7 @@ function CustomerProfile() {
           <Text>Thông tin chung</Text>
         </Flex>
       ),
-      children: (
-        <CustomerInformationForm
-          isLoadingSubmit={isLoadingSubmit}
-        />
-      ),
+      children: <CustomerInformationViewContent />,
     },
     {
       key: "2",
@@ -55,8 +56,7 @@ function CustomerProfile() {
         </Flex>
       ),
       children: (
-        <CustomerAddressForm
-          onOpenShippingModal={onOpenShippingModal}
+        <CustomerAddressViewContent
           shippingAddressFields={shippingAddressFields}
           columnShippingAddresses={columnShippingAddresses}
           dataTableShippingAddresses={dataTableShippingAddresses}
@@ -64,120 +64,139 @@ function CustomerProfile() {
       ),
     },
   ];
+  const MemoCustomerInformationForm = useMemo(
+    () => <CustomerInformationForm />,
+    []
+  );
+
+  const MemoCustomerAddressForm = useMemo(
+    () => (
+      <CustomerAddressForm
+        onOpenShippingModal={onOpenShippingModal}
+        shippingAddressFields={shippingAddressFields}
+        columnShippingAddresses={columnShippingAddresses}
+        dataTableShippingAddresses={dataTableShippingAddresses}
+      />
+    ),
+    [
+      onOpenShippingModal,
+      shippingAddressFields,
+      columnShippingAddresses,
+      dataTableShippingAddresses,
+    ]
+  );
 
   return (
-    <Box
-      minH="100vh" 
-      bg="gray.50" 
-      p={{ base: 4, md: 8 }} 
-      textAlign='center'
-    >
-      {/* Header Section */}
-      <VStack spacing={4} align="stretch" mb={8}>
-        <Flex justify="space-between" align="center">
-          <Button
-            variant="ghost"
-            leftIcon={<ArrowLeft size={18} />}
-            onClick={() => navigate("/")}
-            colorScheme="gray" 
-            _hover={{ bg: "gray.100" }}
-          >
-            Trở về trang chủ
-          </Button>
-        </Flex>
-
-        <Box
-          bg="white"
-          boxShadow="lg" 
-          borderRadius="xl" 
-          p={{ base: 6, md: 8 }}
-          textAlign="center"
-          border="1px solid" 
-          borderColor="gray.100"
+    <Box minH="100vh" bg="gray.50" textAlign="center" pt={"150px"}>
+      {/* /* Header Section */}
+      <Box
+        bg="white"
+        p={{ base: 4, md: 5 }}
+        textAlign="center"
+        mb={8}
+        position={"fixed"}
+        top={{ base: "64px", md: "85px" }}
+        left={0}
+        right={0}
+        zIndex={10}
+      >
+        <Flex
+          alignItems={"center"}
+          justifyContent={"space-between"}
+          flexDirection={{ base: "column", md: "row" }}
+          gap={{ base: 2, md: 0 }}
         >
+          <Flex
+            justify="flex-start"
+            align="center"
+            w={{ base: "100%", md: "auto" }}
+            mb={{ base: 2, md: 0 }}
+          >
+            <Button
+              variant="ghost"
+              leftIcon={<ArrowLeft size={18} />}
+              onClick={() => navigate("/")}
+              colorScheme="gray"
+              _hover={{ bg: "gray.100", color: "black" }}
+              size={{ base: "sm", md: "md" }}
+            >
+              Quay lại
+            </Button>
+          </Flex>
           <Text
-            fontSize={{ base: "2xl", md: "3xl" }} 
-            fontWeight="extrabold" 
-            color="teal.700" 
-            mb={2}
+            fontSize={{ base: "md", md: "3xl" }}
+            fontWeight="bold"
+            color="teal.700"
+            mb={{ base: 2, md: 0 }}
+            textAlign={"center"}
+            flex={1}
           >
             Trang thông tin cá nhân
           </Text>
-          <Text
-            fontSize={{ base: "md", md: "lg" }}
-            color="gray.600"
+          <Button
+            size={{ base: "sm", md: "lg" }}
+            color={"white"}
+            variant="solid"
+            rightIcon={<SquarePen strokeWidth={1.5} size={18} />}
+            onClick={handleOpenDialog}
+            bgColor={DEFAULT_COLOR}
+            _hover={{ bg: "gray.100", color: "black" }}
+            w={{ base: "100%", md: "auto" }}
           >
-            Quản lý thông tin cá nhân và địa chỉ nhận hàng của bạn.
-          </Text>
-        </Box>
-      </VStack>
+            Cập nhật thông tin
+          </Button>
+        </Flex>
+      </Box>
 
-      {/* Main Content Area */}
       <FormProvider {...methodForm}>
-        <form onSubmit={onSubmit}>
-          <Box
-            bg="white"
-            boxShadow="lg"
-            borderRadius="xl"
-            p={{ base: 6, md: 8 }}
-            border="1px solid"
-            borderColor="gray.100"
+        <Box
+          bg="white"
+          boxShadow="lg"
+          borderRadius="xl"
+          p={{ base: 2, md: 4 }}
+          border="1px solid"
+          mx={{ base: 4, md: 8 }}
+          borderColor="gray.100"
+        >
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: DEFAULT_COLOR,
+                borderRadius: 8,
+              },
+              components: {
+                Tabs: {
+                  cardBg: "white",
+                  cardPadding: "10px 16px",
+                  horizontalItemPadding: "10px 16px",
+                  itemSelectedColor: DEFAULT_COLOR,
+                  itemHoverColor: DEFAULT_COLOR,
+                  inkBarColor: DEFAULT_COLOR,
+                  itemColor: "gray.600",
+                },
+              },
+            }}
           >
-            <ConfigProvider
-              theme={{
-                token: {
-                  colorPrimary: DEFAULT_COLOR,
-                  borderRadius: 8, 
-                },
-                components: {
-                  Tabs: {
-                    cardBg: 'white',
-                    cardPadding: '10px 16px',
-                    horizontalItemPadding: '10px 16px',
-                    itemSelectedColor: DEFAULT_COLOR,
-                    itemHoverColor: DEFAULT_COLOR,
-                    inkBarColor: DEFAULT_COLOR,
-                    itemColor: 'gray.600',
-                  },
-                },
-              }}
-            >
-              <Tabs
-                defaultActiveKey="1"
-                items={itemsTabs}
-                size="large" 
-                tabPosition="top"
-              />
-            </ConfigProvider>
-          </Box>
-
-          {/* Action Buttons */}
-          <GridItem colSpan={12} mt={8}>
-            <VStack spacing={4}>
-              <Button
-                isLoading={isLoadingSubmit}
-                colorScheme="teal" 
-                size="lg"
-                type="submit"
-                borderRadius="lg" 
-                px={10}
-              >
-                Cập nhật thông tin
-              </Button>
-              <Text
-                fontSize="sm" 
-                textAlign={"center"}
-                fontStyle="italic"
-                color="gray.500"
-              >
-                (*) Vui lòng điền đầy đủ thông tin trước khi gửi.
-              </Text>
-            </VStack>
-          </GridItem>
-        </form>
+            <Tabs
+              defaultActiveKey="1"
+              items={itemsTabs}
+              size="large"
+              tabPosition="top"
+            />
+          </ConfigProvider>
+        </Box>
+      </FormProvider>
+      <FormProvider {...methodForm}>
+        <CustomerOverviewDialog
+          isLoading={isLoadingSubmit}
+          isOpen={openDialog}
+          onClose={handleCloseDialog}
+          onConfirm={onSubmit}
+          CustomerInformationForm={MemoCustomerInformationForm}
+          CustomerAddressForm={MemoCustomerAddressForm}
+        />
       </FormProvider>
 
-      {/* Modal for adding shipping address */}
       <ShippingAddressModal
         isOpen={isOpenShippingModal}
         onClose={onCloseShippingModal}
