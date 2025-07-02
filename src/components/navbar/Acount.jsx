@@ -14,14 +14,11 @@ import {
 import { RxPerson } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import NavStyle from "./navbar.module.css";
-import { useContext } from "react";
-import { UserContext } from "../../Contexts/UserContext";
 import UserAccount from "./UserAccount";
 import { getAppToken } from "../../configs/token";
 function Acount() {
   const navigate = useNavigate();
 
-  const { user } = useContext(UserContext);
   const tokenApp = getAppToken();
 
   if (tokenApp) {

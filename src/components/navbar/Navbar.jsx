@@ -7,15 +7,12 @@ import Popsearch from "./Popsearch";
 // import { Link } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
 import {
-  startTransition,
   useContext,
   useEffect,
   useRef,
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import OrderPopover from "./order-popover";
-import CustomerPopover from "./customer-popver";
 
 function Navbar() {
   const cartRef = useRef();
@@ -34,11 +31,6 @@ function Navbar() {
     navigate("/cartpage");
   }
 
-  const navigateCustomerProfile = () => {
-    startTransition(() => {
-      navigate("/customer-profile");
-    });
-  };
   useEffect(() => {
     setNum(user.totalCartItems);
   }, [user.totalCartItems]);
@@ -77,9 +69,6 @@ function Navbar() {
         </Flex>
         <Flex alignItems="center" gap={4}>
           <Acount />
-          {/* <Box as="span" onClick={handleCartClick} cursor="pointer">
-            <Cart ref={cartRef} num={num} />
-          </Box> */}
         </Flex>
       </Flex>
       {/* Desktop Navbar */}
@@ -117,19 +106,9 @@ function Navbar() {
           <Search />
         </Box>
         <Flex alignItems="center" gap={6}>
-          <Box
-            as="span"
-            onClick={navigateCustomerProfile}
-            cursor="pointer"
-          >
-            <CustomerPopover />
-          </Box>
           <Box as="span" onClick={handleCartClick} cursor="pointer">
             <Cart ref={cartRef} num={num} />
           </Box>
-          <Box as="span" onClick={() => navigate("/order")} cursor="pointer">
-            <OrderPopover />
-          </Box>{" "}
           <Acount />
         </Flex>
       </Box>

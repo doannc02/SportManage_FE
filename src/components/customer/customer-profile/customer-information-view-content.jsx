@@ -2,16 +2,13 @@ import React from "react";
 import {
   Box,
   Flex,
-  Avatar,
   Text,
   Grid,
   Icon,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { LockIcon } from "@chakra-ui/icons";
 import useCustomerProfile from "../../../pages/user/customer-profile/use-customer-profile";
-import { Mail, ScanQrCode, VenusAndMars } from "lucide-react";
+import { HeartMinus, Mail, MapPin, PackageSearch, PhoneCall, ScanQrCode, SquareUserRound, VenusAndMars } from "lucide-react";
 
 const CustomerInformationViewContent = () => {
   const [{ detailData }] = useCustomerProfile();
@@ -22,13 +19,7 @@ const CustomerInformationViewContent = () => {
         <Icon as={LockIcon} color="teal.500" boxSize={5} />
       </Flex>
 
-      <Flex direction={{ base: "column", md: "row" }} gap={6}>
-        <VStack spacing={2} align="center" minW="150px">
-          <Avatar src={detailData?.avatarUrl} size="2xl" />
-          <Text fontSize={"xl"} fontWeight="medium">
-            {detailData?.user?.username}
-          </Text>
-        </VStack>
+      <Flex direction={{ base: "column", md: "row" }} gap={6} overflow={"auto"}>
         <Grid
           flex="1"
           templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
@@ -38,36 +29,30 @@ const CustomerInformationViewContent = () => {
             <LabelValue
               label="Email"
               value={detailData?.user?.email}
-              icon={<Mail size={20} strokeWidth={1.5} />}
+              icon={<Mail size={20} strokeWidth={1.25} color="#808897" />}
             />
             <LabelValue
               label="ID"
               value={detailData?.user?.id}
-              icon={<ScanQrCode size={20} strokeWidth={1.5} />}
+              icon={<ScanQrCode size={20} strokeWidth={1.25} color="#808897" />}
             />
             <LabelValue
               label="Giới tính"
               value={detailData?.gender}
-              icon={<VenusAndMars size={20} strokeWidth={1.5} />}
+              icon={<VenusAndMars size={20} strokeWidth={1.25} color="#808897"  />}
+            />
+            <LabelValue label="Quốc tịch" value="Việt Nam" icon={<SquareUserRound size={20} strokeWidth={1.25} color="#808897"  />}/>
+          </Flex>
+          <Flex flexDirection={"column"} gap={2}> 
+            <LabelValue label="Liên lạc" value={detailData?.phone} icon={<PhoneCall size={20} strokeWidth={1.25} color="#808897"/>} />
+            <LabelValue label="Tuổi" value={detailData?.age} icon={<HeartMinus size={20} strokeWidth={1.25} color="#808897"/>} />
+            <LabelValue label="Nơi ở" value={detailData?.address} icon={<MapPin size={20} strokeWidth={1.25} color="#808897"/>}/>
+            <LabelValue
+              label="Số địa chỉ nhận hàng"
+              value={detailData?.shippingAddresses?.length}
+              icon={<PackageSearch size={20} strokeWidth={1.25} color="#808897"/>}
             />
           </Flex>
-          <Box>
-            <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-              <LabelValue
-                label="Số điện thoại"
-                value={detailData?.phone}
-                isLink
-              />
-              <LabelValue label="Tuổi" value={detailData?.age} />
-              <LabelValue label="Vai trò" value={"Khách hàng"} />
-              <LabelValue label="Quốc tịch" value="Việt Nam" />
-              <LabelValue label="Nơi ở" value={detailData?.address} />
-              <LabelValue
-                label="Số địa chỉ nhận hàng"
-                value={detailData?.shippingAddresses?.length}
-              />
-            </Grid>
-          </Box>
         </Grid>
       </Flex>
     </Box>
@@ -75,26 +60,40 @@ const CustomerInformationViewContent = () => {
 };
 
 import PropTypes from "prop-types";
+import { Popover } from "antd";
 
-const LabelValue = ({ label, value, icon = null, isLink = false }) => (
-  <HStack spacing={2}>
-    {icon && icon}
-    <Flex gap={2} justifyContent={"center"} alignItems={"center"}>
-      <Text fontSize="md" color="gray.500" fontWeight={"medium"}>
-        {label}
-      </Text>
-    </Flex>
-    <Text
-      fontSize="sm"
-      fontWeight="medium"
-      color={isLink ? "blue.500" : "gray.800"}
-      cursor={isLink ? "pointer" : "default"}
-      _hover={isLink ? { textDecoration: "underline" } : undefined}
+const LabelValue = ({ label, value, icon = null }) => {
+  const displayValue = () => value ?? "-";
+
+  return (
+    <Flex
+      justify="space-between"
+      align="center"
+      borderBottom="1px solid #DFE1E6"
+      mb={2}
+      h="40px"
+      w={{ base: "500px", md: "100%" }}
     >
-      {value}
-    </Text>
-  </HStack>
-);
+      <Flex align="center" gap={2}>
+        {icon ?? icon}
+        <Text fontWeight="normal" fontSize="14px" color="#808897">
+          {label}:
+        </Text>
+      </Flex>
+      <Box
+        display="flex"
+        justifyContent="flex-end"
+        w={window.innerWidth < 768 ? "70%" : "50%"}
+      >
+        <Popover content={displayValue()} title={label}>
+          <Text isTruncated fontSize="16px" color="#43495A" maxW="100%">
+            {displayValue()}
+          </Text>
+        </Popover>
+      </Box>
+    </Flex>
+  );
+};
 
 LabelValue.propTypes = {
   label: PropTypes.string.isRequired,
