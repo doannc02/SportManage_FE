@@ -1,10 +1,18 @@
-import { Box, Button, Text, Flex } from "@chakra-ui/react";
+import { Box, Button, Text, Flex, HStack, VStack } from "@chakra-ui/react";
 import { DEFAULT_COLOR } from "../../../const/enum";
-import { ArrowLeft, MapPinCheck, SquarePen, User } from "lucide-react";
+import {
+  ArrowLeft,
+  MapPinCheck,
+  ShoppingBag,
+  SquarePen,
+  SquareUser,
+  Tags,
+  User,
+} from "lucide-react";
 import CustomerInformationForm from "../../../components/customer/customer-profile/customer-information-form";
 import ShippingAddressModal from "../../../components/shared/dialog/dialog-add-shipping-address";
 import CustomerAddressForm from "../../../components/customer/customer-profile/customer-address-form";
-import { ConfigProvider, Tabs } from "antd";
+import { Avatar, ConfigProvider, Tabs } from "antd";
 import useCustomerProfile from "./use-customer-profile";
 import { FormProvider } from "react-hook-form";
 import CustomerOverviewDialog from "../../../components/customer/customer-profile/customer-overview-dialog";
@@ -22,6 +30,7 @@ function CustomerProfile() {
       shippingAddressFields,
       methodForm,
       openDialog,
+      detailData,
     },
     {
       navigate,
@@ -87,10 +96,15 @@ function CustomerProfile() {
   );
 
   return (
-    <Box minH="100vh" bg="gray.50" textAlign="center" pt={"150px"}>
-      {/* /* Header Section */}
+    <Box
+      minH="100vh"
+      bg="gray.50"
+      textAlign="center"
+      pt={{ base: "150px", md: "100px" }}
+    >
+      {/* Header Section  */}
       <Box
-        bg="white"
+        bgColor="white"
         p={{ base: 4, md: 5 }}
         textAlign="center"
         mb={8}
@@ -99,6 +113,7 @@ function CustomerProfile() {
         left={0}
         right={0}
         zIndex={10}
+        boxShadow="sm"
       >
         <Flex
           alignItems={"center"}
@@ -130,6 +145,7 @@ function CustomerProfile() {
             mb={{ base: 2, md: 0 }}
             textAlign={"center"}
             flex={1}
+            letterSpacing="wide"
           >
             Trang thông tin cá nhân
           </Text>
@@ -148,6 +164,113 @@ function CustomerProfile() {
         </Flex>
       </Box>
 
+      <Box
+        bg="white"
+        boxShadow="lg"
+        borderRadius="xl"
+        p={{ base: 4, md: 7 }}
+        border="1px solid"
+        mx={{ base: 2, md: 32 }}
+        borderColor="gray.100"
+        mb={8}
+        display="flex"
+        flexDirection={{ base: "column", md: "row" }}
+        gap={6}
+        alignItems={{ base: "flex-start", md: "center" }}
+        justifyContent="space-between"
+      >
+        <Box
+          display="flex"
+          flexDirection={{ base: "column", md: "row" }}
+          gap={5}
+          alignItems="center"
+        >
+          <Avatar
+            src={detailData?.avatarUrl}
+            size={window.innerWidth < 768 ? 100 : 150}
+            style={{
+              border: "4px solid #319795",
+              boxShadow: "0 4px 16px rgba(49,151,149,0.15)",
+              background: "#e6fffa",
+            }}
+          />
+          <VStack align="flex-start" spacing={2}>
+            <HStack flexWrap="wrap">
+              <Text fontSize={{ base: "2xl", md: "4xl" }} fontWeight="bold">
+                {detailData?.user?.username}
+              </Text>
+              <Box
+                bg="gray.100"
+                color="teal.700"
+                px={3}
+                py={1}
+                borderRadius="md"
+                fontWeight="semibold"
+                fontSize="sm"
+                display="flex"
+                alignItems="center"
+                gap={1}
+              >
+                <SquareUser size={18} />
+                Khách hàng
+              </Box>
+            </HStack>
+            <Text fontSize="md" color="gray.600">
+              Điểm thành viên: <b>750</b>
+            </Text>
+            <Text fontSize="sm" color="gray.500">
+              Tham gia từ:{" "}
+              {detailData?.user?.createdAt
+                ? new Date(detailData.user.createdAt).toLocaleDateString(
+                    "vi-VN"
+                  )
+                : "02/07/2025"}
+            </Text>
+          </VStack>
+        </Box>
+
+        {/* Right section: Stats + Button */}
+        <Box w="full" maxW={{ md: "280px" }}>
+          <Box
+            w="full"
+            textAlign="left"
+            p={4}
+            bg="teal.50"
+            borderRadius="lg"
+            boxShadow="sm"
+            display={{ base: "none", md: "block" }}
+          >
+            <Box display="flex" alignItems="center" mb={2} gap={2}>
+              <Text fontWeight="bold" color="teal.700">
+                Thông tin mua hàng
+              </Text>
+              <Tags size={23} strokeWidth={1.5} />
+            </Box>
+            <VStack align="flex-start" spacing={1}>
+              <Text fontSize="sm">
+                <b>Số đơn hàng đã mua:</b>{" "}
+                {detailData?.user?.defaultAddress || "15"}
+              </Text>
+              <Text fontSize="sm">
+                <b>Số địa chỉ đã lưu:</b> {shippingAddressFields?.length || 0}
+              </Text>
+            </VStack>
+          </Box>
+
+          <Button
+            mt={3}
+            variant="outline"
+            rightIcon={<ShoppingBag size={20} strokeWidth={1.5} />}
+            onClick={() => navigate("/")}
+            colorScheme="teal"
+            size={{ base: "sm", md: "md" }}
+            w="full"
+          >
+            Đi đến trang mua hàng
+          </Button>
+        </Box>
+      </Box>
+
       <FormProvider {...methodForm}>
         <Box
           bg="white"
@@ -155,7 +278,7 @@ function CustomerProfile() {
           borderRadius="xl"
           p={{ base: 2, md: 4 }}
           border="1px solid"
-          mx={{ base: 4, md: 8 }}
+          mx={{ base: 4, md: 32 }}
           borderColor="gray.100"
         >
           <ConfigProvider
@@ -181,11 +304,12 @@ function CustomerProfile() {
               defaultActiveKey="1"
               items={itemsTabs}
               size="large"
-              tabPosition="top"
+              tabPosition={window.innerWidth < 768 ? "top" : "left"}
             />
           </ConfigProvider>
         </Box>
       </FormProvider>
+
       <FormProvider {...methodForm}>
         <CustomerOverviewDialog
           isLoading={isLoadingSubmit}

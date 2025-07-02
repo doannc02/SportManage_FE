@@ -14,33 +14,56 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
+//  Default form values
 export const defaultValues = {
   countryId: "",
   shippingAddresses: [],
 };
+
 const useCustomerProfile = () => {
+  // ========================
+  // Hook khởi tạo service
+  // ========================
   const navigate = useNavigate();
   const toast = useToast();
 
-  const methodForm = useForm({ defaultValues: defaultValues });
+  // ========================
+  // Form & Field setup
+  // ========================
+  const methodForm = useForm({ defaultValues });
   const { control, handleSubmit, setValue, reset } = methodForm;
 
-  // State to track the default address ID
+  const { fields: shippingAddressFields, append: appendShippingAddress } =
+    useFieldArray({
+      name: "shippingAddresses",
+      control,
+      keyName: "key",
+    });
+
+  // ========================
+  //  State local
+  // ========================
   const [defaultAddressId, setDefaultAddressId] = useState("");
-
   const [shouldFetch, setShouldFetch] = useState(false);
-
   const [openDialog, setOpenDialog] = useState(false);
 
-  const handleOpenDialog = useCallback(() => {
-    setOpenDialog(true);
-  }, []);
+  // ========================
+  //  Modal dialog logic
+  // ========================
+  const handleOpenDialog = useCallback(() => setOpenDialog(true), []);
+  const handleCloseDialog = useCallback(() => setOpenDialog(false), []);
 
-  const handleCloseDialog = useCallback(() => {
-    setOpenDialog(false);
-  }, []);
+  const {
+    isOpen: isOpenShippingModal,
+    onOpen: onOpenShippingModal,
+    onClose: onCloseShippingModal,
+  } = useDisclosure();
+
+  // ========================
+  //  Lấy dữ liệu khách hàng
+  // ========================
   const { data: detailData, refetch: refetchDetail } = useQueryCustomerCurrent({
-    enabled: shouldFetch, // <-- ngăn query chạy trong lần render đầu
+    enabled: shouldFetch, // chỉ fetch sau lần đầu
   });
 
   useEffect(() => {
@@ -49,9 +72,34 @@ const useCustomerProfile = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (detailData) {
+      const defaultAddress = detailData?.shippingAddresses?.find(
+        (addr) => addr.isDefault
+      );
+      if (defaultAddress) {
+        setDefaultAddressId(defaultAddress.id);
+      }
+
+      reset({
+        ...detailData,
+        userName: detailData?.user?.username || "",
+        email: detailData?.user?.email || "",
+        shippingAddresses: detailData?.shippingAddresses || [],
+      });
+    }
+  }, [detailData, reset]);
+
+  // ========================
+  //  Submit form
+  // ========================
   const { mutate, isLoading: isLoadingSubmit } = useMutation(saveUser, {
     onError: (err) =>
-      toast({ title: "Lỗi", description: err.message, status: "error" }),
+      toast({
+        title: "Lỗi",
+        description: err.message,
+        status: "error",
+      }),
     onSuccess: () => {
       refetchDetail();
       toast({
@@ -62,43 +110,6 @@ const useCustomerProfile = () => {
     },
   });
 
-  const {
-    isOpen: isOpenShippingModal,
-    onOpen: onOpenShippingModal,
-    onClose: onCloseShippingModal,
-  } = useDisclosure();
-
-  const { fields: shippingAddressFields, append: appendShippingAddress } =
-    useFieldArray({
-      name: "shippingAddresses",
-      control,
-      keyName: "key",
-    });
-
-  // Column config for shipping addresses table
-  const columnShippingAddresses = useMemo(
-    () => [
-      {
-        header: "Tên người nhận",
-        fieldName: "recipientName",
-      },
-      {
-        header: "Số điện thoại",
-        fieldName: "phone",
-      },
-      {
-        header: "Địa chỉ",
-        fieldName: "fullAddress",
-      },
-      {
-        header: "Mặc định",
-        fieldName: "isDefaultRadio",
-      },
-    ],
-    []
-  );
-
-  // Main form submission
   const onSubmit = handleSubmit((input) => {
     const updatedShippingAddresses =
       input.shippingAddresses?.map((addr) => ({
@@ -106,14 +117,13 @@ const useCustomerProfile = () => {
         isDefault: addr.id === defaultAddressId,
       })) || [];
 
-    // Kiểm tra ConfirmPassWord trong input thay vì methodForm.getValues
     if (!input.ConfirmPassWord || input.ConfirmPassWord.trim() === "") {
       toast({
         title: "Có lỗi xảy ra",
         description: "Vui lòng xác nhận mật khẩu trước khi gửi form",
         status: "error",
       });
-      return; // Prevent form submission if ConfirmPassWord is empty
+      return;
     }
 
     const formData = {
@@ -125,19 +135,41 @@ const useCustomerProfile = () => {
     handleCloseDialog();
   });
 
-  const setAddressAsDefault = (addressId) => {
-    setDefaultAddressId(addressId);
+  // ========================
+  //  Xử lý set địa chỉ mặc định
+  // ========================
+  const setAddressAsDefault = useCallback(
+    (addressId) => {
+      setDefaultAddressId(addressId);
 
-    const updatedAddresses = shippingAddressFields.map((addr) => ({
-      ...addr,
-      isDefault: addr.id === addressId,
-    }));
-    setValue("shippingAddresses", updatedAddresses);
-  };
+      const updatedAddresses = shippingAddressFields.map((addr) => ({
+        ...addr,
+        isDefault: addr.id === addressId,
+      }));
 
-  // Prepare data for shipping addresses table
-  const dataTableShippingAddresses = shippingAddressFields.map(
-    (item, index) => {
+      setValue("shippingAddresses", updatedAddresses);
+    },
+    [shippingAddressFields, setValue]
+  );
+
+  // ========================
+  //  Cột bảng địa chỉ
+  // ========================
+  const columnShippingAddresses = useMemo(
+    () => [
+      { header: "Tên người nhận", fieldName: "recipientName" },
+      { header: "Số điện thoại", fieldName: "phone" },
+      { header: "Địa chỉ", fieldName: "fullAddress" },
+      { header: "Mặc định", fieldName: "isDefaultRadio" },
+    ],
+    []
+  );
+
+  // ========================
+  //  Dữ liệu bảng địa chỉ
+  // ========================
+  const dataTableShippingAddresses = useMemo(() => {
+    return shippingAddressFields.map((item, index) => {
       const fullAddress = [
         item.addressLine,
         item.ward,
@@ -160,25 +192,12 @@ const useCustomerProfile = () => {
           />
         ),
       };
-    }
-  );
-  useEffect(() => {
-    if (detailData) {
-      const defaultAddress = detailData?.shippingAddresses?.find(
-        (addr) => addr.isDefault
-      );
-      if (defaultAddress) {
-        setDefaultAddressId(defaultAddress.id);
-      }
+    });
+  }, [shippingAddressFields, setAddressAsDefault]);
 
-      reset({
-        ...detailData,
-        userName: detailData?.user?.username || "",
-        email: detailData?.user?.email || "",
-        shippingAddresses: detailData?.shippingAddresses || [],
-      });
-    }
-  }, [detailData, reset]);
+  // ========================
+  //  Return API
+  // ========================
 
   return [
     {

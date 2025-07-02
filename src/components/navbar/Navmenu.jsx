@@ -7,18 +7,24 @@ import {
   DrawerCloseButton,
   Box,
   Flex,
-  Text,
-  Stack,
   Image,
 } from "@chakra-ui/react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { BaggageClaim, House, PackageCheck } from "lucide-react";
+import {
+  BaggageClaim,
+  House,
+  LogOut,
+  PackageCheck,
+  UserRound,
+} from "lucide-react";
 import { Badge } from "antd";
 import { useLocation } from "react-router-dom";
 import { DEFAULT_COLOR } from "../../const/enum";
 import { Images } from "../../asserts/images";
+import { logoutAccount } from "../../configs/axios";
+import PropTypes from "prop-types";
 
 // Move useDisclosure to a parent component (e.g., Layout) and pass as props to Navmenu
 function Navmenu({ isOpen, onOpen, onClose, btnRef, countItems }) {
@@ -37,6 +43,11 @@ function Navmenu({ isOpen, onOpen, onClose, btnRef, countItems }) {
       label: "Danh sách đơn hàng",
       icon: <PackageCheck strokeWidth={1} />,
       link: "/order",
+    },
+    {
+      label: "Trang thông tin cá nhân",
+      icon: <UserRound strokeWidth={1} />,
+      link: "/customer-profile",
     },
   ];
 
@@ -78,19 +89,37 @@ function Navmenu({ isOpen, onOpen, onClose, btnRef, countItems }) {
                     fontWeight="medium"
                     fontSize="md"
                     color={
-                      location.pathname === item.link ? DEFAULT_COLOR : "gray.700"
+                      location.pathname === item.link
+                        ? DEFAULT_COLOR
+                        : "gray.700"
                     }
                     bg={
                       location.pathname === item.link
                         ? "green.50"
                         : "transparent"
                     }
-                    _hover={{ bg: "green.50", color: DEFAULT_COLOR  }}
+                    _hover={{ bg: "green.50", color: DEFAULT_COLOR }}
                   >
                     {item.label}
                   </Button>
                 </Link>
               ))}
+              <Button
+                variant="ghost"
+                w="100%"
+                onClick={() => {
+                  logoutAccount();
+                }}
+                justifyContent="flex-start"
+                leftIcon={<LogOut strokeWidth={1} />}
+                fontWeight="medium"
+                fontSize="md"
+                color={"gray.700"}
+                bg={"transparent"}
+                _hover={{ bg: "green.50", color: DEFAULT_COLOR }}
+              >
+                Đăng xuất
+              </Button>
             </Flex>
           </DrawerBody>
         </DrawerContent>
@@ -98,5 +127,15 @@ function Navmenu({ isOpen, onOpen, onClose, btnRef, countItems }) {
     </>
   );
 }
+Navmenu.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onOpen: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  btnRef: PropTypes.oneOfType([
+    PropTypes.func, 
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+  ]),
+  countItems: PropTypes.number
+};
 
 export default Navmenu;
