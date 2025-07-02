@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Box, Heading, Skeleton, Stack } from "@chakra-ui/react";
+import { Box, Center, Heading, Image, Skeleton, Stack } from "@chakra-ui/react";
 import { UserContext } from "../../../Contexts/UserContext";
 import { useQueryProductsList } from "../../../services/customers/products";
 import { Checkbox, Divider, Empty } from "antd";
@@ -33,13 +33,12 @@ const ProductPage = () => {
 
   useEffect(() => {
     getCategoryValue();
-  }, [categoryValue]); // Thêm dependency categoryValue
+  }, [categoryValue]); 
 
-  // Sửa lại cách gọi API
   const { data, isLoading } = useQueryProductsList({
     pageNumber: 0,
     pageSize: 20,
-    keyword: search || undefined, // Truyền undefined nếu search rỗng
+    keyword: search || undefined, 
     categoryIds: selectCategory.length > 0 ? selectCategory : undefined,
   });
 
@@ -71,6 +70,7 @@ const ProductPage = () => {
           flexDirection="column"
           p={4}
           gap={2}
+          borderRight={"1px"}
         >
           <Heading
             as="h3"
@@ -81,18 +81,36 @@ const ProductPage = () => {
             Danh mục sản phẩm
           </Heading>
           <Stack spacing={3}>
-            <div className="grid grid-cols-2 md:grid-cols-1">
-              {dataCategory?.items?.map((category) => (
-                <Checkbox
-                  key={category.id}
-                  checked={selectCategory.includes(category.id)}
-                  onChange={() => handleCategoryChange(category.id)}
-                >
-                  {category.name}
-                </Checkbox>
-              ))}
-            </div>
-          </Stack>
+  <div className="grid grid-cols-2 md:grid-cols-1 gap-4"> 
+    {dataCategory?.items?.map((category) => (
+      <div key={category.id} className="flex items-center gap-2 w-full">
+        <Image
+          boxSize="28px" 
+          objectFit="cover"
+          borderRadius="md"
+          src={category.logo}
+          alt={category.name}
+          fallback={
+            <Center
+              boxSize="28px"
+              bg="gray.100"
+              borderRadius="md"
+            >
+            </Center>
+          }
+        />
+        <div className="flex-1 min-w-0"> 
+            <Checkbox
+            checked={selectCategory.includes(category.id)}
+            onChange={() => handleCategoryChange(category.id)}
+            >
+            {category.name}
+            </Checkbox>
+        </div>
+      </div>
+    ))}
+  </div>
+</Stack>
         </Box>
         {/* Phần danh sách sản phẩm */}
         <Box
