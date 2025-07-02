@@ -16,8 +16,7 @@ import { useFormContext } from "react-hook-form";
 const CustomerInformationForm = () => {
   // const { control, avatarValue } = props;
   const { control, watch, setValue, getValues } = useFormContext();
-  const avatarValue = watch("avatarUrl");
-
+  const avatarValue = watch("avatarUrl");  
   return (
     <>
       <Box
@@ -26,7 +25,7 @@ const CustomerInformationForm = () => {
         alignItems="center"
         mb={4}
       >
-        <Text fontSize="xl" fontWeight="bold">
+        <Text fontSize="lg" fontWeight="bold">
           Thông tin khách hàng
         </Text>
       </Box>
@@ -189,7 +188,6 @@ const CustomerInformationForm = () => {
 };
 CustomerInformationForm.propTypes = {
   control: PropTypes.object.isRequired,
-  isLoadingSubmit: PropTypes.bool,
 };
 
 export default CustomerInformationForm;
