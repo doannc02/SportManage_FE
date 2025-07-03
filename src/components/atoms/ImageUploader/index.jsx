@@ -10,7 +10,8 @@ import {
 import { CloseIcon, AddIcon } from '@chakra-ui/icons';
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { authApi, BASE_URL } from '../../../configs/auth';
+import { authApi } from '../../../configs/auth';
+import { Spin } from 'antd';
 
 export const MultiImageUploader = ({
     isDisable = true,
@@ -21,6 +22,7 @@ export const MultiImageUploader = ({
     defaultValue = [],
 }) => {
     const [previews, setPreviews] = useState([]);
+    const [uploading, setUploading] = useState(false);
     // Removed unused 'uploading' state
     const toast = useToast();
     const fileInputRef = useRef(null);
@@ -58,6 +60,7 @@ export const MultiImageUploader = ({
         // Removed 'setUploading' call
 
         try {
+            setUploading(true);
             const res = await authApi({
                 method: 'post',
                 url: '/api/upload-image',
@@ -73,6 +76,7 @@ export const MultiImageUploader = ({
         } catch (err) {
             toast({ title: 'Tải ảnh thất bại', description: err.message, status: 'error' });
         } finally {
+            setUploading(false);
             // Removed 'setUploading' call
             if (fileInputRef.current) fileInputRef.current.value = '';
         }
@@ -81,11 +85,12 @@ export const MultiImageUploader = ({
     const triggerUpload = () => fileInputRef.current?.click();
 
     return (
-        <Box p={2}>
-            <Input
-                type="file"
-                accept="image/*"
-                multiple
+        <Spin spinning={uploading}>
+            <Box p={2}>
+                <Input
+                    type="file"
+                    accept="image/*"
+                    multiple
                 ref={fileInputRef}
                 display="none"
                 onChange={handleFileChange}
@@ -148,6 +153,7 @@ export const MultiImageUploader = ({
             </Flex>
 
         </Box>
+        </Spin>
     );
 };
 

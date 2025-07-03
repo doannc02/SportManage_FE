@@ -104,7 +104,7 @@ const useCustomerProfile = () => {
       refetchDetail();
       toast({
         title: "Thành công",
-        description: "Chỉnh sửa thành công!",
+        description: "Thông tin của bạn đã được cập nhật!",
         status: "success",
       });
     },
