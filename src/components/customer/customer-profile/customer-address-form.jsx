@@ -8,11 +8,13 @@ const CustomerAddressForm = (props) => {
   return (
     <>
       {/* Shipping addresses section */}
-      <GridItem colSpan={12} mt={6}>
+      <GridItem colSpan={12}>
         <Box
           display="flex"
           justifyContent="space-between"
           alignItems="center"
+          gap={4}
+          flexDirection={{ base: "column", md: "row" }}
           mb={4}
         >
           <Text fontSize="lg" fontWeight="bold">
