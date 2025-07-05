@@ -8,8 +8,8 @@ import {
   useColorModeValue,
   Image,
 } from "@chakra-ui/react";
-import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 //import { UserContext } from "../Contexts/UserContext";
 import CoreInput from "../components/atoms/CoreInput";
 import { useForm } from "react-hook-form";
@@ -19,8 +19,10 @@ import { UserContext } from "../Contexts/UserContext";
 import { toastError, toastSuccess } from "../helpers/toast";
 import { Images } from "../asserts/images";
 import { DEFAULT_COLOR } from "../const/enum";
+import { UAParser } from "ua-parser-js";
+import { useQueryIPAddress, useQueryIPLocation } from "../services/common";
+import { VITE_LOCATION_API_KEY } from "../configs/env";
 
-// import jwt from "jsonwebtoken";
 export default function Login() {
   const { setUser } = useContext(UserContext);
   const [isLoading, setLoading] = useState(false);
@@ -29,12 +31,45 @@ export default function Login() {
     password: "",
   });
 
+  //query lấy data của địa chỉ ip và location của ip
+  const { data: ipData } = useQueryIPAddress();
+  const { data: locationData } = useQueryIPLocation({
+    ipAddress: ipData,
+    apiKey: VITE_LOCATION_API_KEY,
+  });
+
+  // thư viện UAParser để lấy thông tin thiết bị, trình duyệt và hệ điều hành
+  const parser = new UAParser();
+  const deviceInfo = parser.getResult();
+
+
+  // Dữ liệu đăng nhập thiết bị
+  const loginDeviceData = {
+    browser: deviceInfo.browser.name + " " + deviceInfo.browser.version,
+    os: deviceInfo.os.name + " " + deviceInfo.os.version,
+    device: deviceInfo.device.model || "Thiết bị không xác định",
+    ipAddress: ipData,
+    loginTime: new Date().toISOString(),
+    city: locationData?.city || "Không xác định",
+    country: locationData?.countryNameNative || "Không xác định",
+  };
+
+  useEffect(() => {
+    console.log("User Agent:", navigator.userAgent);
+  }, []);
+  
   const onSubmit = handleSubmit(async (data) => {
     setLoading(true);
+    const payload = {
+      username: data.username,
+      password: data.password,
+      loginDevice: loginDeviceData,
+    };
+
     try {
-      const res = await postLogin(data.username, data.password);
-      console.log(res, 'res');
-      
+      const res = await postLogin(payload);
+      console.log(payload, "payload");
+
       if (res.accessToken) {
         setAppToken(res);
         setUser({

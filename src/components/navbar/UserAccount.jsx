@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import NavStyle from "./navbar.module.css";
 import { getAppToken } from "../../configs/token";
 import { logoutAccount } from "../../configs/axios";
-import { House, PackageCheck, UserRound } from "lucide-react";
+import { House, PackageCheck, Settings, UserRound } from "lucide-react";
 import { DEFAULT_COLOR } from "../../const/enum";
 
 function UserAccount() {
@@ -33,6 +33,11 @@ function UserAccount() {
       label: "Cá nhân",
       icon: <UserRound strokeWidth={1} />,
       link: "/customer-profile",
+    },
+    {
+      label: "Cài đặt",
+      icon: <Settings strokeWidth={1} />,
+      link: "/settings",
     },
   ];
   const isMobile = window.innerWidth < 768;
@@ -111,17 +116,6 @@ function UserAccount() {
       >
         <PopoverArrow />
         <PopoverCloseButton />
-        {/* <PopoverHeader
-          pt="36px"
-          pb="2"
-          bg="teal.50"
-          borderTopRadius="lg"
-          fontWeight="bold"
-          fontSize="lg"
-          color="teal.700"
-        >
-          Tài khoản
-        </PopoverHeader> */}
         <PopoverBody p={5}>
           <Flex flexDir="column" gap={3}>
             <Flex direction="column" gap={2} mt={4}>

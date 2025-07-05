@@ -33,16 +33,14 @@ const ProductPage = () => {
 
   useEffect(() => {
     getCategoryValue();
-  }, [categoryValue]); 
+  }, [categoryValue]);
 
   const { data, isLoading } = useQueryProductsList({
     pageNumber: 0,
     pageSize: 20,
-    keyword: search || undefined, 
+    keyword: search || undefined,
     categoryIds: selectCategory.length > 0 ? selectCategory : undefined,
   });
-
-
 
   return (
     <>
@@ -70,7 +68,8 @@ const ProductPage = () => {
           flexDirection="column"
           p={4}
           gap={2}
-          borderRight={"1px"}
+          borderRight={"1px solid"}
+          borderColor="gray.300"
         >
           <Heading
             as="h3"
@@ -81,36 +80,38 @@ const ProductPage = () => {
             Danh mục sản phẩm
           </Heading>
           <Stack spacing={3}>
-  <div className="grid grid-cols-2 md:grid-cols-1 gap-4"> 
-    {dataCategory?.items?.map((category) => (
-      <div key={category.id} className="flex items-center gap-2 w-full">
-        <Image
-          boxSize="28px" 
-          objectFit="cover"
-          borderRadius="md"
-          src={category.logo}
-          alt={category.name}
-          fallback={
-            <Center
-              boxSize="28px"
-              bg="gray.100"
-              borderRadius="md"
-            >
-            </Center>
-          }
-        />
-        <div className="flex-1 min-w-0"> 
-            <Checkbox
-            checked={selectCategory.includes(category.id)}
-            onChange={() => handleCategoryChange(category.id)}
-            >
-            {category.name}
-            </Checkbox>
-        </div>
-      </div>
-    ))}
-  </div>
-</Stack>
+            <div className="grid grid-cols-2 md:grid-cols-1 gap-4">
+              {dataCategory?.items?.map((category) => (
+                <div
+                  key={category.id}
+                  className="flex items-center gap-2 w-full"
+                >
+                  <Image
+                    boxSize="28px"
+                    objectFit="cover"
+                    borderRadius="md"
+                    src={category.logo}
+                    alt={category.name}
+                    fallback={
+                      <Center
+                        boxSize="28px"
+                        bg="gray.100"
+                        borderRadius="md"
+                      ></Center>
+                    }
+                  />
+                  <div className="flex-1 min-w-0">
+                    <Checkbox
+                      checked={selectCategory.includes(category.id)}
+                      onChange={() => handleCategoryChange(category.id)}
+                    >
+                      {category.name}
+                    </Checkbox>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Stack>
         </Box>
         {/* Phần danh sách sản phẩm */}
         <Box

@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import CoreAutoComplete from "../atoms/CoreAutoComplete";
 import { useForm } from "react-hook-form";
 import { optionsReason } from "../../const/enum";
-import React, { useEffect } from "react";
+import React from "react";
 import { formatOffsetDateTime } from "../../helpers/date";
 import CoreInput from "../atoms/CoreInput";
 
@@ -32,24 +32,13 @@ const CancelOrderDialog = ({
 }) => {
   const methodForm = useForm({
     defaultValues: {
-      orderId: "",
+      orderId: order.id,
       reason: "",
       date: formatOffsetDateTime(Date.now()),
       detailReason: "",
     },
   });
-  const { control, reset, handleSubmit } = methodForm;
-
-  useEffect(() => {
-    if (order) {
-      reset({
-        orderId: order.id,
-        reason: "",
-        date: formatOffsetDateTime(Date.now()),
-        detailReason: "",
-      });
-    }
-  }, [order, reset]);
+  const { control, handleSubmit } = methodForm;
 
   const handleConfirm = handleSubmit(async (data) => {
     onConfirm(data);
