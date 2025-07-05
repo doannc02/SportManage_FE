@@ -13,4 +13,5 @@ export const VITE_STORAGE_BUCKET = import.meta.env.VITE_STORAGE_BUCKET
 export const VITE_MESSAGING_SENDER_ID = import.meta.env.VITE_AUTH_DOMAIN
 export const VITE_APP_ID = import.meta.env.VITE_APP_ID
 
-
+//location
+export const VITE_LOCATION_API_KEY = import.meta.env.VITE_LOCATION_API_KEY

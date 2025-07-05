@@ -1,5 +1,7 @@
 import { useQuery } from "react-query"
 import { addressApi } from "../../configs/auth"
+import axios from "axios"
+
 
 export const getAddressLv1 = async (
 
@@ -59,6 +61,38 @@ export const useQueryAddressLv3 = (
 ) => {
     return useQuery([`/api-tinhthanh/3/${id}.htm`], () => getAddressLv3({ id }), {
         // ...defaultOption,
+        ...options,
+    })
+}
+
+
+
+export const getIPAddress = async () => {
+    const res = await axios("https://api.ipify.org?format=json");
+    return res.data.ip;
+};
+
+
+export const useQueryIPAddress = (
+    options
+) => {
+    return useQuery(["https://api.ipify.org?format=json"], () => getIPAddress(), {
+        // ...defaultOption,
+        ...options,
+    })
+}
+
+export const getIPLocation = async (ipAddress, apiKey) => {
+    const res = await axios(`https://apiip.net/api/check?ip=${ipAddress}&accessKey=${apiKey}`);
+    return res.data;
+};
+
+export const useQueryIPLocation = (
+    { ipAddress, apiKey },
+    options
+) => {
+    return useQuery([`https://apiip.net/api/check?ip=${ipAddress}&accessKey=${apiKey}`], () => getIPLocation(ipAddress, apiKey), {
+        enabled: !!ipAddress && !!apiKey,
         ...options,
     })
 }
