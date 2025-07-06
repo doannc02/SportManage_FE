@@ -1,4 +1,10 @@
-import { useContext, useRef, useState } from "react";
+import {
+  startTransition,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Box,
@@ -245,16 +251,22 @@ const ProductReview = ({ review, productId, onCommentAdded }) => {
     </Box>
   );
 };
+
 const ProductDetails = () => {
+  const params = useParams();
   const tokenApp = getAppToken();
   const { setUser } = useContext(UserContext);
+  const { data, isLoading } = useQueryProductsDetail(
+    { id: params.id },
+    { enabled: !!params?.id }
+  );
   const toast = useToast();
-  const params = useParams();
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const getVariantId = localStorage.getItem("variant-id");
   const cancelRef = useRef();
-
   const [selectedVariant, setSelectedVariant] = useState(null);
+
   const [quantity, setQuantity] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -265,11 +277,6 @@ const ProductDetails = () => {
   const colorText = useColorModeValue("gray.900", "gray.400");
   // const bgVariant = useColorModeValue("gray.100", "gray.700");
   const thumbBg = useColorModeValue("white", "gray.800");
-
-  const { data, isLoading } = useQueryProductsDetail(
-    { id: params.id },
-    { enabled: !!params?.id }
-  );
 
   const {
     data: dataReviews,
@@ -326,6 +333,15 @@ const ProductDetails = () => {
       },
     }
   );
+
+  useEffect(() => {
+    if (!data?.variants) return; // data chưa sẵn sàng
+
+    const findId = data.variants.find((item) => item.id === getVariantId);
+    startTransition(() => {
+      setSelectedVariant(findId);
+    });
+  }, [data?.variants, getVariantId]);
 
   const handleVariantSelect = (variant) => {
     if (selectedVariant?.id === variant.id) {
@@ -423,9 +439,9 @@ const ProductDetails = () => {
     <Container maxW="6xl" py={10}>
       <Box mb={2}>
         <Heading size="lg" mb={2} display="flex" gap={2} alignItems="center">
-          <ArrowLeft onClick={() => navigate(-1)}/>
-          Chi tiết sản phẩm 
-          <ShoppingBag  color={DEFAULT_COLOR}/>
+          <ArrowLeft onClick={() => navigate(-1)} />
+          Chi tiết sản phẩm
+          <ShoppingBag color={DEFAULT_COLOR} />
         </Heading>
         <Divider />
       </Box>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useQueryProductsList } from "../../services/customers/products";
+import {  useQueryProductsVariantList } from "../../services/customers/products";
 import {
   Box,
   Skeleton as ChakraSkeleton,
@@ -30,7 +30,10 @@ export const ProductCard = ({ product }) => {
           opacity: 1,
         },
       }}
-      onClick={() => navigate(`/product/${product.id}`)}
+      onClick={() => {
+        navigate(`/product/${product.productId}`);
+        localStorage.setItem("variant-id", product.id)
+      }}
     >
       <Box
         className="product-border"
@@ -102,19 +105,20 @@ export const ProductCard = ({ product }) => {
 };
 
 const ProductList = () => {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(window.innerWidth < 768 ? 6 : 24);
-  const { data, isLoading, isError } = useQueryProductsList({
+  const { data, isLoading, isError } = useQueryProductsVariantList({
     pageNumber: page,
     pageSize: pageSize,
   });
+  
   const handleChange = (currentPage) => {
-    setPage(currentPage - 1);
+    setPage(currentPage);
   };
   useEffect(() => {
     const handleResize = () => {
       setPageSize(window.innerWidth < 768 ? 6 : 24);
-      setPage(0);
+      setPage(1);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -189,8 +193,8 @@ const ProductList = () => {
       >
         <Pagination
           align="center"
-          current={page + 1}
-          total={data?.totalRecords}
+          current={page}
+          total={data?.totalCount}
           pageSize={pageSize}
           onChange={handleChange}
         />

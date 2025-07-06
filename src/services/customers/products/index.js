@@ -42,6 +42,47 @@ export const useQueryProductsList = (
     );
 }
 
+
+export const getProductVariantList = async (
+    {
+        pageSize,
+        pageNumber,
+        keyword,
+        categoryIds
+    }
+) => {
+    const { data } = await authApi({
+        method: 'get',
+        url: '/api/products/variant-paging',
+        params: {
+            pageSize,
+            pageNumber,
+            keyword,
+            categoryIds
+        },
+        paramsSerializer: (params) => {
+            // Xử lý serialization cho mảng
+            return queryString.stringify(params, { arrayFormat: 'repeat' })
+          }
+    })
+    return data
+}
+
+export const useQueryProductsVariantList = (
+    { pageSize, pageNumber, keyword, categoryIds },
+    options
+) => {
+    return useQuery(
+        ['/api/products/variant-paging', pageSize, pageNumber, keyword, categoryIds],
+        () => getProductVariantList({ pageSize, pageNumber, keyword, categoryIds }),
+        {
+            ...defaultOption,
+            ...options,
+        }
+    );
+}
+
+
 export const getProductDetail = async (
     {
         id
