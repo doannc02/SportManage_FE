@@ -22,6 +22,9 @@ import { DEFAULT_COLOR } from "../const/enum";
 import { UAParser } from "ua-parser-js";
 import { useQueryIPAddress, useQueryIPLocation } from "../services/common";
 import { VITE_LOCATION_API_KEY } from "../configs/env";
+import { FaGoogle } from "react-icons/fa";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../hooks/usePushNotifications";
 
 export default function Login() {
   const { setUser } = useContext(UserContext);
@@ -42,7 +45,6 @@ export default function Login() {
   const parser = new UAParser();
   const deviceInfo = parser.getResult();
 
-
   // Dữ liệu đăng nhập thiết bị
   const loginDeviceData = {
     browser: deviceInfo.browser.name + " " + deviceInfo.browser.version,
@@ -57,7 +59,7 @@ export default function Login() {
   useEffect(() => {
     console.log("User Agent:", navigator.userAgent);
   }, []);
-  
+
   const onSubmit = handleSubmit(async (data) => {
     setLoading(true);
     const payload = {
@@ -95,6 +97,16 @@ export default function Login() {
     }
   });
 
+    const handleLoginGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log("User info:", user);
+      // TODO: Lưu user hoặc chuyển hướng
+    } catch (error) {
+      console.error("Login error:", error);
+    }
+  };
   // const logingin = async () => {
   //   setLoading(true);
   //   axios
@@ -182,7 +194,7 @@ export default function Login() {
                 name="password"
               />
 
-              <Stack spacing={10}>
+              <Stack spacing={7}>
                 <Stack
                   direction={{ base: "column", sm: "row" }}
                   align={"start"}
@@ -221,6 +233,21 @@ export default function Login() {
                   size={"lg"}
                 >
                   ĐĂNG NHẬP
+                </Button>
+                <Button
+                  // isLoading={isLoading}
+                  loadingText="Đang đăng nhập..."
+                  rounded={"xl"}
+                  fontSize={"md"}
+                  color={DEFAULT_COLOR}
+                  onClick={handleLoginGoogle}
+                  variant={"outline"}
+                  size={"lg"}
+                >
+                  <span style={{ marginRight: "0.5rem" }}>
+                    <FaGoogle />
+                  </span>{" "}
+                  Đăng nhập với Google
                 </Button>
               </Stack>
             </Stack>

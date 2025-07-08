@@ -1,6 +1,7 @@
 // src/hooks/usePushNotifications.js
 import {  initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { useEffect } from "react";
 import { useState } from "react";
 import { authApi } from "../configs/auth";
@@ -22,6 +23,10 @@ const firebaseConfig = {
 // Khởi tạo Firebase App (chỉ một lần)
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
+
+export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider();
+
 
 const usePushNotifications = () => {
   const [fcmToken, setFcmToken] = useState(null);
@@ -125,3 +130,5 @@ const usePushNotifications = () => {
 };
 
 export default usePushNotifications;
+
+
