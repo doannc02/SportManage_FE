@@ -200,6 +200,7 @@ const CategoryMainDashBoard = () => {
                             <img
                               src={getLogoUrl(cat.logo)}
                               alt={cat.name}
+                              loading="lazy"
                               className="object-contain w-full h-full"
                               onError={(e) => {
                                 e.target.onerror = null;

@@ -364,7 +364,7 @@ const UserDetailAdmin = () => {
       </form>
 
       {/* Modal for adding shipping address */}
-      <ShippingAddressModal
+      {/* <ShippingAddressModal
         isOpen={isOpenShippingModal}
         onClose={onCloseShippingModal}
         onSubmit={(data) => {
@@ -387,7 +387,7 @@ const UserDetailAdmin = () => {
           // Add the new shipping address with names
           appendShippingAddress(data);
         }}
-      />
+      /> */}
     </>
   );
 };

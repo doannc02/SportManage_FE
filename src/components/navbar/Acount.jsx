@@ -59,19 +59,6 @@ function Acount() {
             </Button>
           </Flex>
         </PopoverHeader>
-        <PopoverBody p="0px">
-          <Flex flexDir="column">
-            <Box p="15px" className={NavStyle.greyHover}>
-              Whish List
-            </Box>
-            <Box p="15px" className={NavStyle.greyHover}>
-              Your Order
-            </Box>
-            <Box p="15px" className={NavStyle.greyHover}>
-              Your Refferal
-            </Box>
-          </Flex>
-        </PopoverBody>
       </PopoverContent>
     </Popover>
   );

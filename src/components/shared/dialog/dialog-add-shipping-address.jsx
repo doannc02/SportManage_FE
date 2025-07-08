@@ -4,12 +4,13 @@ import {
     ModalBody, ModalFooter, Grid, GridItem, Button, FormControl,
     Checkbox
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { startTransition, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import CoreInput from "../../atoms/CoreInput";
 import CoreAutoComplete from "../../atoms/CoreAutoComplete";
 import { useQueryAddressLv1, useQueryAddressLv2, useQueryAddressLv3 } from "../../../services/common";
 import { InputAdornment } from "@mui/material";
+import { useQueryInfoCurrentCustomer } from "../../../services/customers/current-infos";
 
 
 const ShippingAddressModal = ({
@@ -17,11 +18,13 @@ const ShippingAddressModal = ({
     onClose,
     onSubmit,
 }) => {
-
+    const { data } = useQueryInfoCurrentCustomer()
+    console.log(data?.phone);
+    
     const form = useForm({
         defaultValues: {
             recipientName: "",
-            phone: "",
+            phone: data?.phone | "",
             addressLine: "",
             country: "Việt Nam",
             countryId: "",
@@ -104,6 +107,7 @@ const ShippingAddressModal = ({
                         <GridItem colSpan={[12, 6]}>
                             <CoreInput
                                 control={form.control}
+                                readOnly
                                 name='phone'
                                 label='Số điện thoại'
                                 placeholder='Nhập số điện thoại'
