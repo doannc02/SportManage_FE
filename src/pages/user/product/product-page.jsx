@@ -90,6 +90,7 @@ const ProductPage = () => {
                     boxSize="28px"
                     objectFit="cover"
                     borderRadius="md"
+                    loading="lazy"
                     src={category.logo}
                     alt={category.name}
                     fallback={

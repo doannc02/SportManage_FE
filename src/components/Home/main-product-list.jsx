@@ -45,6 +45,7 @@ export const ProductCard = ({ product }) => {
         <Box height="200px" overflow="hidden" mb={2}>
           <img
             src={`${product?.images?.[0]}` || "/placeholder.png"}
+            loading="lazy"
             alt={product?.name}
             style={{
               transition: "transform 0.3s ease",
@@ -123,6 +124,7 @@ const ProductList = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  
   return (
     <Box py={8} my={6} w={"100%"}>
       {/* Đây là Box container chính, sẽ quyết định width và padding chung */}

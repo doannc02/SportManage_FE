@@ -17,10 +17,22 @@ import { getAppToken } from "../../configs/token";
 import { logoutAccount } from "../../configs/axios";
 import { House, PackageCheck, Settings, UserRound } from "lucide-react";
 import { DEFAULT_COLOR } from "../../const/enum";
+import { useQueryInfoCurrentCustomer } from "../../services/customers/current-infos";
+import { Avatar } from "antd";
+import { useEffect, useState } from "react";
 
 function UserAccount() {
   const tokenApp = getAppToken();
+  const { data } = useQueryInfoCurrentCustomer();
+  const [isMobile, setIsMobile] = useState(false);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768 ? true : false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   //   const { logout } = useAuth();
   const menuItems = [
     { label: "Trang chủ", icon: <House strokeWidth={1} />, link: "/" },
@@ -40,7 +52,6 @@ function UserAccount() {
       link: "/settings",
     },
   ];
-  const isMobile = window.innerWidth < 768;
   if (isMobile) {
     return (
       <Flex
@@ -50,19 +61,23 @@ function UserAccount() {
         px={3}
         py={2}
         borderRadius="md"
-        _hover={{ bg: "teal.50", boxShadow: "md" }}
         className={NavStyle.userAccountTrigger}
       >
         <Box
-          bg="teal.500"
+          bg={data?.avatarUrl ? "" : "teal.500"}
           color="white"
           borderRadius="full"
-          p={1.5}
+          p={data.avatarUrl ? 0 : 1.5}
           display="flex"
           alignItems="center"
           justifyContent="center"
         >
-          <RxPerson size="22px" />
+          {/* <RxPerson size="22px" /> */}
+          {data?.avatarUrl ? (
+            <Avatar size={50} src={data?.avatarUrl} />
+          ) : (
+            <RxPerson size="22px" />
+          )}
         </Box>
         <Text
           fontWeight="medium"
@@ -83,20 +98,23 @@ function UserAccount() {
           cursor="pointer"
           px={3}
           py={2}
-          borderRadius="md"
-          _hover={{ bg: "teal.50", boxShadow: "md" }}
           className={NavStyle.userAccountTrigger}
         >
           <Box
-            bg="teal.500"
+            bg={data?.avatarUrl ? "" : "teal.500"}
             color="white"
             borderRadius="full"
-            p={1.5}
+            p={data?.avatarUrl ? 0 : 1.5}
             display="flex"
             alignItems="center"
             justifyContent="center"
           >
-            <RxPerson size="22px" />
+            {/* <RxPerson size="22px" /> */}
+            {data?.avatarUrl ? (
+              <Avatar size={50} src={data?.avatarUrl} />
+            ) : (
+              <RxPerson size="22px" />
+            )}
           </Box>
           <Text
             fontWeight="medium"
