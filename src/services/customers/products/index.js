@@ -36,7 +36,7 @@ export const useQueryProductsList = (
         ['/api/products/paging', pageSize, pageNumber, keyword, categoryIds],
         () => getProductList({ pageSize, pageNumber, keyword, categoryIds }),
         {
-            ...defaultOption,
+            // ...defaultOption,
             ...options,
         }
     );

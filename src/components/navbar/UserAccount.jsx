@@ -41,7 +41,7 @@ function UserAccount() {
       key: "/customer-profile",
     },
     {
-      label: "Cài đặt",
+      label: "Thiết bị",
       icon: <Settings strokeWidth={1} size={19} />,
       key: "/settings",
     },

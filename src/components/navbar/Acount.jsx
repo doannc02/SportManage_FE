@@ -3,17 +3,14 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverHeader,
-  PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
   Flex,
   Button,
-  Box,
   Text,
 } from "@chakra-ui/react";
 import { RxPerson } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
-import NavStyle from "./navbar.module.css";
 import UserAccount from "./UserAccount";
 import { getAppToken } from "../../configs/token";
 function Acount() {

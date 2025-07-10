@@ -150,7 +150,7 @@ const Trending = () => {
               fontWeight="bold"
               _hover={{ bg: "teal.600" }}
             >
-              Mưa ngay
+              Mua ngay
             </Button>
           </Box>
         ))}
