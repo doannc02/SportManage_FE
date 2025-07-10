@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Box, Center, Heading, Image, Skeleton, Stack } from "@chakra-ui/react";
 import { UserContext } from "../../../Contexts/UserContext";
-import { useQueryProductsList } from "../../../services/customers/products";
+import {  useQueryProductsVariantList } from "../../../services/customers/products";
 import { Checkbox, Divider, Empty } from "antd";
 import useDetailProduct from "../../admin/products/detail/useDetail";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -16,7 +16,8 @@ const ProductPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const categoryValue = queryParams.get("category");
-
+  console.log(search);
+  
   const handleCategoryChange = (value) => {
     setSelectCategory((prev) =>
       prev.includes(value)
@@ -35,15 +36,16 @@ const ProductPage = () => {
     getCategoryValue();
   }, [categoryValue]);
 
-  const { data, isLoading } = useQueryProductsList({
-    pageNumber: 0,
+  const { data, isLoading } = useQueryProductsVariantList({
+    pageNumber: 1,
     pageSize: 20,
     keyword: search || undefined,
     categoryIds: selectCategory.length > 0 ? selectCategory : undefined,
   });
 
+  
   return (
-    <>
+    <Box px={{base:0, md:10}}>
       <Box my={2}>
         <Heading
           size="base"
@@ -60,16 +62,19 @@ const ProductPage = () => {
         </Heading>
         <Divider />
       </Box>
-      <div className="md:flex-row flex flex-col gap-2">
+      <Box 
+        display={"flex"}
+        flexDirection={{base:"column", md:"row"}}
+        gap={2}
+      >
         {/* Phần danh mục sản phẩm */}
         <Box
           w={{ base: "100%", md: "20%" }}
           display="flex"
           flexDirection="column"
-          p={4}
+          px={10}
           gap={2}
-          borderRight={"1px solid"}
-          borderColor="gray.300"
+          borderRight={{base:"none", md:"0.1px solid #d4d9d6"}}
         >
           <Heading
             as="h3"
@@ -121,7 +126,7 @@ const ProductPage = () => {
           display="grid"
           alignItems={"center"}
           gridTemplateColumns={["1fr", "1fr 1fr", "repeat(5, 1fr)"]}
-          p={4}
+          px={4}
           gap={6}
         >
           {isLoading ? (
@@ -149,8 +154,8 @@ const ProductPage = () => {
             </Box>
           )}
         </Box>
-      </div>
-    </>
+      </Box>
+    </Box>
   );
 };
 

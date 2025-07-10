@@ -17,6 +17,7 @@ import {
   House,
   LogOut,
   PackageCheck,
+  Settings,
   UserRound,
 } from "lucide-react";
 import { Badge } from "antd";
@@ -48,6 +49,12 @@ function Navmenu({ isOpen, onOpen, onClose, btnRef, countItems }) {
       label: "Trang thông tin cá nhân",
       icon: <UserRound strokeWidth={1} />,
       link: "/customer-profile",
+    },
+    {
+      label: "Thiết bị",
+      icon: <Settings
+       strokeWidth={1} />,
+      link: "/settings",
     },
   ];
 
@@ -132,10 +139,10 @@ Navmenu.propTypes = {
   onOpen: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   btnRef: PropTypes.oneOfType([
-    PropTypes.func, 
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   ]),
-  countItems: PropTypes.number
+  countItems: PropTypes.number,
 };
 
 export default Navmenu;

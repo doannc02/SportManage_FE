@@ -4,12 +4,14 @@ import { UserContext } from "../../Contexts/UserContext";
 import { AutoComplete, ConfigProvider } from "antd";
 import { Search2Icon } from "@chakra-ui/icons";
 import _, { debounce } from "lodash";
-import { useQueryProductsList } from "../../services/customers/products";
+import {
+  useQueryProductsVariantList,
+} from "../../services/customers/products";
 import { getLabelValueOptions } from "../../helpers/get-label-value-options";
 import { Clock8 } from "lucide-react";
 
 const defaultValues = {
-  pageNumber: 0,
+  pageNumber: 1,
   pageSize: 5,
   keyword: "",
 };
@@ -19,7 +21,6 @@ function Search() {
   const [history, setHistory] = useState([]);
   const [queryPage, setQueryPage] = useState(_.omitBy(defaultValues, _.isNil));
   const [debouncedInput, setDebouncedInput] = useState(history[1]);
-
   const navigate = useNavigate();
   const { setSearch } = useContext(UserContext);
   const handleSearch = () => {
@@ -49,7 +50,9 @@ function Search() {
     setHistory(getLabelValueOptions(updated));
   };
 
-  const { data } = useQueryProductsList(queryPage);
+  const { data } = useQueryProductsVariantList(queryPage, {
+    enabled: !!searchInput,
+  });
 
   const fetchSuggestions = useCallback(
     debounce((value) => {
@@ -72,7 +75,7 @@ function Search() {
     setQueryPage((prev) => ({
       ...prev,
       keyword: debouncedInput,
-      pageNumber: 0,
+      pageNumber: 1,
     }));
   }, [debouncedInput]);
 
@@ -130,6 +133,8 @@ function Search() {
           setHistory([]);
         }}
         onSelect={(value) => {
+          console.log(value);
+          
           setSearch(value);
           setSearchInput(value);
           navigate(`/productpage?q=${value}`);

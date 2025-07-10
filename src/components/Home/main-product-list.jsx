@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {  useQueryProductsVariantList } from "../../services/customers/products";
+import { useQueryProductsVariantList } from "../../services/customers/products";
 import {
   Box,
   Skeleton as ChakraSkeleton,
@@ -32,7 +32,7 @@ export const ProductCard = ({ product }) => {
       }}
       onClick={() => {
         navigate(`/product/${product.productId}`);
-        localStorage.setItem("variant-id", product.id)
+        localStorage.setItem("variant-id", product.id);
       }}
     >
       <Box
@@ -112,7 +112,7 @@ const ProductList = () => {
     pageNumber: page,
     pageSize: pageSize,
   });
-  
+  localStorage.removeItem("variant-id");
   const handleChange = (currentPage) => {
     setPage(currentPage);
   };
@@ -124,7 +124,7 @@ const ProductList = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  
+
   return (
     <Box py={8} my={6} w={"100%"}>
       {/* Đây là Box container chính, sẽ quyết định width và padding chung */}
