@@ -8,8 +8,8 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { ShoppingCart } from "lucide-react";
-import { ConfigProvider, Pagination, Popover } from "antd";
+import { ShoppingCart, TagIcon } from "lucide-react";
+import { ConfigProvider, Pagination, Popover, Tag } from "antd";
 import { DEFAULT_COLOR } from "../../const/enum";
 
 export const ProductCard = ({ product }) => {
@@ -61,25 +61,34 @@ export const ProductCard = ({ product }) => {
           />
         </Box>
         <Box p={{ base: "0 8px 12px", md: 3 }}>
-          <Text fontSize="md" color="gray.600" isTruncated mb={2}>
+          <Tag color="cyan">
+            <span>
+              #
+              {Array.isArray(product?.productCategories) &&
+              product?.productCategories.length > 0
+                ? product?.productCategories[0]?.name
+                : "Rẻ vô địch"}
+            </span>
+          </Tag>
+
+          <Text fontSize="md" color="gray.600" isTruncated my={2}>
             <Popover content={product?.name}>{product?.name}</Popover>
           </Text>
-          {product?.variants?.[0] && (
-            <Flex justifyContent={"space-between"} alignItems={"center"}>
-              <Text fontSize="md" fontWeight="bold" color={DEFAULT_COLOR}>
-                ₫{product?.variants[0].price.toLocaleString()}
+
+          <Flex justifyContent={"space-between"} alignItems={"center"}>
+            <Text fontSize="md" fontWeight="bold" color={DEFAULT_COLOR}>
+              ₫{product?.price.toLocaleString()}
+            </Text>
+            <Flex justifyContent={"center"} alignItems={"center"}>
+              <ShoppingCart size={16} color="#000000" strokeWidth={1} />
+              <Text ml={1} fontSize="sm" color="gray.600">
+                {product?.stockQuantity || 0}
               </Text>
-              <Flex justifyContent={"center"} alignItems={"center"}>
-                <ShoppingCart size={16} color="#000000" strokeWidth={1} />
-                <Text ml={1} fontSize="sm" color="gray.600">
-                  {product?.variants[0]?.stockQuantity || 0}
-                </Text>
-              </Flex>
             </Flex>
-          )}
-          <Text fontSize="sm" color="gray.500" noOfLines={1} mt={1}>
+          </Flex>
+          {/* <Text fontSize="sm" color="gray.500" noOfLines={1} mt={1}>
             {product?.reviews ? product.reviews.length : 0} lượt đánh giá
-          </Text>
+          </Text> */}
         </Box>
       </Box>
 

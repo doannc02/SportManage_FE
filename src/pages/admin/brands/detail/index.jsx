@@ -6,8 +6,6 @@ import { countiesCitiesEnums, isActiveBrands } from "../../../../const/enum";
 import { useQueryAddressLv1 } from "../../../../services/common";
 import { Avatar, Flex } from "antd";
 import { MultiImageUploader } from "../../../../components/atoms/ImageUploader";
-import { BASE_URL } from "../../../../configs/auth";
-import CoreDatePicker from "../../../../components/atoms/CoreDatePicker";
 
 const BrandsDetailAdmin = () => {
   const { data: dataAddressLv1, isLoading: isLoadingAddressLv1 } =
