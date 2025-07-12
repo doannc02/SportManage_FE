@@ -1,13 +1,12 @@
 import { Card } from "antd";
 import { twMerge } from "tailwind-merge";
 import { useQueryCategoryList } from "../../services/admins/categories";
-import { Box, Text, useBreakpointValue } from "@chakra-ui/react";
+import {  Box, Text, useBreakpointValue } from "@chakra-ui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/pagination";
-import { useEffect, useState } from "react";
 import { Skeleton } from "antd";
 
 const getLogoUrl = (logo) =>
@@ -74,14 +73,13 @@ const CategoryMainDashBoard = () => {
   };
 
   // Hàm tính toán border cho từng item - tạo grid lines rõ ràng
-  const getBorderStyle = (index, groupLength, gridCols, gridRows) => {
+  const getBorderStyle = (index, groupLength, gridCols) => {
     const row = Math.floor(index / gridCols);
     const col = index % gridCols;
 
     return {
       border: "1px solid #d1d5db", // Border cho tất cả các cạnh
-      borderTop: row === 0 ? "1px solid #d1d5db" : "0", // Chỉ hàng đầu có border top
-      borderLeft: col === 0 ? "1px solid #d1d5db" : "0", // Chỉ cột đầu có border left
+      borderLeft: col === 1 | col === 0 ? "1px solid #d1d5db" : "0", // Chỉ cột 0 và 1 có border left
       marginTop: row === 0 ? "0" : "-1px", // Overlap border để tránh double border
       marginLeft: col === 0 ? "0" : "-1px", // Overlap border để tránh double border
     };
@@ -105,7 +103,7 @@ const CategoryMainDashBoard = () => {
       >
         Danh mục sản phẩm
       </Text>
-      <div className="w-full bg-white mx-auto rounded-lg overflow-hidden shadow-sm">
+      <div className="w-full bg-white mx-auto overflow-hidden ">
         {isLoading ? (
           <Swiper {...swiperProps}>
             <SwiperSlide>
@@ -121,7 +119,7 @@ const CategoryMainDashBoard = () => {
                     className={twMerge(
                       "w-full aspect-square flex flex-col items-center justify-center",
                       "min-h-0 !rounded-none",
-                      "!border-none bg-gray-50"
+                      "bg-gray-50"
                     )}
                     style={{
                       height: "auto",
@@ -139,7 +137,7 @@ const CategoryMainDashBoard = () => {
                       active
                       size="large"
                       shape="square"
-                      className="w-7 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20"
+                      className="w-20 h-20 sm:w-16 sm:h-16 md:w-20 md:h-20"
                     />
                     <Skeleton.Input
                       active
@@ -181,8 +179,8 @@ const CategoryMainDashBoard = () => {
                           className={twMerge(
                             "w-full aspect-square flex flex-col items-center justify-center",
                             "hover:shadow-md hover:bg-blue-50 transition-all duration-200",
-                            "min-h-0 !rounded-none cursor-pointer",
-                            "!border-none relative z-10 hover:z-20"
+                            "!rounded-none cursor-pointer",
+                            " relative z-10 hover:z-20"
                           )}
                           style={{
                             height: "auto",
@@ -196,12 +194,11 @@ const CategoryMainDashBoard = () => {
                           }}
                           bodyStyle={cardBodyStyle}
                         >
-                          <div className="w-7 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center mb-2">
+                          <div className="w-28 h-28 md:w-20 md:h-20 flex items-center justify-center mb-2">
                             <img
                               src={getLogoUrl(cat.logo)}
                               alt={cat.name}
                               loading="lazy"
-                              className="object-contain w-full h-full"
                               onError={(e) => {
                                 e.target.onerror = null;
                                 e.target.src =
