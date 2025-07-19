@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Box, Center, Heading, Image, Skeleton, Stack } from "@chakra-ui/react";
 import { UserContext } from "../../../Contexts/UserContext";
-import {  useQueryProductsVariantList } from "../../../services/customers/products";
+import { useQueryProductsVariantList } from "../../../services/customers/products";
 import { Checkbox, Divider, Empty } from "antd";
 import useDetailProduct from "../../admin/products/detail/useDetail";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ const ProductPage = () => {
   const queryParams = new URLSearchParams(location.search);
   const categoryValue = queryParams.get("category");
   console.log(search);
-  
+
   const handleCategoryChange = (value) => {
     setSelectCategory((prev) =>
       prev.includes(value)
@@ -43,9 +43,8 @@ const ProductPage = () => {
     categoryIds: selectCategory.length > 0 ? selectCategory : undefined,
   });
 
-  
   return (
-    <Box px={{base:0, md:10}}>
+    <Box px={{ base: 0, md: 10 }}>
       <Box my={2}>
         <Heading
           size="base"
@@ -54,17 +53,18 @@ const ProductPage = () => {
           alignItems="center"
           ps={2}
           pt={2}
-          onClick={() => navigate("/")}
           cursor={"pointer"}
         >
-          <ArrowLeft />
-          Trở về trang chủ
+          <span className="flex items-center" onClick={() => navigate("/")}>
+            <ArrowLeft />
+            Trở về trang chủ
+          </span>
         </Heading>
         <Divider />
       </Box>
-      <Box 
+      <Box
         display={"flex"}
-        flexDirection={{base:"column", md:"row"}}
+        flexDirection={{ base: "column", md: "row" }}
         gap={2}
       >
         {/* Phần danh mục sản phẩm */}
@@ -74,7 +74,7 @@ const ProductPage = () => {
           flexDirection="column"
           px={10}
           gap={2}
-          borderRight={{base:"none", md:"0.1px solid #d4d9d6"}}
+          borderRight={{ base: "none", md: "0.1px solid #d4d9d6" }}
         >
           <Heading
             as="h3"
@@ -84,6 +84,14 @@ const ProductPage = () => {
           >
             Danh mục sản phẩm
           </Heading>
+          <Heading
+            size="sm"
+            mb={4}
+            textAlign={{ base: "center", md: "left" }}
+          >
+            Bỏ chọn tất cả 
+          </Heading>
+          
           <Stack spacing={3}>
             <div className="grid grid-cols-2 md:grid-cols-1 gap-4">
               {dataCategory?.items?.map((category) => (
