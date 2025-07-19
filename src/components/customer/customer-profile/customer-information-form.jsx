@@ -21,7 +21,7 @@ const CustomerInformationForm = () => {
   const { control, watch, setValue, getValues } = useFormContext();
   const avatarValue = watch("avatarUrl");
   const navigate = useNavigate();
-
+  
   return (
     <>
       <Box
@@ -141,9 +141,6 @@ const CustomerInformationForm = () => {
                 label="Mật khẩu"
                 placeholder="Nhập mật khẩu"
                 type="password"
-                rules={{
-                  required: "Trường này là bắt buộc!",
-                }}
               />
             </GridItem>
             <GridItem colSpan={[12, 12, 6]}>
@@ -153,9 +150,6 @@ const CustomerInformationForm = () => {
                 label="Xác nhận mật khẩu"
                 placeholder="Xác nhận mật khẩu"
                 type="password"
-                rules={{
-                  required: "Trường này là bắt buộc!",
-                }}
               />
             </GridItem>
             <GridItem colSpan={[12, 12, 6]}>
