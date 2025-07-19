@@ -109,6 +109,7 @@ const ShippingAddressModal = ({
                                 control={form.control}
                                 readOnly
                                 name='phone'
+                                type='number'
                                 label='Số điện thoại'
                                 placeholder='Nhập số điện thoại'
                                 required
