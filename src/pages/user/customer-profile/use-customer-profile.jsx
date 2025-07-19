@@ -66,7 +66,7 @@ const useCustomerProfile = () => {
     enabled: shouldFetch, // chỉ fetch sau lần đầu
   });
   console.log(detailData);
-  
+
   useEffect(() => {
     startTransition(() => {
       setShouldFetch(true);
@@ -118,14 +118,24 @@ const useCustomerProfile = () => {
         isDefault: addr.id === defaultAddressId,
       })) || [];
 
-    // if (!input.ConfirmPassWord || input.ConfirmPassWord.trim() === "") {
-    //   toast({
-    //     title: "Có lỗi xảy ra",
-    //     description: "Vui lòng xác nhận mật khẩu trước khi gửi form",
-    //     status: "error",
-    //   });
-    //   return;
-    // }
+    if (input.password) {
+      if (!input.ConfirmPassWord || input.ConfirmPassWord.trim() === "") {
+        toast({
+          title: "Có lỗi xảy ra",
+          description: "Vui lòng xác nhận mật khẩu trước khi gửi form",
+          status: "error",
+        });
+        return;
+      }
+      if (input.password.trim() !== input.ConfirmPassWord.trim()) {
+        toast({
+          title: "Có lỗi xảy ra",
+          description: "Mật khẩu xác nhận không trùng khớp",
+          status: "error",
+        });
+        return;
+      }
+    }
 
     const formData = {
       ...input,
@@ -222,7 +232,7 @@ const useCustomerProfile = () => {
       setDefaultAddressId,
       refetchDetail,
       handleOpenDialog,
-      handleCloseDialog
+      handleCloseDialog,
     },
   ];
 };
